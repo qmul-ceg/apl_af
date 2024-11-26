@@ -1,8 +1,8 @@
 import { AFibColumns } from "@/enums/AFibColumns";
 
-export function getAnticoagulantType(dataRow) {
-AFibColumns
-    let OnAnticoag = "No";
+export function onAnticoagulant(dataRow) {
+
+    let OnAnticoag = "NO";
 
     let DOAC, Warf, AnticoagContra, AnticoagDecline;
 
@@ -28,11 +28,32 @@ AFibColumns
     return OnAnticoag;
 }
 
-export function getAspirinAntiplatelet(dataRow) {
+export function onAspirinAntiplatelet(dataRow) {
 
-    let OnAsprineAntip = "No";
+    let OnAsprineAntip;
 
     OnAsprineAntip = dataRow[AFibColumns.AspirinDate] || dataRow[AFibColumns.AntiplateletDate] ? "YES" : "NO";
     
     return OnAsprineAntip;
+}
+
+export function onNSAID(dataRow) {
+
+    return dataRow[AFibColumns.NSAID_Med] ? "YES" : "NO";
+}
+
+export function hasCVD(dataRow) {
+
+    let CVD = "NO";
+
+    if (dataRow[AFibColumns.IHD_Concept] || dataRow[AFibColumns.StrokeTIA_Concept]  || dataRow[AFibColumns.NonHaemStrokeConcept]  || dataRow[AFibColumns.PAD_Concept) {
+        CVD = "YES";
+    }
+    
+    return CVD;
+}
+
+export function hasHypertension(dataRow) {
+
+    return dataRow[AFibColumns.HTN_Concept] ? "YES" : "NO";
 }
