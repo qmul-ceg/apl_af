@@ -1,29 +1,23 @@
 import React, { useState, createContext, } from 'react'
 import patientsData from '/src/data/patient_data.json'
 import { GpSystems } from './enums/GPsystems'
+import { AFibColumns } from './enums/AFibColumns'
 
 export const MainContext = createContext()
 
 const MainProvider = ({ children }) => {
    const [patients] = useState(patientsData) //Static because we are not setting our patient data
-   const [gpSystem, setGpSystem] = useState(GpSystems.NotSelected)
    const [importedData, setImportedData] = useState([])
+   const [relativeRunDate, setRelativeRunDate] = useState("")
+
+   // console.log(relativeRunDate)
    console.log(importedData)
-
-
-
-   
-
-   // const setImportedData = (data) =>{
-   //    setImportedData(data)
-   // }
-
-
-
-
-
+   // // const setImportedData = (data) =>{
+   // //    setImportedData(data)
+   // // }
 
    //FILTER STATES
+   const [selectedAnti, setSelectedAnti] = useState("none")
    const [selectedAges, setSelectedAges] = useState([])
    const [nsaid, setNsaid] = useState ("")
    const [cvd, setCvd] = useState ("")
@@ -35,8 +29,13 @@ const MainProvider = ({ children }) => {
 
 
 
+
    /////FILTER SELECTIONS
-   
+   //AntiFilter
+   const handleAntiFilter =(value) => {
+      setSelectedAnti(value)
+   }
+   console.log(selectedAnti)
    //Age Filters
    const handleAgeSelection = (age) =>{
       if (selectedAges.includes(age)){
@@ -88,6 +87,8 @@ const MainProvider = ({ children }) => {
       return { systolic, diastolic };
    };
 
+
+
    const checkPatientBloodPressure = (systolic, diastolic) => {
       for (let value of selectedBP){
          if(value === "lt130-80" && systolic < 130 && diastolic < 80) {
@@ -99,7 +100,7 @@ const MainProvider = ({ children }) => {
          if(value === "140/90-159/90" && (systolic >= 140 && systolic <= 159 || diastolic >= 90)){
             return true
          }
-         if(value="gte160-100" && (systolic >= 160 || diastolic >= 100)){
+         if(value ==="gte160-100" && (systolic >= 160 || diastolic >= 100)){
             return true
          }
       }
@@ -132,8 +133,20 @@ const MainProvider = ({ children }) => {
       setMedReview((prev) => (prev === value ? "" : value)); // Toggle value off
    };
 
-   //Check Against Relative run date 
 
+   //Convert Date to JS Format 
+   const convertDate = (dateString) => {
+      if (dateString){
+         const [day, month, year] = dateString.split('-');
+         const months = { "Jan": "01", "Feb": "02", "Mar": "03", "Apr": "04", "May": "05", "Jun": "06", "Jul": "07", "Aug": "08", "Sep": "09", "Oct": "10", "Nov": "11", "Dec": "12" };
+      
+         return `20${year}-${months[month]}-${day}`; 
+      }
+      else return ""
+      
+  }
+
+   //Function to Check Against Relative run date 
    const recordedOverTwelveMonths = (recordedDate, relativeRunDate) => {
       const recorded = new Date(recordedDate); // Convert to Date object
       const cutoffDate = new Date(relativeRunDate); // Reference date
@@ -141,54 +154,87 @@ const MainProvider = ({ children }) => {
       return recorded < cutoffDate; // Check if recorded is over 12 months ago
    }
 
+   //Convert Relative Run Date
+   const convertRelativeRunDate = (dateString) =>{
+      if(dateString){
+         const [day, month, year] = dateString.split('/');
+         return `${year}-${month}-${day}`;
+      }
+      else return ""
+      
+   }
    
+   console.log(convertRelativeRunDate(relativeRunDate))
 
    //FILTER LOGIC
    const getFilteredPatients = () =>{
       return importedData.filter((patient) =>{
+
+         //none, doac_warf, doac, warf, antiplatelets, dual
+         const antiFilterControl = 
+            selectedAnti === "none"||
+            (selectedAnti === "doac_warf" && 
+               (patient[AFibColumns.OnAnticoagulant] ==="YES - DOAC" || 
+                patient[AFibColumns.OnAnticoagulant] === "YES - WARF")) ||
+            (selectedAnti === "doac" && 
+               patient[AFibColumns.OnAnticoagulant] ==="YES - DOAC") ||
+            (selectedAnti === "warf" && 
+               patient[AFibColumns.OnAnticoagulant] ==="YES - WARF") ||
+            (selectedAnti === "antiplatelets" && 
+               patient[AFibColumns.OnAspirinAntiplatelet] === "YES" &&
+               patient[AFibColumns.OnAnticoagulant] ==="NO")  ||
+            (selectedAnti === "dual" && 
+                  patient[AFibColumns.OnAspirinAntiplatelet] === "YES" && 
+                   (patient[AFibColumns.OnAnticoagulant] ==="YES - DOAC" ||
+                   patient[AFibColumns.OnAnticoagulant] ==="YES - WARF"))
+                  //  patient[AFibColumns.OnAnticoagulant] ==="YES - WARF")
+
+
          const ageFilter = 
-            selectedAges.includes("<65") && patient.age < 65 ||
-            selectedAges.includes("65-79") && patient.age >= 65 && patient.age <= 79 ||
-            selectedAges.includes("80+") && patient.age >= 80 ||
+            (selectedAges.includes("<65") && patient[AFibColumns.Age] < 65) ||
+            (selectedAges.includes("65-79") && patient[AFibColumns.Age] >= 65 && patient[AFibColumns.Age] <= 79) ||
+            (selectedAges.includes("80+") && patient[AFibColumns.Age] >= 80) ||
             selectedAges.length === 0;
       
          const nsaidFilter =
-            nsaid === "Yes" && patient.nsaidIssued ==="Yes" ||
-            nsaid === "No" && patient.nsaidIssued === "No" ||
+            nsaid === "YES" && patient[AFibColumns.OnNSAID] ==="YES" ||
+            nsaid === "NO" && patient[AFibColumns.OnNSAID] === "NO" ||
             !nsaid;
 
          const cvdFilter =
-            cvd === "Yes" && patient.cvd ==="Yes" ||
-            cvd === "No" && patient.cvd === "No" ||
+            cvd === "YES" && patient[AFibColumns.CVD]  ==="YES" ||
+            cvd === "NO" && patient[AFibColumns.CVD]  === "NO" ||
             !cvd;
          
-         const { systolic, diastolic } = parseBloodPressure(patient.bp);
+
+         const { systolic, diastolic } = parseBloodPressure(patient[AFibColumns.BP] );
          const bloodPressureFilter = selectedBP.length === 0 || checkPatientBloodPressure(systolic, diastolic);
          
 
 
          const chdFilter =
             selectedChd.length === 0||
-            selectedChd.includes("gte2") && patient.cha2ds2Vasc.value >= 2 ||
-            selectedChd.includes("1") && patient.cha2ds2Vasc.value == 1 ||
-            selectedChd.includes("0") && patient.cha2ds2Vasc.value == 0 ||
-            selectedChd.includes(">12m") && recordedOverTwelveMonths(patient.cha2ds2Vasc.latestDate, "2024-12-05")||
-            selectedChd.includes("not_recorded") && (!patient.cha2ds2Vasc.latestDate || patient.cha2ds2Vasc.latestDate.trim() === "")
+            selectedChd.includes("gte2") && patient[AFibColumns.CHADSVAScValue]  >= 2 ||
+            selectedChd.includes("1") && patient[AFibColumns.CHADSVAScValue] == 1 ||
+            selectedChd.includes("0") && patient[AFibColumns.CHADSVAScValue] == 0 ||
+            selectedChd.includes(">12m") && recordedOverTwelveMonths(patient[AFibColumns.CHADSVAScDate], convertRelativeRunDate(relativeRunDate))||
+            selectedChd.includes("not_recorded") && (!convertDate(patient[AFibColumns.CHADSVAScDate]) || convertDate(patient[AFibColumns.CHADSVAScDate]).trim() === "")
             
             
          const orbitFilter = 
             selectedOrbit.length === 0 ||
-            selectedOrbit.includes("gte4") && patient.orbit.value >=4 ||
-            selectedOrbit.includes(">12m") && recordedOverTwelveMonths(patient.orbit.latestDate, "2024-12-05") ||
-            selectedOrbit.includes("not_recorded") && (!patient.orbit.latestDate || patient.orbit.latestDate.trim() === "")
+            selectedOrbit.includes("gte4") && patient[AFibColumns.ORBIT_Value] >=4 ||
+            selectedOrbit.includes(">12m") && recordedOverTwelveMonths(patient[AFibColumns.ORBIT_Date], convertRelativeRunDate(relativeRunDate)) ||
+            selectedOrbit.includes("not_recorded") && (!convertDate(patient[AFibColumns.ORBIT_Date]) || convertDate(patient[AFibColumns.ORBIT_Date]).trim() === "")
             
          
          const medReviewFilter = 
-            medReview === "Yes" ? 
-            recordedOverTwelveMonths(patient.medReviewDate, "2024-12-05" ) : true
+            medReview === "YES" ? 
+            recordedOverTwelveMonths(convertDate(patient[AFibColumns.MedsReviewDate]), convertRelativeRunDate(relativeRunDate) ) : true //CHANGE THIS FROM JSON 
 
+         
             
-         return ageFilter && nsaidFilter && cvdFilter && bloodPressureFilter && chdFilter && orbitFilter && medReviewFilter
+         return ageFilter && nsaidFilter && cvdFilter && bloodPressureFilter && chdFilter && orbitFilter && medReviewFilter && antiFilterControl
          });   
    }
 
@@ -204,7 +250,10 @@ const MainProvider = ({ children }) => {
       selectedChd,handleChd,
       selectedOrbit, handleOrbit,
       medReview, handleMedReview,
-      importedData, setImportedData
+      importedData, setImportedData,
+      setRelativeRunDate,
+      selectedAnti, handleAntiFilter,
+
       // handleGpSystem
       // parseBloodPressure,
       // checkPatientBloodPressure

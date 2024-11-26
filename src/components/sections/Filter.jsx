@@ -15,7 +15,8 @@ const Filter = () => {
          selectedBP, handleBP,
          selectedChd, handleChd,
          selectedOrbit, handleOrbit,
-         medReview, handleMedReview} = useContext(MainContext);
+         medReview, handleMedReview,
+         selectedAnti, handleAntiFilter} = useContext(MainContext);
 
 
 
@@ -56,12 +57,66 @@ const Filter = () => {
                                  {/* <SelectValue placeholder="" /> */}
                               </SelectTrigger>
                               <SelectContent>
-                                 <SelectItem value="none">NONE</SelectItem>
-                                 <SelectItem value="doac_warfarin">DOAC or WARFARIN</SelectItem>
-                                 <SelectItem value="doac">DOAC</SelectItem>
-                                 <SelectItem value="warfarin">WARFARIN</SelectItem>
-                                 <SelectItem value="antiplatelets">ANTIPLATELETS ONLY</SelectItem>
-                                 <SelectItem value="dual_therapy">DUAL THERAPY</SelectItem>
+                                 <label className="flex items-center space-x-2 ml-4">
+                                    <input
+                                       type="radio"
+                                       value="none"
+                                       name="antiFilter"
+                                       checked={selectedAnti === "none"}
+                                       onChange={(event) => handleAntiFilter(event.target.value)}
+                                    />
+                                    <span>NONE</span>
+                                 </label>
+                                 <label className="flex items-center space-x-2 ml-4">
+                                    <input
+                                       type="radio"
+                                       value="doac_warf"
+                                       name="antiFilter"
+                                       checked={selectedAnti === "doac_warf"}
+                                       onChange={(event) => handleAntiFilter(event.target.value)}
+                                    />
+                                    <span>DOAC or WARFARIN</span>
+                                 </label>
+                                 <label className="flex items-center space-x-2 ml-4">
+                                    <input
+                                       type="radio"
+                                       value="doac"
+                                       name="antiFilter"
+                                       checked={selectedAnti === "doac"}
+                                       onChange={(event) => handleAntiFilter(event.target.value)}
+                                    />
+                                    <span>DOAC</span>
+                                 </label>
+                                 <label className="flex items-center space-x-2 ml-4">
+                                    <input
+                                       type="radio"
+                                       value="warf"
+                                       name="antiFilter"
+                                       checked={selectedAnti === "warf"}
+                                       onChange={(event) => handleAntiFilter(event.target.value)}
+                                    />
+                                    <span>WARFARIN</span>
+                                 </label>
+                                 <label className="flex items-center space-x-2 ml-4">
+                                    <input
+                                       type="radio"
+                                       value="antiplatelets"
+                                       name="antiFilter"
+                                       checked={selectedAnti === "antiplatelets"}
+                                       onChange={(event) => handleAntiFilter(event.target.value)}
+                                    />
+                                    <span>ANTIPLATELETS ONLY</span>
+                                 </label>
+                                 <label className="flex items-center space-x-2 ml-4">
+                                    <input
+                                       type="radio"
+                                       value="dual"
+                                       name="antiFilter"
+                                       checked={selectedAnti === "dual"}
+                                       onChange={(event) => handleAntiFilter(event.target.value)}
+                                    />
+                                    <span>DUAL THERAPY</span>
+                                 </label>
                               </SelectContent>
                         </Select>
 
@@ -140,39 +195,39 @@ const Filter = () => {
                      <div className= "w-44 flex flex-col gap-6">
                         {/* AGE FILTER*/}
                         <Select>
-                              <SelectTrigger className=" bg-[#648DBC]  text-white">
-                                 <h1>AGE</h1>
-                              </SelectTrigger>
-                              <SelectContent>
-                                 <label className="flex items-center space-x-2 ml-4">
-                                    <input
-                                       type="checkbox"
-                                       value="<65"
-                                       checked={selectedAges.includes("<65")}
-                                       onChange={() => handleAgeSelection("<65")}
-                                    />
-                                    <span>{"< 65"}</span>
-                                 </label>
+                           <SelectTrigger className=" bg-[#648DBC]  text-white">
+                              <h1>AGE</h1>
+                           </SelectTrigger>
+                           <SelectContent>
+                              <label className="flex items-center space-x-2 ml-4">
+                                 <input
+                                    type="checkbox"
+                                    value="<65"
+                                    checked={selectedAges.includes("<65")}
+                                    onChange={() => handleAgeSelection("<65")}
+                                 />
+                                 <span>{"< 65"}</span>
+                              </label>
 
-                                 <label className="flex items-center space-x-2 ml-4">
-                                    <input
-                                       type="checkbox"
-                                       value="65-79"
-                                       checked={selectedAges.includes("65-79")}
-                                       onChange={() => handleAgeSelection("65-79")}
-                                    />
-                                    <span>65 - 79</span>
-                                 </label>
-                                 <label className="flex items-center space-x-2 ml-4">
-                                    <input
-                                       type="checkbox"
-                                       value="80+"
-                                       checked={selectedAges.includes("80+")}
-                                       onChange={() => handleAgeSelection("80+")}
-                                    />
-                                    <span>80+</span>
-                                 </label>
-                              </SelectContent>
+                              <label className="flex items-center space-x-2 ml-4">
+                                 <input
+                                    type="checkbox"
+                                    value="65-79"
+                                    checked={selectedAges.includes("65-79")}
+                                    onChange={() => handleAgeSelection("65-79")}
+                                 />
+                                 <span>65 - 79</span>
+                              </label>
+                              <label className="flex items-center space-x-2 ml-4">
+                                 <input
+                                    type="checkbox"
+                                    value="80+"
+                                    checked={selectedAges.includes("80+")}
+                                    onChange={() => handleAgeSelection("80+")}
+                                 />
+                                 <span>80+</span>
+                              </label>
+                           </SelectContent>
                         </Select>
 
                         {/* MED REVIEW FILTER*/}
@@ -186,22 +241,22 @@ const Filter = () => {
                                     <input
                                        type="checkbox"
                                        name="medReview"
-                                       value="Yes"
-                                       checked = {medReview=== "Yes"}
-                                       onChange= {()=>handleMedReview("Yes")}
+                                       value="YES"
+                                       checked = {medReview=== "YES"}
+                                       onChange= {()=>handleMedReview("YES")}
                                     />
-                                    <span>{"Yes"}</span>
+                                    <span>{"YES"}</span>
                                  </label>
 
                                  <label className="flex items-center space-x-2 ml-4">
                                     <input
                                           type="checkbox"
                                           name="medReview"
-                                          value="No"
-                                          checked={medReview === "No"}
-                                          onChange={()=>handleMedReview("No")}
+                                          value="NO"
+                                          checked={medReview === "NO"}
+                                          onChange={()=>handleMedReview("NO")}
                                        />
-                                       <span>{"No"}</span>
+                                       <span>{"NO"}</span>
                                  </label>
                               </SelectContent>
                         </Select>
@@ -259,22 +314,22 @@ const Filter = () => {
                                     <input
                                        type="checkbox"
                                        name="nsaid"
-                                       value="Yes"
-                                       checked= {nsaid=== "Yes"}
-                                       onChange= {()=>handleNSAID("Yes")}
+                                       value="YES"
+                                       checked= {nsaid=== "YES"}
+                                       onChange= {()=>handleNSAID("YES")}
                                     />
-                                    <span>{"Yes"}</span>
+                                    <span>{"YES"}</span>
                                  </label>
 
                                  <label className="flex items-center space-x-2 ml-4">
                                     <input
                                           type="checkbox"
                                           name="nsaid"
-                                          value="No"
-                                          checked={nsaid === "No"}
-                                          onChange={()=>handleNSAID("No")}
+                                          value="NO"
+                                          checked={nsaid === "NO"}
+                                          onChange={()=>handleNSAID("NO")}
                                        />
-                                       <span>{"No"}</span>
+                                       <span>{"NO"}</span>
                                  </label>
                               </SelectContent>
                         </Select>
@@ -286,27 +341,26 @@ const Filter = () => {
                                  {/* <SelectValue placeholder="CHA₂DS₂-VASc" /> */}
                               </SelectTrigger>
                               <SelectContent>
-                              <label className="flex items-center space-x-2 ml-4">
+                                 <label className="flex items-center space-x-2 ml-4">
                                        <input
                                           type="checkbox"
                                           name="cvd"
-                                          value="Yes"
-                                          checked= {cvd=== "Yes"}
-                                          onChange= {()=>handleCVD("Yes")}
+                                          value="YES"
+                                          checked= {cvd=== "YES"}
+                                          onChange= {()=>handleCVD("YES")}
                                        />
-                                       <span>{"Yes"}</span>
-                                    </label>
-
-                                    <label className="flex items-center space-x-2 ml-4">
-                                       <input
-                                             type="checkbox"
-                                             name="cvd"
-                                             value="No"
-                                             checked={cvd === "No"}
-                                             onChange={()=>handleCVD("No")}
-                                          />
-                                          <span>{"No"}</span>
-                                    </label>
+                                       <span>{"YES"}</span>
+                                 </label>
+                                 <label className="flex items-center space-x-2 ml-4">
+                                    <input
+                                          type="checkbox"
+                                          name="cvd"
+                                          value="NO"
+                                          checked={cvd === "NO"}
+                                          onChange={()=>handleCVD("NO")}
+                                       />
+                                       <span>{"NO"}</span>
+                                 </label>
                               </SelectContent>
                         </Select>
 

@@ -9,15 +9,14 @@ import { GpSystems } from './enums/GPsystems.ts'
 import { MainContext } from './MainContext'
 import { GpInformationSystems } from './enums/GpInformationSystems'
 import { AFibColumns } from './enums/AFibColumns'
-import { onAnticoagulantMeds, onAspirinAntiplateletMeds, onNSAIDMeds } from './helper/AFibLTCmeds'
-
+import { getBloodPressure, hasCVD, hasHypertension, onAnticoagulantMeds, onAspirinAntiplateletMeds, onNSAIDMeds, onStatinsMeds } from './helper/AFibLTCmeds'
 
 const Import = () => {
-   
+   const navigate = useNavigate()//Inititalised the navigate function
    const [gpSystemSelected, setGpSystemSelected] = useState(GpSystems.NoneSelected)
    // console.log(gpSystemSelected)
    
-   const { setImportedData } = useContext(MainContext)
+   const { setImportedData, setRelativeRunDate } = useContext(MainContext)
 
    const handleGpSystemSelect = (event) =>{
       setGpSystemSelected(event.target.value)
@@ -42,7 +41,9 @@ const Import = () => {
 
       const file = files[0]
       let skipRows = 0;
+      let runDateTime;
       let relativeRunDate;
+   
       
       //Check GP system 
       if(gpSystemSelected === GpInformationSystems.EMIS_Web){
@@ -56,7 +57,7 @@ const Import = () => {
                for (let i = 0; i < lines.length; i++){
                   let line = lines[i].split(',');
                   if(line[0].includes("Last Run") || line[0].includes("Last run")){
-                     relativeRunDate = line[3]
+                     runDateTime = line[3]
                   }
                   if(line[0].includes("Patient Details")){
                      skipRows++;
@@ -65,8 +66,9 @@ const Import = () => {
                   skipRows++;
                }
                parseData(file, skipRows) //?? HOISTING Function
-               
-               // window.location.href='/display'
+               relativeRunDate = runDateTime.split(' ')[0] // Splits the run date and time and saves the first value in the variable
+               setRelativeRunDate(relativeRunDate)
+              
              
              };
          }
@@ -86,7 +88,11 @@ const Import = () => {
                       dataArray[dataArray.length - 1][AFibColumns.OnAnticoagulant] = onAnticoagulantMeds(dataArray[dataArray.length - 1]);
                       dataArray[dataArray.length - 1][AFibColumns.OnAspirinAntiplatelet] = onAspirinAntiplateletMeds(dataArray[dataArray.length - 1]);
                       dataArray[dataArray.length - 1][AFibColumns.OnNSAID] = onNSAIDMeds(dataArray[dataArray.length - 1]);
-
+                      dataArray[dataArray.length - 1][AFibColumns.OnStatin] = onStatinsMeds(dataArray[dataArray.length - 1]);
+                      dataArray[dataArray.length - 1][AFibColumns.CVD] = hasCVD(dataArray[dataArray.length - 1]);
+                      dataArray[dataArray.length - 1][AFibColumns.Hypertension] = hasHypertension(dataArray[dataArray.length - 1]);
+                      dataArray[dataArray.length - 1][AFibColumns.BP] = getBloodPressure(dataArray[dataArray.length - 1]);
+                     
                   }
               });
               console.log("Processed Data:", dataArray);

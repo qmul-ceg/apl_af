@@ -14,10 +14,10 @@ export function onAnticoagulantMeds(dataRow) {
     if (DOAC) {        
         OnAnticoag = "YES - DOAC";
         if (Warf && Date.parse(Warf) > Date.parse(DOAC))
-            OnAnticoag = "YES - Warf"
+            OnAnticoag = "YES - WARF"
     }
     else if (Warf) {
-        OnAnticoag = "YES - Warf";
+        OnAnticoag = "YES - WARF";
     }
     else if (AnticoagContra) 
         OnAnticoag = "CONTRA"
@@ -43,12 +43,15 @@ export function onNSAIDMeds(dataRow) {
 }
 
 export function onStatinsMeds(dataRow) {
+
     return dataRow[AFibColumns.StatinsMed] ? "YES" : "NO";
 }
 
 
 export function hasCVD(dataRow) {
+
     let CVD = "NO";
+
     if (dataRow[AFibColumns.IHD_Concept] || dataRow[AFibColumns.StrokeTIA_Concept]  || dataRow[AFibColumns.NonHaemStrokeConcept]  || dataRow[AFibColumns.PAD_Concept]) {
         CVD = "YES";
     }
@@ -65,7 +68,7 @@ export function getBloodPressure(dataRow) {
     
     let BP = "";
     if (dataRow[AFibColumns.SystolicBPValue] && dataRow[AFibColumns.DiastolicBPValue])
-        BP = dataRow[AFibColumns.SystolicBPValue] + '/' + dataRow[AFibColumns.DiastolicBPValue];
+        BP = `${dataRow[AFibColumns.SystolicBPValue]}/${dataRow[AFibColumns.DiastolicBPValue]}`;
 
     return BP;
 

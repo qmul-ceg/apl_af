@@ -100,13 +100,13 @@ const Data = () => {
                      <span className="text-xs w-full border ">{patient[AFibColumns.ORBIT_Date]}</span>
                   </div>
                </TableCell>
-               <TableCell>{patient[AFibColumns.OnAspirinAntiplatelet]}</TableCell>
+               <TableCell>{patient[AFibColumns.OnAnticoagulant]}</TableCell>
                <TableCell >{patient[AFibColumns.OnAspirinAntiplatelet]}</TableCell>
                <TableCell >{patient[AFibColumns.OnNSAID]}</TableCell>
                <TableCell>{patient[AFibColumns.OnStatin]}</TableCell>
                <TableCell >{patient[AFibColumns.CVD]}</TableCell>
                <TableCell >{patient[AFibColumns.Hypertension]}</TableCell>
-               <TableCell >{patient[AFibColumns.SystolicBPValue]}</TableCell>
+               <TableCell >{patient[AFibColumns.BP]}</TableCell>
                <TableCell >{patient[AFibColumns.MedsReviewDate]}</TableCell>
 
             </TableRow>
