@@ -2,11 +2,24 @@ import React, { useState } from 'react'
 import { FiChevronDown, FiChevronUp, FiInfo } from 'react-icons/fi'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
-import * as Dialog from "@radix-ui/react-dialog";
 import { Popover, PopoverContent, PopoverTrigger, } from "@/components/ui/popover"
+import { MainContext } from '@/MainContext'
+import { useContext } from 'react'
 
 const Filter = () => {
 
+   const{  
+         selectedAges, handleAgeSelection, 
+         nsaid, handleNSAID, 
+         cvd, handleCVD,
+         selectedBP, handleBP,
+         selectedChd, handleChd,
+         selectedOrbit, handleOrbit,
+         medReview, handleMedReview} = useContext(MainContext);
+
+
+
+   //FILTER FUNCTIONALITY
    const[filterMenu, setFilterMenu] = useState(true)
    const[quickFilter, setQuickFilter] = useState(true)
 
@@ -29,14 +42,14 @@ const Filter = () => {
             </button>
          </div>
          
-         
-         
          {
             filterMenu &&(
                <div className= "flex justify-between border border-gray-400 w-full px-4 py-2 h-80" id="collapsible_filter ">
                   
                   <div className="w-[70vh] flex justify-between ">
+                     {/* FILTER COLUMN 1 */}
                      <div className= "w-64 flex flex-col gap-6 ">
+                        {/* ANTICOAGULANT FILTER */}
                         <Select>
                               <SelectTrigger className=" bg-[#648DBC] text-white">
                                  <h1 >Anticoagulants / Antiplatelets</h1>
@@ -52,21 +65,62 @@ const Filter = () => {
                               </SelectContent>
                         </Select>
 
+                        {/* CHA₂DS₂-VASc FILTER */}
                         <Select>
                               <SelectTrigger className=" bg-[#648DBC] text-white">
                                  <h1>CHA₂DS₂-VASc</h1>
                                  {/* <SelectValue placeholder="CHA₂DS₂-VASc" /> */}
                               </SelectTrigger>
                               <SelectContent>
-                                 <SelectItem value="light">≥ 2</SelectItem>
-                                 <SelectItem value="dark">1</SelectItem>
-                                 <SelectItem value="system">0</SelectItem>
-                                 <SelectItem value="system">Recorded {'>'} 12m</SelectItem>
-                                 <SelectItem value="system">Not Recorded</SelectItem>
-
+                                 <label className="flex items-center space-x-2 ml-4">
+                                    <input
+                                       type="checkbox"
+                                       value="gte2"
+                                       checked={selectedChd.includes("gte2")}
+                                       onChange={() => handleChd("gte2")}
+                                    />
+                                    <span>≥ 2</span>
+                                 </label>
+                                 <label className="flex items-center space-x-2 ml-4">
+                                    <input
+                                       type="checkbox"
+                                       value="1"
+                                       checked={selectedChd.includes("1")}
+                                       onChange={() => handleChd("1")}
+                                    />
+                                    <span>1</span>
+                                 </label>
+                                 <label className="flex items-center space-x-2 ml-4">
+                                    <input
+                                       type="checkbox"
+                                       value="0"
+                                       checked={selectedChd.includes("0")}
+                                       onChange={() => handleChd("0")}
+                                    />
+                                    <span>0</span>
+                                 </label>
+                                 <label className="flex items-center space-x-2 ml-4">
+                                    <input
+                                       type="checkbox"
+                                       value=">12m"
+                                       checked={selectedChd.includes(">12m")}
+                                       onChange={() => handleChd(">12m")}
+                                    />
+                                    <span>Recorded {'>'} 12m</span>
+                                 </label>
+                                 <label className="flex items-center space-x-2 ml-4">
+                                    <input
+                                       type="checkbox"
+                                       value="not_recorded"
+                                       checked={selectedChd.includes("not_recorded")}
+                                       onChange={() => handleChd("not_recorded")}
+                                    />
+                                    <span>Not Recorded</span>
+                                 </label>
                               </SelectContent>
                         </Select>
 
+                        {/*VULNERABILITIES FILTER */}
                         <Select>
                               <SelectTrigger className=" bg-[#648DBC]  text-white">
                                  <h1>VULNERABILITIES</h1>
@@ -82,77 +136,228 @@ const Filter = () => {
 
                      </div>
 
-                     <div className= "w-40 flex flex-col gap-6">
+                     {/* FILTER COLUMN 2 */}
+                     <div className= "w-44 flex flex-col gap-6">
+                        {/* AGE FILTER*/}
                         <Select>
                               <SelectTrigger className=" bg-[#648DBC]  text-white">
                                  <h1>AGE</h1>
-                                 {/* <SelectValue placeholder="" /> */}
                               </SelectTrigger>
                               <SelectContent>
-                                 <SelectItem value="none">{'<'} 65</SelectItem>
-                                 <SelectItem value="doac_warfarin">65 - 79</SelectItem>
-                                 <SelectItem value="doac">80+</SelectItem>
+                                 <label className="flex items-center space-x-2 ml-4">
+                                    <input
+                                       type="checkbox"
+                                       value="<65"
+                                       checked={selectedAges.includes("<65")}
+                                       onChange={() => handleAgeSelection("<65")}
+                                    />
+                                    <span>{"< 65"}</span>
+                                 </label>
+
+                                 <label className="flex items-center space-x-2 ml-4">
+                                    <input
+                                       type="checkbox"
+                                       value="65-79"
+                                       checked={selectedAges.includes("65-79")}
+                                       onChange={() => handleAgeSelection("65-79")}
+                                    />
+                                    <span>65 - 79</span>
+                                 </label>
+                                 <label className="flex items-center space-x-2 ml-4">
+                                    <input
+                                       type="checkbox"
+                                       value="80+"
+                                       checked={selectedAges.includes("80+")}
+                                       onChange={() => handleAgeSelection("80+")}
+                                    />
+                                    <span>80+</span>
+                                 </label>
                               </SelectContent>
                         </Select>
 
+                        {/* MED REVIEW FILTER*/}
                         <Select>
                               <SelectTrigger className=" bg-[#648DBC]  text-white">
-                                 <h1>MED REVIEW</h1>
+                                 <h1>MED REVIEW {">"} 12m</h1>
                                  {/* <SelectValue placeholder="CHA₂DS₂-VASc" /> */}
                               </SelectTrigger>
                               <SelectContent>
-                                 <SelectItem value="light">Yes</SelectItem>
-                                 <SelectItem value="dark">No</SelectItem>
+                              <label className="flex items-center space-x-2 ml-4">
+                                    <input
+                                       type="checkbox"
+                                       name="medReview"
+                                       value="Yes"
+                                       checked = {medReview=== "Yes"}
+                                       onChange= {()=>handleMedReview("Yes")}
+                                    />
+                                    <span>{"Yes"}</span>
+                                 </label>
+
+                                 <label className="flex items-center space-x-2 ml-4">
+                                    <input
+                                          type="checkbox"
+                                          name="medReview"
+                                          value="No"
+                                          checked={medReview === "No"}
+                                          onChange={()=>handleMedReview("No")}
+                                       />
+                                       <span>{"No"}</span>
+                                 </label>
                               </SelectContent>
                         </Select>
 
+                         {/* ORBIT FILTER*/}
                         <Select>
-                              <SelectTrigger className=" bg-[#648DBC]  text-white">
-                                 <h1>ORBIT</h1>
-                                 {/* <SelectValue placeholder="VULNERABILITIES" /> */}
-                              </SelectTrigger>
-                              <SelectContent>
-                                 <SelectItem value="light">≥ 4</SelectItem>
-                                 <SelectItem value="dark">Recorded {'>'} 12m</SelectItem>
-                                 <SelectItem value="system">Not Recorded</SelectItem>
-                              </SelectContent>
+                           <SelectTrigger className=" bg-[#648DBC]  text-white">
+                              <h1>ORBIT</h1>
+                              {/* <SelectValue placeholder="VULNERABILITIES" /> */}
+                           </SelectTrigger>
+                           <SelectContent>
+                              <label className="flex items-center space-x-2 ml-4">
+                                 <input
+                                    type="checkbox"
+                                    value="gte4"
+                                    checked={selectedOrbit.includes("gte4")}
+                                    onChange={() => handleOrbit("gte4")}
+                                 />
+                                 <span>≥ 4</span>
+                              </label>
+                              <label className="flex items-center space-x-2 ml-4">
+                                 <input
+                                    type="checkbox"
+                                    value=">12m"
+                                    checked={selectedOrbit.includes(">12m")}
+                                    onChange={() => handleOrbit(">12m")}
+                                 />
+                                 <span>Recorded {'>'} 12m</span>
+                              </label>
+                              <label className="flex items-center space-x-2 ml-4">
+                                 <input
+                                    type="checkbox"
+                                    value="not_recorded"
+                                    checked={selectedOrbit.includes("not_recorded")}
+                                    onChange={() => handleOrbit("not_recorded")}
+                                 />
+                                 <span>Not Recorded</span>
+                              </label>
+                              
+                              
+                           </SelectContent>
                         </Select>
-
                      </div>
                      
+                     {/* FILTER COLUMN 3 */}
                      <div className= "w-40 flex flex-col gap-6 ">
+                        {/*NSAID FILTER*/}
                         <Select>
                               <SelectTrigger className=" bg-[#648DBC] text-white">
                                  <h1>NSAID</h1>
                                  {/* <SelectValue placeholder="" /> */}
                               </SelectTrigger>
                               <SelectContent>
-                                 <SelectItem value="light">Yes</SelectItem>
-                                 <SelectItem value="dark">No</SelectItem>
+                                 <label className="flex items-center space-x-2 ml-4">
+                                    <input
+                                       type="checkbox"
+                                       name="nsaid"
+                                       value="Yes"
+                                       checked= {nsaid=== "Yes"}
+                                       onChange= {()=>handleNSAID("Yes")}
+                                    />
+                                    <span>{"Yes"}</span>
+                                 </label>
+
+                                 <label className="flex items-center space-x-2 ml-4">
+                                    <input
+                                          type="checkbox"
+                                          name="nsaid"
+                                          value="No"
+                                          checked={nsaid === "No"}
+                                          onChange={()=>handleNSAID("No")}
+                                       />
+                                       <span>{"No"}</span>
+                                 </label>
                               </SelectContent>
                         </Select>
 
+                        {/*CVD FILTER*/}
                         <Select>
                               <SelectTrigger className=" bg-[#648DBC]  text-white">
                                  <h1>CVD</h1>
                                  {/* <SelectValue placeholder="CHA₂DS₂-VASc" /> */}
                               </SelectTrigger>
                               <SelectContent>
-                                 <SelectItem value="light">Yes</SelectItem>
-                                 <SelectItem value="dark">No</SelectItem>
+                              <label className="flex items-center space-x-2 ml-4">
+                                       <input
+                                          type="checkbox"
+                                          name="cvd"
+                                          value="Yes"
+                                          checked= {cvd=== "Yes"}
+                                          onChange= {()=>handleCVD("Yes")}
+                                       />
+                                       <span>{"Yes"}</span>
+                                    </label>
+
+                                    <label className="flex items-center space-x-2 ml-4">
+                                       <input
+                                             type="checkbox"
+                                             name="cvd"
+                                             value="No"
+                                             checked={cvd === "No"}
+                                             onChange={()=>handleCVD("No")}
+                                          />
+                                          <span>{"No"}</span>
+                                    </label>
                               </SelectContent>
                         </Select>
 
+                        {/* BP FILTER*/}
                         <Select>
                               <SelectTrigger className=" bg-[#648DBC] text-white">
                                  <h1>BP</h1>
                                  {/* <SelectValue placeholder="VULNERABILITIES" /> */}
                               </SelectTrigger>
                               <SelectContent>
-                                 <SelectItem value="light"> {'<'} 130/80</SelectItem>
+                              <label className="flex items-center space-x-2 ml-4">
+                                    <input
+                                       type="checkbox"
+                                       value="lt130-80"
+                                       checked={selectedBP.includes("lt130-80")}
+                                       onChange={() => handleBP("lt130-80")}
+                                    />
+                                    <span>{"<"} 130/80</span>
+                                 </label>
+
+                                 <label className="flex items-center space-x-2 ml-4">
+                                    <input
+                                       type="checkbox"
+                                       value="lt140-90"
+                                       checked={selectedBP.includes("lt140-90")}
+                                       onChange={() => handleBP("lt140-90")}
+                                    />
+                                    <span>{"<"} 140/90</span>
+                                 </label>
+                                 <label className="flex items-center space-x-2 ml-4">
+                                    <input
+                                       type="checkbox"
+                                       value="140/90-159/90"
+                                       checked={selectedBP.includes("140/90-159/90")}
+                                       onChange={() => handleBP("140/90-159/90")}
+                                    />
+                                    <span>140/90 - 159/90</span>
+                                 </label>
+                                 <label className="flex items-center space-x-2 ml-4">
+                                    <input
+                                       type="checkbox"
+                                       value="gte160-100"
+                                       checked={selectedBP.includes("gte160-100")}
+                                       onChange={() => handleBP("gte160-100")}
+                                    />
+                                    <span> ≥ 160/100</span>
+                                 </label>
+                                 {/* <SelectItem value="light"> {'<'} 130/80</SelectItem>
                                  <SelectItem value="dark"> {'<'} 140/90</SelectItem>
                                  <SelectItem value="system">140/90 - 159/90</SelectItem>
-                                 <SelectItem value="system"> ≥ 160/100</SelectItem>
+                                 <SelectItem value="system"> ≥ 160/100</SelectItem> */}
 
                               </SelectContent>
                         </Select>

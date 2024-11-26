@@ -1,12 +1,15 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow,} from "@/components/ui/table"
-import Modal from './Modal'
-import patients from '/src/data/patient_data.json'
+// import patients from '/src/data/patient_data.json'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, } from "@/components/ui/dialog"
+import { MainContext } from '@/MainContext'
 
 
 const Data = () => {
 
+   const { getFilteredPatients } = useContext(MainContext)
+
+   const filteredPatients = getFilteredPatients()
 
 
   return (
@@ -63,7 +66,7 @@ const Data = () => {
          </TableHeader>
          
          <TableBody className="text-center">
-            {patients.map((patient, index)=> (
+            {filteredPatients.map((patient, index)=> (
             <TableRow key={index}>
                <Dialog>
                   <DialogTrigger asChild>
@@ -83,16 +86,27 @@ const Data = () => {
                <TableCell>{patient.age}</TableCell>
                <TableCell>{patient.gender}</TableCell>
                <TableCell >{patient.referenceNo}</TableCell>
-               <TableCell >{patient.cha2ds2Vasc.value}</TableCell>
-               <TableCell>{patient.cha2ds2Vasc.latestDate}</TableCell>
-               <TableCell >{patient.orbit.value}</TableCell>
-               <TableCell >{patient.orbit.latestDate}</TableCell>
-               <TableCell>1234455</TableCell>
-               <TableCell >1234455</TableCell>
-               <TableCell >1234455</TableCell>
-               <TableCell>1234455</TableCell>
-               <TableCell >1234455</TableCell>
-               <TableCell >1234455</TableCell>
+               <TableCell>
+               <div className="flex w-full">
+                  <span className="text-xs w-[50%] border">{patient.cha2ds2Vasc.value}</span>
+                  <span className="text-xs w-full border">{patient.cha2ds2Vasc.latestDate}</span>
+               </div>
+               </TableCell>
+               
+               <TableCell >
+                  <div className="flex w-full">
+                     <span className="text-xs w-[50%] border ">{patient.orbit.value}</span>
+                     <span className="text-xs w-full border ">{patient.orbit.latestDate}</span>
+                  </div>
+               </TableCell>
+               <TableCell>{patient.anticoagulantIssued}</TableCell>
+               <TableCell >{patient.aspirinIssued}</TableCell>
+               <TableCell >{patient.nsaidIssued}</TableCell>
+               <TableCell>{patient.statinIssued}</TableCell>
+               <TableCell >{patient.cvd}</TableCell>
+               <TableCell >{patient.htn}</TableCell>
+               <TableCell >{patient.bp}</TableCell>
+               <TableCell >{patient.medReviewDate}</TableCell>
 
             </TableRow>
               )) }
