@@ -60,3 +60,13 @@ export function hasHypertension(dataRow) {
 
     return dataRow[AFibColumns.HTN_Concept] ? "YES" : "NO";
 }
+
+export function getBloodPressure(dataRow) {
+    
+    let BP = "";
+    if (dataRow[AFibColumns.SystolicBPValue] && dataRow[AFibColumns.DiastolicBPValue])
+        BP = dataRow[AFibColumns.SystolicBPValue] + '/' + dataRow[AFibColumns.DiastolicBPValue];
+
+    return BP;
+
+}
