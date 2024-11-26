@@ -42,6 +42,12 @@ export function onNSAIDMeds(dataRow) {
     return dataRow[AFibColumns.NSAID_Med] ? "YES" : "NO";
 }
 
+export function onStatinsMeds(dataRow) {
+
+    return dataRow[AFibColumns.StatinsMed] ? "YES" : "NO";
+}
+
+
 export function hasCVD(dataRow) {
 
     let CVD = "NO";
