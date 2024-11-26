@@ -43,15 +43,12 @@ export function onNSAIDMeds(dataRow) {
 }
 
 export function onStatinsMeds(dataRow) {
-
     return dataRow[AFibColumns.StatinsMed] ? "YES" : "NO";
 }
 
 
 export function hasCVD(dataRow) {
-
     let CVD = "NO";
-
     if (dataRow[AFibColumns.IHD_Concept] || dataRow[AFibColumns.StrokeTIA_Concept]  || dataRow[AFibColumns.NonHaemStrokeConcept]  || dataRow[AFibColumns.PAD_Concept]) {
         CVD = "YES";
     }

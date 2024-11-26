@@ -1,10 +1,27 @@
 import React, { useState, createContext, } from 'react'
 import patientsData from '/src/data/patient_data.json'
+import { GpSystems } from './enums/GPsystems'
 
 export const MainContext = createContext()
 
 const MainProvider = ({ children }) => {
    const [patients] = useState(patientsData) //Static because we are not setting our patient data
+   const [gpSystem, setGpSystem] = useState(GpSystems.NotSelected)
+   const [importedData, setImportedData] = useState([])
+   console.log(importedData)
+
+
+
+   
+
+   // const setImportedData = (data) =>{
+   //    setImportedData(data)
+   // }
+
+
+
+
+
 
    //FILTER STATES
    const [selectedAges, setSelectedAges] = useState([])
@@ -128,7 +145,7 @@ const MainProvider = ({ children }) => {
 
    //FILTER LOGIC
    const getFilteredPatients = () =>{
-      return patients.filter((patient) =>{
+      return importedData.filter((patient) =>{
          const ageFilter = 
             selectedAges.includes("<65") && patient.age < 65 ||
             selectedAges.includes("65-79") && patient.age >= 65 && patient.age <= 79 ||
@@ -186,8 +203,9 @@ const MainProvider = ({ children }) => {
       selectedBP, handleBP,
       selectedChd,handleChd,
       selectedOrbit, handleOrbit,
-      medReview, handleMedReview
-
+      medReview, handleMedReview,
+      importedData, setImportedData
+      // handleGpSystem
       // parseBloodPressure,
       // checkPatientBloodPressure
    }

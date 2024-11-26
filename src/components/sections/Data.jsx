@@ -3,6 +3,7 @@ import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Tabl
 // import patients from '/src/data/patient_data.json'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, } from "@/components/ui/dialog"
 import { MainContext } from '@/MainContext'
+import { AFibColumns } from '@/enums/AFibColumns'
 
 
 const Data = () => {
@@ -10,7 +11,7 @@ const Data = () => {
    const { getFilteredPatients } = useContext(MainContext)
 
    const filteredPatients = getFilteredPatients()
-
+   
 
   return (
     <>
@@ -71,7 +72,7 @@ const Data = () => {
                <Dialog>
                   <DialogTrigger asChild>
                      <TableCell className="font-medium  cursor-pointer text-blue-600 hover:underline">
-                        {patient.fullName}
+                        {patient[AFibColumns.FullName]}
 
                      </TableCell>
                   </DialogTrigger>
@@ -83,30 +84,30 @@ const Data = () => {
                </Dialog>
 
                
-               <TableCell>{patient.age}</TableCell>
-               <TableCell>{patient.gender}</TableCell>
-               <TableCell >{patient.referenceNo}</TableCell>
+               <TableCell>{patient[AFibColumns.Age]}</TableCell>
+               <TableCell>{patient[AFibColumns.Gender]}</TableCell>
+               <TableCell >{patient[AFibColumns.PatientReference]}</TableCell>
                <TableCell>
                <div className="flex w-full">
-                  <span className="text-xs w-[50%] border">{patient.cha2ds2Vasc.value}</span>
-                  <span className="text-xs w-full border">{patient.cha2ds2Vasc.latestDate}</span>
+                  <span className="text-xs w-[50%] border">{patient[AFibColumns.CHADSVAScValue]}</span>
+                  <span className="text-xs w-full border">{patient[AFibColumns.CHADSVAScDate]}</span>
                </div>
                </TableCell>
                
                <TableCell >
                   <div className="flex w-full">
-                     <span className="text-xs w-[50%] border ">{patient.orbit.value}</span>
-                     <span className="text-xs w-full border ">{patient.orbit.latestDate}</span>
+                     <span className="text-xs w-[50%] border ">{patient[AFibColumns.ORBIT_Value]}</span>
+                     <span className="text-xs w-full border ">{patient[AFibColumns.ORBIT_Date]}</span>
                   </div>
                </TableCell>
-               <TableCell>{patient.anticoagulantIssued}</TableCell>
-               <TableCell >{patient.aspirinIssued}</TableCell>
-               <TableCell >{patient.nsaidIssued}</TableCell>
-               <TableCell>{patient.statinIssued}</TableCell>
-               <TableCell >{patient.cvd}</TableCell>
-               <TableCell >{patient.htn}</TableCell>
-               <TableCell >{patient.bp}</TableCell>
-               <TableCell >{patient.medReviewDate}</TableCell>
+               <TableCell>{patient[AFibColumns.OnAspirinAntiplatelet]}</TableCell>
+               <TableCell >{patient[AFibColumns.OnAspirinAntiplatelet]}</TableCell>
+               <TableCell >{patient[AFibColumns.OnNSAID]}</TableCell>
+               <TableCell>{patient[AFibColumns.OnStatin]}</TableCell>
+               <TableCell >{patient[AFibColumns.CVD]}</TableCell>
+               <TableCell >{patient[AFibColumns.Hypertension]}</TableCell>
+               <TableCell >{patient[AFibColumns.SystolicBPValue]}</TableCell>
+               <TableCell >{patient[AFibColumns.MedsReviewDate]}</TableCell>
 
             </TableRow>
               )) }
