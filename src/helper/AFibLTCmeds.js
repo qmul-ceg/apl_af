@@ -1,6 +1,6 @@
 import { AFibColumns } from "@/enums/AFibColumns";
 
-export function onAnticoagulant(dataRow) {
+export function onAnticoagulantMeds(dataRow) {
 
     let OnAnticoag = "NO";
 
@@ -28,7 +28,7 @@ export function onAnticoagulant(dataRow) {
     return OnAnticoag;
 }
 
-export function onAspirinAntiplatelet(dataRow) {
+export function onAspirinAntiplateletMeds(dataRow) {
 
     let OnAsprineAntip;
 
@@ -37,7 +37,7 @@ export function onAspirinAntiplatelet(dataRow) {
     return OnAsprineAntip;
 }
 
-export function onNSAID(dataRow) {
+export function onNSAIDMeds(dataRow) {
 
     return dataRow[AFibColumns.NSAID_Med] ? "YES" : "NO";
 }
