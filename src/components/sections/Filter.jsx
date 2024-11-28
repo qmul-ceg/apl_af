@@ -52,72 +52,72 @@ const Filter = () => {
                      <div className= "w-64 flex flex-col gap-6 ">
                         {/* ANTICOAGULANT FILTER */}
                         <Select>
-                              <SelectTrigger className=" bg-[#648DBC] text-white">
-                                 <h1 >Anticoagulants / Antiplatelets</h1>
-                                 {/* <SelectValue placeholder="" /> */}
-                              </SelectTrigger>
-                              <SelectContent>
-                                 <label className="flex items-center space-x-2 ml-4">
-                                    <input
-                                       type="radio"
-                                       value="none"
-                                       name="antiFilter"
-                                       checked={selectedAnti === "none"}
-                                       onChange={(event) => handleAntiFilter(event.target.value)}
-                                    />
-                                    <span>NONE</span>
-                                 </label>
-                                 <label className="flex items-center space-x-2 ml-4">
-                                    <input
-                                       type="radio"
-                                       value="doac_warf"
-                                       name="antiFilter"
-                                       checked={selectedAnti === "doac_warf"}
-                                       onChange={(event) => handleAntiFilter(event.target.value)}
-                                    />
-                                    <span>DOAC or WARFARIN</span>
-                                 </label>
-                                 <label className="flex items-center space-x-2 ml-4">
-                                    <input
-                                       type="radio"
-                                       value="doac"
-                                       name="antiFilter"
-                                       checked={selectedAnti === "doac"}
-                                       onChange={(event) => handleAntiFilter(event.target.value)}
-                                    />
-                                    <span>DOAC</span>
-                                 </label>
-                                 <label className="flex items-center space-x-2 ml-4">
-                                    <input
-                                       type="radio"
-                                       value="warf"
-                                       name="antiFilter"
-                                       checked={selectedAnti === "warf"}
-                                       onChange={(event) => handleAntiFilter(event.target.value)}
-                                    />
-                                    <span>WARFARIN</span>
-                                 </label>
-                                 <label className="flex items-center space-x-2 ml-4">
-                                    <input
-                                       type="radio"
-                                       value="antiplatelets"
-                                       name="antiFilter"
-                                       checked={selectedAnti === "antiplatelets"}
-                                       onChange={(event) => handleAntiFilter(event.target.value)}
-                                    />
-                                    <span>ANTIPLATELETS ONLY</span>
-                                 </label>
-                                 <label className="flex items-center space-x-2 ml-4">
-                                    <input
-                                       type="radio"
-                                       value="dual"
-                                       name="antiFilter"
-                                       checked={selectedAnti === "dual"}
-                                       onChange={(event) => handleAntiFilter(event.target.value)}
-                                    />
-                                    <span>DUAL THERAPY</span>
-                                 </label>
-                              </SelectContent>
+                           <SelectTrigger className=" bg-[#648DBC] text-white">
+                              <h1 >Anticoagulants / Antiplatelets</h1>
+                              {/* <SelectValue placeholder="" /> */}
+                           </SelectTrigger>
+                           <SelectContent>
+                              <label className="flex items-center space-x-2 ml-4">
+                                 <input
+                                    type="radio"
+                                    value="none"
+                                    name="antiFilter"
+                                    checked={selectedAnti === "none"}
+                                    onChange={(event) => handleAntiFilter(event.target.value)}
+                                 />
+                                 <span>NONE</span>
+                              </label>
+                              <label className="flex items-center space-x-2 ml-4">
+                                 <input
+                                    type="radio"
+                                    value="doac_warf"
+                                    name="antiFilter"
+                                    checked={selectedAnti === "doac_warf"}
+                                    onChange={(event) => handleAntiFilter(event.target.value)}
+                                 />
+                                 <span>DOAC or WARFARIN</span>
+                              </label>
+                              <label className="flex items-center space-x-2 ml-4">
+                                 <input
+                                    type="radio"
+                                    value="doac"
+                                    name="antiFilter"
+                                    checked={selectedAnti === "doac"}
+                                    onChange={(event) => handleAntiFilter(event.target.value)}
+                                 />
+                                 <span>DOAC</span>
+                              </label>
+                              <label className="flex items-center space-x-2 ml-4">
+                                 <input
+                                    type="radio"
+                                    value="warf"
+                                    name="antiFilter"
+                                    checked={selectedAnti === "warf"}
+                                    onChange={(event) => handleAntiFilter(event.target.value)}
+                                 />
+                                 <span>WARFARIN</span>
+                              </label>
+                              <label className="flex items-center space-x-2 ml-4">
+                                 <input
+                                    type="radio"
+                                    value="antiplatelets"
+                                    name="antiFilter"
+                                    checked={selectedAnti === "antiplatelets"}
+                                    onChange={(event) => handleAntiFilter(event.target.value)}
+                                 />
+                                 <span>ANTIPLATELETS ONLY</span>
+                              </label>
+                              <label className="flex items-center space-x-2 ml-4">
+                                 <input
+                                    type="radio"
+                                    value="dual"
+                                    name="antiFilter"
+                                    checked={selectedAnti === "dual"}
+                                    onChange={(event) => handleAntiFilter(event.target.value)}
+                                 />
+                                 <span>DUAL THERAPY</span>
+                              </label>
+                           </SelectContent>
                         </Select>
 
                         {/* CHA₂DS₂-VASc FILTER */}

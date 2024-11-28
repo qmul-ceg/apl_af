@@ -166,18 +166,4 @@ const Import = () => {
 
 export default Import
     
-      // const file = event.target.files[0]
-      // if(!file) return;
-
-      // if(file.type !== 'text/csv'){
-      //    setDefaultResultOrder('Please upload a valid CSV file.')
-      //    return;
-      // }
-
-      // Papa.parse(file, {
-      //    // header: true, 
-      //    // skipEmptyLines: true,
-      //    complete: (result) => {
-      //       console.log(result)
-      //    }
-      // })
+      

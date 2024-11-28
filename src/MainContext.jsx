@@ -9,12 +9,59 @@ const MainProvider = ({ children }) => {
    const [patients] = useState(patientsData) //Static because we are not setting our patient data
    const [importedData, setImportedData] = useState([])
    const [relativeRunDate, setRelativeRunDate] = useState("")
+   const [isModalOpen, setIsModalOpen] =useState(false)
+   const [selectedPatientData, setSelectedPatientData] =useState()
+   const [selectedPatientIndex, setSelectedPatientIndex] =useState()
+   console.log(isModalOpen)
 
+
+
+   const handlePatientClick = (index) =>{
+      console.log("Clicked row index:", index)
+
+      if(importedData.length > 0 && importedData[index]){
+         const selectedPatientRow = importedData[index] //Get the index of the the patient selected in imported Data
+         setSelectedPatientData(selectedPatientRow) 
+         setSelectedPatientIndex(index) //Stores index of the selected patient
+         setIsModalOpen(true)  //Opens modal
+         console.log(selectedPatientRow)
+         console.log(selectedPatientData)
+      }
+   
+   }
+
+   const handleNextPatient = () =>{
+      setSelectedPatientIndex((prevIndex) =>{
+         const nextIndex = prevIndex + 1 
+         const updatedIndex = nextIndex < importedData.length ? nextIndex : prevIndex;
+         setSelectedPatientData(importedData[updatedIndex])
+         return updatedIndex
+      })
+   }
+   
+
+   const handlePreviousPatient = () => {
+      setSelectedPatientIndex((prevIndex) => {
+      const prevIndexValue = prevIndex - 1;
+      const updatedIndex = prevIndexValue >= 0 ? prevIndexValue : prevIndex;
+      setSelectedPatientData(importedData[updatedIndex]);  // Update selected patient data
+      return updatedIndex;
+      });
+   };
+   // const [openModal, setOpenModal] = useState(false)
    // console.log(relativeRunDate)
-   console.log(importedData)
+   // console.log(importedData)
    // // const setImportedData = (data) =>{
    // //    setImportedData(data)
    // // }
+   // console.log(setSelectedPatient)
+   
+   //MODAL CONTROL
+   // const modalOpen =() =>{
+   //    setOpenModal(true)
+   // }
+
+   // modalOpen()
 
    //FILTER STATES
    const [selectedAnti, setSelectedAnti] = useState("none")
@@ -108,7 +155,6 @@ const MainProvider = ({ children }) => {
    }
 
    //CHA₂DS₂-VASc Filters
-
    const handleChd = (value) => {
       if(selectedChd.includes(value)){
          setSelectedChd(selectedChd.filter((item) => item !== value))
@@ -253,10 +299,12 @@ const MainProvider = ({ children }) => {
       importedData, setImportedData,
       setRelativeRunDate,
       selectedAnti, handleAntiFilter,
-
-      // handleGpSystem
-      // parseBloodPressure,
-      // checkPatientBloodPressure
+      isModalOpen, setIsModalOpen,
+      handlePatientClick,
+      selectedPatientData,
+      handleNextPatient,
+      handlePreviousPatient
+  
    }
 
 
@@ -274,5 +322,10 @@ export default MainProvider
 
 
 
+    // openModal, setOpenModal,
+      // modalOpen
 
+      // handleGpSystem
+      // parseBloodPressure,
+      // checkPatientBloodPressure
 

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow,} from "@/components/ui/table"
 // import patients from '/src/data/patient_data.json'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, } from "@/components/ui/dialog"
@@ -7,9 +7,8 @@ import { AFibColumns } from '@/enums/AFibColumns'
 
 
 const Data = () => {
-
-   const { getFilteredPatients } = useContext(MainContext)
-
+// modalOpen
+   const { getFilteredPatients, setIsModalOpen, handlePatientClick } = useContext(MainContext)
    const filteredPatients = getFilteredPatients()
    
 
@@ -69,19 +68,21 @@ const Data = () => {
          <TableBody className="text-center">
             {filteredPatients.map((patient, index)=> (
             <TableRow key={index}>
-               <Dialog>
-                  <DialogTrigger asChild>
-                     <TableCell className="font-medium  cursor-pointer text-blue-600 hover:underline">
+               {/* <Dialog>
+                  <DialogTrigger asChild> */}
+                     <TableCell className="font-medium  cursor-pointer text-blue-600 hover:underline"
+                     onClick={()=>handlePatientClick(index)}
+                     >
                         {patient[AFibColumns.FullName]}
 
                      </TableCell>
-                  </DialogTrigger>
-                  <DialogContent className="w-full">
+                  {/* </DialogTrigger>
+                  <DialogContent className="w-[500px]">
                      <DialogHeader>
                         <DialogTitle>Patient Details</DialogTitle>
                      </DialogHeader>
                   </DialogContent>
-               </Dialog>
+               </Dialog> */}
 
                
                <TableCell>{patient[AFibColumns.Age]}</TableCell>

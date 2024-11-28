@@ -4,7 +4,7 @@ import Display from './Display.jsx';
 import { useContext } from 'react';
 import { MainContext } from './MainContext.jsx';
 import MainProvider from './MainContext.jsx';
-
+import Modal from './components/sections/Modal.jsx';
 function App() {
 
    
@@ -17,6 +17,9 @@ function App() {
                <Routes>
                   <Route path = "/" element = {<Import />}/>
                   <Route path = "/display" element = {<Display />}/>
+                  <Route path = "/modal" element = {<Modal />}/> 
+                  {/* DELETE ABOVE PATH AFTER BUILDING MODAL */}
+
                </Routes>
             </Router>
          </div>

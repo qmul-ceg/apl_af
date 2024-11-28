@@ -1,12 +1,15 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 
 
 import Data from './components/sections/Data'
 import Header from './components/sections/Header'
 import Filter from './components/sections/Filter'
 import Modal from './components/sections/Modal'
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, } from "@/components/ui/dialog"
+// import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, } from "@/components/ui/dialog"
+import { MainContext } from './MainContext'
 
+
+import {  } from 'react'
 const Display = () => {
    // const[filterMenu, setFilterMenu] = useState(true)
    // const[quickFilter, setQuickFilter] = useState(true)
@@ -20,11 +23,15 @@ const Display = () => {
    // }
 
    // Selected Value
-   const[isModalOpen, setModalOpen] = useState(false)
+   // const[openModal, setOpenModal] = useState(false)
 
-   const triggerModal =() =>{
-      setModalOpen(!isModalOpen)
-   }
+   // const triggerModal =() =>{
+   //    setModalOpen(!isModalOpen)
+   // }
+
+  
+
+   const { isModalOpen } = useContext(MainContext)
 
 return (
    <div>
@@ -34,7 +41,10 @@ return (
                <Header />
             </div>
       </section>
-      
+       
+      <Modal open ={isModalOpen}>
+         
+      </Modal>
 
       {/* FILTER DROPDOWN */}
       <section className="flex flex-col justify-center items-center  mt-4" >
@@ -52,7 +62,7 @@ return (
          
       </section>
 
-
+     
 
    </div>
   )
