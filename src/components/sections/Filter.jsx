@@ -16,7 +16,8 @@ const Filter = () => {
          selectedChd, handleChd,
          selectedOrbit, handleOrbit,
          medReview, handleMedReview,
-         selectedAnti, handleAntiFilter} = useContext(MainContext);
+         selectedAnti, handleAntiFilter,
+         resetFilters} = useContext(MainContext);
 
 
 
@@ -67,6 +68,7 @@ const Filter = () => {
                                  />
                                  <span>NONE</span>
                               </label>
+
                               <label className="flex items-center space-x-2 ml-4">
                                  <input
                                     type="radio"
@@ -77,6 +79,7 @@ const Filter = () => {
                                  />
                                  <span>DOAC or WARFARIN</span>
                               </label>
+
                               <label className="flex items-center space-x-2 ml-4">
                                  <input
                                     type="radio"
@@ -87,6 +90,7 @@ const Filter = () => {
                                  />
                                  <span>DOAC</span>
                               </label>
+
                               <label className="flex items-center space-x-2 ml-4">
                                  <input
                                     type="radio"
@@ -97,6 +101,7 @@ const Filter = () => {
                                  />
                                  <span>WARFARIN</span>
                               </label>
+
                               <label className="flex items-center space-x-2 ml-4">
                                  <input
                                     type="radio"
@@ -107,6 +112,18 @@ const Filter = () => {
                                  />
                                  <span>ANTIPLATELETS ONLY</span>
                               </label>
+
+                              <label className="flex items-center space-x-2 ml-4">
+                                 <input
+                                    type="radio"
+                                    value="no_anticoagulant"
+                                    name="antiFilter"
+                                    checked={selectedAnti === "no_anticoagulant"}
+                                    onChange={(event) => handleAntiFilter(event.target.value)}
+                                 />
+                                 <span>NO ANTICOAGULANT</span>
+                              </label>
+
                               <label className="flex items-center space-x-2 ml-4">
                                  <input
                                     type="radio"
@@ -443,7 +460,10 @@ const Filter = () => {
                      </div>
                      
                      <div>
-                        <Button className = "bg-[#648DBC] font-bold text-white"variant="outline">RESET FILTERS</Button>
+                        <Button 
+                           className = "bg-[#648DBC] font-bold text-white"
+                           variant="outline"
+                           onClick={resetFilters}>RESET FILTERS</Button>
                      </div>
                      
 

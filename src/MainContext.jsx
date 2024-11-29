@@ -48,33 +48,45 @@ const MainProvider = ({ children }) => {
       return updatedIndex;
       });
    };
-   // const [openModal, setOpenModal] = useState(false)
-   // console.log(relativeRunDate)
-   // console.log(importedData)
-   // // const setImportedData = (data) =>{
-   // //    setImportedData(data)
-   // // }
-   // console.log(setSelectedPatient)
-   
-   //MODAL CONTROL
-   // const modalOpen =() =>{
-   //    setOpenModal(true)
-   // }
 
-   // modalOpen()
 
    //FILTER STATES
-   const [selectedAnti, setSelectedAnti] = useState("none")
-   const [selectedAges, setSelectedAges] = useState([])
-   const [nsaid, setNsaid] = useState ("")
-   const [cvd, setCvd] = useState ("")
-   const [selectedBP, setSelectedBP] = useState([])
-   const [selectedChd, setSelectedChd] = useState([]) //CHA₂DS₂-VASc
-   const [selectedOrbit, setSelectedOrbit] = useState ([])
-   const [medReview, setMedReview] = useState ("")
+   const defaultFilters ={
+      selectedAnti:"none",
+      selectedAges: [],
+      nsaid:"",
+      cvd: "",
+      selectedBP: [],
+      selectedChd: [],
+      selectedOrbit: [],
+      medReview:""
+   }
 
 
 
+
+   const [selectedAnti, setSelectedAnti] = useState(defaultFilters.selectedAnti)
+   const [selectedAges, setSelectedAges] = useState(defaultFilters.selectedAges)
+   const [nsaid, setNsaid] = useState (defaultFilters.nsaid)
+   const [cvd, setCvd] = useState (defaultFilters.cvd)
+   const [selectedBP, setSelectedBP] = useState(defaultFilters.selectedBP)
+   const [selectedChd, setSelectedChd] = useState(defaultFilters.selectedChd) //CHA₂DS₂-VASc
+   const [selectedOrbit, setSelectedOrbit] = useState (defaultFilters.selectedOrbit)
+   const [medReview, setMedReview] = useState (defaultFilters.medReview)
+
+
+  
+
+   const resetFilters = ()=>{
+      setSelectedAnti(defaultFilters.selectedAnti);
+      setSelectedAges(defaultFilters.selectedAges);
+      setNsaid(defaultFilters.nsaid);
+      setCvd(defaultFilters.setCvd);
+      setSelectedBP(defaultFilters.selectedBP);
+      setSelectedChd(defaultFilters.selectedChd);
+      setSelectedOrbit(defaultFilters.selectedOrbit);
+      setMedReview(defaultFilters.medReview); 
+   }
 
 
    /////FILTER SELECTIONS
@@ -220,20 +232,25 @@ const MainProvider = ({ children }) => {
          const antiFilterControl = 
             selectedAnti === "none"||
             (selectedAnti === "doac_warf" && 
-               (patient[AFibColumns.OnAnticoagulant] ==="YES - DOAC" || 
-                patient[AFibColumns.OnAnticoagulant] === "YES - WARF")) ||
+               (patient[AFibColumns.OnAnticoagulant].includes("YES - DOAC") || 
+                patient[AFibColumns.OnAnticoagulant].includes("YES - WARF"))) ||
             (selectedAnti === "doac" && 
-               patient[AFibColumns.OnAnticoagulant] ==="YES - DOAC") ||
+               patient[AFibColumns.OnAnticoagulant].includes("YES - DOAC")) ||
             (selectedAnti === "warf" && 
-               patient[AFibColumns.OnAnticoagulant] ==="YES - WARF") ||
+               patient[AFibColumns.OnAnticoagulant].includes("YES - WARF")) ||
             (selectedAnti === "antiplatelets" && 
                patient[AFibColumns.OnAspirinAntiplatelet] === "YES" &&
                patient[AFibColumns.OnAnticoagulant] ==="NO")  ||
             (selectedAnti === "dual" && 
                   patient[AFibColumns.OnAspirinAntiplatelet] === "YES" && 
-                   (patient[AFibColumns.OnAnticoagulant] ==="YES - DOAC" ||
-                   patient[AFibColumns.OnAnticoagulant] ==="YES - WARF"))
-                  //  patient[AFibColumns.OnAnticoagulant] ==="YES - WARF")
+                   (patient[AFibColumns.OnAnticoagulant].includes("YES - DOAC") ||
+                   patient[AFibColumns.OnAnticoagulant].includes("YES - WARF"))) ||
+            (selectedAnti === "no_anticoagulant" && 
+               !patient[AFibColumns.OnAnticoagulant].includes("YES - DOAC") &&
+               (!patient[AFibColumns.OnAnticoagulant].includes("YES - WARF")))
+               // (patient[AFibColumns.OnAnticoagulant] != "YES - WARF"))
+            
+
 
 
          const ageFilter = 
@@ -275,8 +292,26 @@ const MainProvider = ({ children }) => {
             
          
          const medReviewFilter = 
-            medReview === "YES" ? 
-            recordedOverTwelveMonths(convertDate(patient[AFibColumns.MedsReviewDate]), convertRelativeRunDate(relativeRunDate) ) : true //CHANGE THIS FROM JSON 
+            !medReview ||
+            (medReview === "YES" && 
+               (!patient[AFibColumns.MedsReviewDate] || 
+               recordedOverTwelveMonths(
+                  convertDate(patient[AFibColumns.MedsReviewDate]), 
+                  convertRelativeRunDate(relativeRunDate)
+               ))) || 
+            (medReview === "NO" && 
+               patient[AFibColumns.MedsReviewDate] && 
+               !recordedOverTwelveMonths(
+                  convertDate(patient[AFibColumns.MedsReviewDate]), 
+                  convertRelativeRunDate(relativeRunDate)
+               ));
+
+
+            // medReview === "YES" ? 
+            //    !patient[AFibColumns.MedsReviewDate] ||
+            //    recordedOverTwelveMonths(convertDate(patient[AFibColumns.MedsReviewDate]), convertRelativeRunDate(relativeRunDate) )
+            //    :  true 
+                 //CHANGE THIS FROM JSON 
 
          
             
@@ -303,7 +338,8 @@ const MainProvider = ({ children }) => {
       handlePatientClick,
       selectedPatientData,
       handleNextPatient,
-      handlePreviousPatient
+      handlePreviousPatient,
+      resetFilters
   
    }
 

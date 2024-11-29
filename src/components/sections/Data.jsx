@@ -10,8 +10,34 @@ const Data = () => {
 // modalOpen
    const { getFilteredPatients, setIsModalOpen, handlePatientClick } = useContext(MainContext)
    const filteredPatients = getFilteredPatients()
-   
 
+   const [sortChdValue, setSortChdValue] = useState("asc")
+
+   console.log(filteredPatients)
+   const handleSortClick = () => {
+      setSortChdValue (prevDirection => {
+         return (prevDirection === "asc" ? "desc" : "asc")
+      })
+   }
+
+   const sortedPatients = () => {
+      if (sortChdValue === 'asc') {
+          return [...filteredPatients].sort((a, b) => {
+              const valueA = parseFloat(a[AFibColumns.CHADSVAScValue]) || 0;
+              const valueB = parseFloat(b[AFibColumns.CHADSVAScValue]) || 0;
+              return valueA - valueB; // Ascending
+          });
+      } else {
+          return [...filteredPatients].sort((a, b) => {
+              const valueA = parseFloat(a[AFibColumns.CHADSVAScValue]) || 0;
+              const valueB = parseFloat(b[AFibColumns.CHADSVAScValue]) || 0;
+              return valueB - valueA; // Descending
+          });
+      }
+  };
+
+const tableData = sortedPatients()
+  
   return (
     <>
       <Table className="border border-gray-400">
@@ -30,7 +56,10 @@ const Data = () => {
                            CHA₂DS₂-VASc
                            </div>
                         <div className="flex w-full">
-                           <span className="w-full py-2 border-r border-gray-400">Value</span>
+                           <span className="w-full py-2 border-r border-gray-400 cursor-pointer" onClick={handleSortClick}>Value
+
+                              <span>{sortChdValue === "asc" ? ' ↑' : ' ↓'}</span>
+                           </span>
                           
                            <span className="w-full py-2  border-gray-400">Latest Date</span>
                         </div>
@@ -66,7 +95,7 @@ const Data = () => {
          </TableHeader>
          
          <TableBody className="text-center">
-            {filteredPatients.map((patient, index)=> (
+            {tableData.map((patient, index)=> (
             <TableRow key={index}>
                {/* <Dialog>
                   <DialogTrigger asChild> */}
