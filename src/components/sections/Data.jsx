@@ -11,7 +11,7 @@ const Data = () => {
    const { getFilteredPatients, setIsModalOpen, handlePatientClick } = useContext(MainContext)
    const filteredPatients = getFilteredPatients()
 
-   const [sortChdValue, setSortChdValue] = useState("asc")
+   const [sortChdValue, setSortChdValue] = useState("desc")
 
    console.log(filteredPatients)
    const handleSortClick = () => {
@@ -40,6 +40,10 @@ const tableData = sortedPatients()
   
   return (
     <>
+      {
+         filteredPatients && (
+         <div className='text-center'>Filtered patients count: <span className='font-bold text-red-900'>{filteredPatients.length}</span></div>
+      )}    
       <Table className="border border-gray-400">
          {/* <TableCaption>Patient Data</TableCaption> */}
          <TableHeader>
