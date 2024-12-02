@@ -31,10 +31,10 @@ const Display = () => {
 
   
 
-   const { isModalOpen } = useContext(MainContext)
+   const { isModalOpen, dataCount } = useContext(MainContext)
 
 return (
-   <div>
+   <div className="">
       {/* HEADER */}
       <section id="header" className =" flex justify-center mt-2">
             <div className="w-[98vw]">
@@ -54,9 +54,12 @@ return (
          
       </section>
       
+      <div className=" mt-2 w-[98vw] mx-auto text-center">
+         <strong>Patient count: <span className='text-red-600'>{dataCount}</span></strong> 
+      </div>
       {/* DISPLAY DATA */}
-      <section className= "flex justify-center  mt-4" id="display_data">
-         <div className=" w-[98vw]">
+      <section className= "flex justify-center  mt-2" id="display_data">
+         <div className=" w-[98vw] ">
             <Data />
          </div>
          

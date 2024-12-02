@@ -3,15 +3,35 @@ import { useContext } from 'react'
 import { MainContext } from '@/MainContext'
 import {Table, TableBody,TableCaption,TableCell,TableHead,TableHeader,TableRow,} from "@/components/ui/table"
 import { AFibColumns } from '@/enums/AFibColumns'
-
+import { Description } from '@radix-ui/react-dialog'
+import { Popover, PopoverContent, PopoverTrigger, } from "@/components/ui/popover"
 
 const Modal = ({open, }) => {
 
    // const { setOpenModal, modalOpen } = useContext(MainContext)
-   const { setIsModalOpen, modalOpen, selectedPatientData, handleNextPatient, handlePreviousPatient } = useContext(MainContext)
+   const { setIsModalOpen, 
+      selectedPatientData, 
+      handleNextPatient, 
+      handlePreviousPatient, 
+      isModalOpen,
+      } = useContext(MainContext)
 
-   
+
    if (!open) return null
+
+   // STOPS BACKGROUND FROM SCROLLING
+//    useEffect(() => {
+//       if (open) {
+//           document.body.classList.add('no-scroll');
+//       } else {
+//           document.body.classList.remove('no-scroll');
+//       }
+  
+//       // Clean up effect
+//       // return () => {
+//       //     document.body.classList.remove('no-scroll');
+//       // };
+//   }, [open]);
    
 
    const OVERLAY ={
@@ -23,312 +43,511 @@ const Modal = ({open, }) => {
       backgroundColor: 'rgba(0,0,0, 0.7)',
       zIndex:50
    }
+
+   const medicationTableData = [
+      {  medication: "Warfarin (6m)", 
+         colorCode: "", 
+         medicationName: selectedPatientData[AFibColumns.WarfarinMed], 
+         dateOfIssue: selectedPatientData[AFibColumns.WarfarinDate] 
+      },
+      {
+         medication: "DOAC (6m)", 
+         colorCode: "", 
+         medicationName: selectedPatientData[AFibColumns.DOAC_Med], 
+         dateOfIssue: selectedPatientData[AFibColumns.DOAC_Date] 
+      },
+      {
+         medication: "Third Party Prescribing (12m)", 
+         colorCode: "", 
+         medicationName: selectedPatientData[AFibColumns.ThirdPartyCodeTerm], 
+         dateOfIssue: selectedPatientData[AFibColumns.ThirdPartyCodeDate] 
+      },
+      {
+         medication: "Other Oral Anticoagulants (12m", 
+         colorCode: "", 
+         medicationName: selectedPatientData[AFibColumns.OtherAnticoagulantsMed], 
+         dateOfIssue: selectedPatientData[AFibColumns.OtherAnticoagulantsDate] 
+      },
+      {
+         medication: "Aspirin (12m)", 
+         colorCode: "", 
+         medicationName: selectedPatientData[AFibColumns.AspirinMed], 
+         dateOfIssue: selectedPatientData[AFibColumns.AspirinDate] 
+      },
+      {
+         medication: "Other Antiplatelets (12m)", 
+         colorCode: "", 
+         medicationName: selectedPatientData[AFibColumns.AntiplateletMed], 
+         dateOfIssue: selectedPatientData[AFibColumns.AntiplateletDate] 
+      },
+      {
+         medication: "PPI medication (6m)", 
+         colorCode: "", 
+         medicationName: selectedPatientData[AFibColumns.PPI_Med], 
+         dateOfIssue: selectedPatientData[AFibColumns.PPI_Date] 
+      },
+      {
+         medication: "NSAID (excluding Aspirin)(6m)", 
+         colorCode: "", 
+         medicationName: selectedPatientData[AFibColumns.NSAID_Med], 
+         dateOfIssue: selectedPatientData[AFibColumns.NSAID_Date] 
+      },
+      {
+         medication: "Statins (6m)", 
+         colorCode: "", 
+         medicationName: selectedPatientData[AFibColumns.StatinsMed], 
+         dateOfIssue: selectedPatientData[AFibColumns.StatinsDate] 
+      }
+   ]
+
+   const riskScoreTableData = [
+      {
+         risk: "CHA₂DS₂-VASc (latest ever)", 
+         colorCode: "", 
+         score: selectedPatientData[AFibColumns.CHADSVAScValue], 
+         dateRecorded: selectedPatientData[AFibColumns.CHADSVAScDate] 
+      },
+      {
+         risk: "ORBIT (latest ever)", 
+         colorCode: "", 
+         score: selectedPatientData[AFibColumns.ORBIT_Value], 
+         dateRecorded: selectedPatientData[AFibColumns.ORBIT_Date] 
+      },
+      {
+         risk: "HAS-BLED (latest ever)", 
+         colorCode: "", 
+         score: selectedPatientData[AFibColumns.HASBLED_Value], 
+         dateRecorded: selectedPatientData[AFibColumns.HASBLED_Date] 
+      },
+   ]
+
+   const comorbiditiesTableData = [
+      {
+         comorbidity: "HF, CKD 3-5, IHD, Stroke/TIA, PAD, HTN, Diab (T1/T2)", 
+         colorCode: "", 
+         description:"" , 
+         dateRecorded: ""
+      },
+      {
+         comorbidity: "Liver Failure", 
+         colorCode: "", 
+         description: "", 
+         dateRecorded: selectedPatientData[AFibColumns.LiverFailureConcept]
+      },
+      {
+         comorbidity: "Heart Valve", 
+         colorCode: "", 
+         description: "", 
+         dateRecorded: selectedPatientData[AFibColumns.HeartValveConcept]
+      },
+      {
+         comorbidity: "Bleeding history", 
+         colorCode: "", 
+         description: "", 
+         dateRecorded: selectedPatientData[AFibColumns.BleedConcept]
+      },
+      {
+         comorbidity: "SMI/Learning Disability/Housebound", 
+         colorCode: "", 
+         description: "", 
+         dateRecorded: selectedPatientData[AFibColumns.SMI_Concept]
+      },
+      {
+         comorbidity: "Dementia", 
+         colorCode: "", 
+         description: "", 
+         dateRecorded: selectedPatientData[AFibColumns.DementiaConcept]
+      },
+      {
+         comorbidity: "Palliative Care", 
+         colorCode: "", 
+         description: "", 
+         dateRecorded: selectedPatientData[AFibColumns.PalliativeCareConcept]
+      },
+   
+   ]
+
+   const processMeasuresTableData = [
+      {
+         process: "International normalised ratio (INR)(latest in 24m)", 
+         colorCode: "", 
+         value: selectedPatientData[AFibColumns.INR_Value], 
+         dateRecorded: selectedPatientData[AFibColumns.INR_Date] 
+      },
+      {
+         process: "Systolic/Diastolic BP (mmHg)(latest ever)", 
+         colorCode: "", 
+         value: selectedPatientData[AFibColumns.SystolicBPConcept], 
+         dateRecorded: selectedPatientData[AFibColumns.SystolicBPDate] 
+      },
+      {
+         process: "Alcohol consumption", 
+         colorCode: "", 
+         value: selectedPatientData[AFibColumns.AlcoholValue], 
+         dateRecorded: selectedPatientData[AFibColumns.AlcoholDate] 
+      },
+      {
+         process: "Audit Scores * (latest ever)", 
+         colorCode: "", 
+         value: selectedPatientData[AFibColumns.AuditScoresConcept], 
+         dateRecorded: selectedPatientData[AFibColumns.AuditScoresDate] 
+      },
+      {
+         process: "Cockcroft-Gault CrCI (mL/min)(latest ever)", 
+         colorCode: "", 
+         value: "", 
+         dateRecorded: ""
+      },
+      {
+         process: "Serum Creatinine Level (latest ever)", 
+         colorCode: "", 
+         value: selectedPatientData[AFibColumns.SerumCreatValue], 
+         dateRecorded: selectedPatientData[AFibColumns.SerumCreatDate]
+      },
+      {
+         process: "Serum ALT or ASP(latest ever", 
+         colorCode: "", 
+         value: "", 
+         dateRecorded: ""
+      },
+      {
+         process: "Haemoglobin (latest ever)", 
+         colorCode: "", 
+         value: selectedPatientData[AFibColumns.HaemEstimateValue], 
+         dateRecorded: selectedPatientData[AFibColumns.HaemEstimateDate]
+      },
+      {
+         process: "Weight (kg)(latest ever)", 
+         colorCode: "", 
+         value: selectedPatientData[AFibColumns.WeightValue], 
+         dateRecorded: selectedPatientData[AFibColumns.WeightDate]
+      },
+      
+   ]
+
+
    return (
       <>
-      <div className="fixed" style={OVERLAY} />
-         {/* {selectedPatientData.map((patient, index) => ( */}
-         <div className="fixed inset-0 border w-[70%] m-auto z-50 bg-white text-xs">
-            <div className="border flex flex-row justify-between items-center">
-               Patient Modal 
-               <button className="border rounded-sm p-1" onClick={()=>setIsModalOpen(false)}> 
-                  close 
+      <div className="fixed "  style={OVERLAY} />
+         
+         
+         
+         <div className="fixed inset-0 max-h-[80vh] w-[60%] max-w-[900px] m-auto z-50  ">
+            {/* HEADER */}
+            <div className="flex justify-between items-center  w-full h-12 px-4 rounded-t-lg bg-[#648DBC] text-white">
+               <strong>Patient Information Modal </strong>
+            <button className="  p-1 text-2xl" onClick={()=>{
+               console.log('Closing Modal...')
+               setIsModalOpen((prevState) => !prevState)
+               }}> 
+                  x 
                </button>
             </div>
 
             
-            {/* {selectedPatientData.map((patient, index) => ( */}
+           
               
-            <div className="border text-xs">
-               <div className="flex justify-between">
-                  <div className="border w-[40%]">
-                     <div className="flex">
-                        <h2>Full Name</h2>
-                        <div className="border w-[60%]">{selectedPatientData[AFibColumns.FullName]}</div>
-                     </div>
-                     <div className="flex text-xs">
-                        <h2>Date of Birth</h2>
-                        <div className="border w-[60%]">{selectedPatientData[AFibColumns.DateOfBirth]}</div>
+            <div className="border text-xs px-2 flex flex-col h-[90%] bg-white">
+               <div className="flex w-full  border-black border-dotted mt-2">
+
+                  {/* TABLE 1 */}
+                  <div className="flex flex-col gap-2  w-[50%] text-left">
+                     <div className="flex ">
+                        <h2 className=" w-[30%] text-white pl-2 bg-[#648DBC] font-semibold py-1">Full Name</h2>
+                        <div className="border-b border-gray-400 w-[65%]  pl-2 py-1">{selectedPatientData[AFibColumns.FullName]}</div>
                      </div>
                      <div className="flex">
-                        <h2>NHS Number</h2>
-                        <div className="border w-[60%]">{selectedPatientData[AFibColumns.NHS_Number]}</div>
+                        <h2 className=" w-[30%] text-white pl-2 bg-[#648DBC] font-semibold py-1">Date of Birth</h2>
+                        <div className="border-b border-gray-400 w-[65%]  pl-2 py-1">{selectedPatientData[AFibColumns.DateOfBirth]}</div>
                      </div>
                      <div className="flex">
-                        <h2>Ethnicity</h2>
-                        <div className="border w-[60%]">{selectedPatientData[AFibColumns.EthnicityCodeTerm]}</div>
+                        <h2 className=" w-[30%] text-white pl-2 bg-[#648DBC] font-semibold py-1">NHS Number</h2>
+                        <div className="border-b border-gray-400 w-[65%]  pl-2 py-1">{selectedPatientData[AFibColumns.NHS_Number]}</div>
+                     </div>
+                     <div className="flex">
+                        <h2 className=" w-[30%] text-white pl-2 bg-[#648DBC] font-semibold py-1">Ethnicity</h2>
+                        <div className="border-b border-gray-400 w-[65%]  pl-2 py-1">{selectedPatientData[AFibColumns.EthnicityCodeTerm]}</div>
                      </div>
                   </div>
-                  <div className="border w-[50%]">
+
+                  {/* TABLE 2 */}
+                  <div className="flex flex-col gap-2 w-[50%] text-left">
                      <div className="flex">
-                        <h2>Patient record #</h2>
-                        <div className="border w-[60%]">{selectedPatientData[AFibColumns.PatientReference]}</div>
+                        <h2 className=" w-[30%] text-white pl-2 bg-[#648DBC] font-semibold py-1">Patient record #</h2>
+                        <div className="border-b border-gray-400 w-[65%]  pl-2 py-1">{selectedPatientData[AFibColumns.PatientReference]}</div>
                      </div>
                      <div className="flex">
-                        <h2>Gender</h2>
-                        <div className="border w-[60%]">{selectedPatientData[AFibColumns.Gender]}</div>
+                        <h2 className=" w-[30%] text-white pl-2 bg-[#648DBC] font-semibold py-1">Gender</h2>
+                        <div className="border-b border-gray-400 w-[65%]  pl-2 py-1">{selectedPatientData[AFibColumns.Gender]}</div>
                      </div>
                      <div className="flex">
-                        <h2>Age</h2>
-                        <div className="border w-[60%]">{selectedPatientData[AFibColumns.Age]}</div>
+                        <h2 className=" w-[30%] text-white pl-2 bg-[#648DBC] font-semibold py-1">Age</h2>
+                        <div className="border-b border-gray-400 w-[65%]  pl-2 py-1">{selectedPatientData[AFibColumns.Age]}</div>
                      </div>
                      <div className="flex">
-                        <h2>Mobile Telephone</h2>
-                        <div className="border w-[60%]">{selectedPatientData[AFibColumns.MobileTelephone]}</div>
+                        <h2 className=" w-[30%] text-white pl-2 bg-[#648DBC] font-semibold py-1">Mobile Telephone</h2>
+                        <div className="border-b border-gray-400 w-[65%]  pl-2 py-1">{selectedPatientData[AFibColumns.MobileTelephone]}</div>
                      </div>
                   </div>
                </div>
 
-               <div className="border flex justify-center p-2 gap-6">
+               <div className=" flex justify-center p-2 gap-6 mt-4 mb-4">
                   <button className="border border-black p-2" onClick={handleNextPatient}>Next patient</button>
                   <button className="border border-black p-2" onClick={handlePreviousPatient}>Previous patient</button>
                </div>
                
-               <div className="border h-[86vh] overflow-y-auto pb-10">
-               {/* MEDICATIONS TABLE */}
-                  <Table>
-                     
-                     <TableHeader>
-                        <TableRow>
-                           <TableHead >Medications</TableHead>
-                           <TableHead>Medication name</TableHead>
-                           <TableHead>Date of Issue</TableHead>
-                        </TableRow>
-                     </TableHeader>
-                     <TableBody>
-                        <TableRow>
-                           <TableCell >Warfarin(6m)</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.WarfarinMed]}</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.WarfarinDate]}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                           <TableCell >DOAC(6m)</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.DOAC_Med]}</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.DOAC_Date]}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                           <TableCell >Third Party Prescribing(12m)</TableCell>
-                           <TableCell></TableCell>
-                           <TableCell></TableCell>
-                        </TableRow>
-                        <TableRow>
-                           <TableCell >Other Oral Anticoagulants(12m)</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.OtherAnticoagulantsMed]}</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.OtherAnticoagulantsDate]}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                           <TableCell >Aspirin(6m)</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.AspirinMed]}</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.AspirinDate]}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                           <TableCell >Other antiplatelets (12m)</TableCell>
-                           <TableCell></TableCell>
-                           <TableCell></TableCell>
-                        </TableRow>
-                        <TableRow>
-                           <TableCell >PPI medication (6m)</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.PPI_Med]}</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.PPI_Date]}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                           <TableCell >NSAID (excludng Aspirin)(6m)</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.NSAID_Med]}</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.NSAID_Date]}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                           <TableCell >Statins(6m)</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.StatinsMed]}</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.StatinsDate]}</TableCell>
-                        </TableRow>
-                     </TableBody>
-                  </Table>
+               
+               {/* TABLES */}
+               <div className=" flex-1 overflow-y-auto max-h-full ">
+                  {/* MEDICATIONS TABLE */}
+                  <table className="w-full border">
+                     <thead className="bg-[#648DBC] text-left text-white font-semibold">
+                        <tr>
+                           <th className=" pl-2 py-1 w-[40%]">Medications</th>
+                           <th className=" w-[10%]" colSpan="1">&nbsp;</th>
+                           <th className=" border-black pl-2">Medication Name</th>
+                           <th className=" border-black pl-2  w-[15%]">Date of Issue</th>
 
+                        </tr>
+                     </thead>
+                     <tbody>
+                        {
+                           medicationTableData.map((item, index) =>(
+                              <tr key={index} 
+                                 className ={
+                                 index % 2 === 0 ? "bg-gray-100 border-b" : "bg-white border-b" }>
+                                 <td className="py-1 pl-4 font-semibold">{item.medication}</td>
+                                 <td></td>
+                                 <td className="py-1 pl-4">{item.medicationName}</td>
+                                 <td className="py-1 pl-4">{item.dateOfIssue}</td>
+                              </tr>
+                           ) )
+                        }
+                     </tbody>
+                  </table>
                   {/* RISK SCORE TABLE */}
-                  <Table>
-                     <TableHeader>
-                        <TableRow>
-                           <TableHead >Risk Score</TableHead>
-                           <TableHead>Score</TableHead>
-                           <TableHead>Date Recorded</TableHead>
-                        </TableRow>
-                     </TableHeader>
-                     <TableBody>
-                        <TableRow>
-                           <TableCell >CHA₂DS₂-VASc (latest ever)</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.CHADSVAScValue]}</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.CHADSVAScDate]}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                           <TableCell >ORBIT (latest ever)</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.ORBIT_Value]}</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.ORBIT_Date]}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                           <TableCell >HAS-BLED (latest ever)</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.HASBLED_Value]}</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.HASBLED_Date]}</TableCell>
-                        </TableRow>
-                     </TableBody>
-                  </Table>
+                  <table className="w-full border mt-4">
+                     <thead className="bg-[#648DBC] text-left text-white font-semibold">
+                        <tr>
+                           <th className=" pl-2 py-1 w-[40%]">Risk Score</th>
+                           <th className="w-[10%]" colSpan="1">&nbsp;</th>
+                           <th className=" pl-2">Score</th>
+                           <th className=" pl-2 w-[15%]">Date Recorded</th>
 
-                  {/* COMORBIDITIES TABLE */}
-                  <Table>
-                     <TableHeader>
-                        <TableRow>
-                           <TableHead >Comorbidities</TableHead>
-                           <TableHead>Description</TableHead>
-                           <TableHead>Date Recorded</TableHead>
-                        </TableRow>
-                     </TableHeader>
-                     <TableBody>
-                        <TableRow>
-                           <TableCell >HF, CKD 3-5, IHD, Stroke/TIA, PAD, HTN, Diab (T1/T2)</TableCell>
-                           <TableCell>{`${selectedPatientData[AFibColumns.StrokeTIA_Concept]},${selectedPatientData[AFibColumns.NonHaemStrokeConcept]}`}``</TableCell>
-                           <TableCell></TableCell>
-                        </TableRow>
-                        <TableRow>
-                           <TableCell >Liver Failure</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.LiverFailureConcept]}</TableCell>
-                           <TableCell></TableCell>
-                        </TableRow>
-                        <TableRow>
-                           <TableCell >Heart Valve</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.HeartValveConcept]}</TableCell>
-                           <TableCell></TableCell>
-                        </TableRow>
-                        <TableRow>
-                           <TableCell >Bleeding History</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.BleedConcept]}</TableCell>
-                           <TableCell></TableCell>
-                        </TableRow>
-                        <TableRow>
-                           <TableCell >SMI/Learning Disability/Housebound</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.SMI_Concept]}</TableCell>
-                           <TableCell></TableCell>
-                        </TableRow><TableRow>
-                           <TableCell >Dementia</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.DementiaConcept]}</TableCell>
-                           <TableCell></TableCell>
-                        </TableRow><TableRow>
-                           <TableCell >Palliative Care</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.PalliativeCareConcept]}</TableCell>
-                           <TableCell></TableCell>
-                        </TableRow>
-                     </TableBody>
-                  </Table>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        {
+                           riskScoreTableData.map((item, index) =>(
+                              <tr key={index} 
+                                 className ={
+                                 index % 2 === 0 ? "bg-gray-100 border-b" : "bg-white border-b" }  
+                                 
+                              >
+                                 <td className="py-1 pl-4 font-semibold">{item.risk}
+                                 {item.process}
+                                    {item.risk === "CHA₂DS₂-VASc (latest ever)" && (
+                                       
+                                       <span><Popover >
+                                          <PopoverTrigger className="pl-2">
+         
+                                          <strong className="text-sm">i</strong>
+                                          
+                                       </PopoverTrigger>
+                                       <PopoverContent className="p-0 w-[30em] h-[8em] text-sm">
+                                          <table className="border w-full">
+                                             <thead className="border bg-gray-100 w-full">
+                                                <tr className="py-2">
+                                                   <th className="py-1 w-full">CHA₂DS₂-VASc Risk Factors</th>
+                                                </tr>
+                                             </thead>
+                                             <tbody>
+                                                <thead>
+                                                   <tr className="flex w-full border">
+                                                      <th className="border text-left pl-2">Risk Factors</th>
+                                                      <th className="pl-2 border">Points</th>
+                                                   </tr>
+                                                </thead>
+                                                <tr>
+                                                   <td className="border w-[22em]">Congestive Heart Failure (CHF)</td>
+                                                   <td className ="border-b border-gray-100 py-1 pl-2 text-center">?</td>
+                                                </tr>
+                                                <tr>
+                                                   <td className ="border-b border-gray-100 py-1 pl-2">AUDIT-C {">"} 5: High or severe drinking risk</td>
+                                                
+                                                </tr>
+                                             </tbody>
 
-                  {/* PROCESS MEASURES TABLE */}
-                  <Table>
-                     <TableHeader>
-                        <TableRow>
-                           <TableHead >Process Measures</TableHead>
-                           <TableHead>Value</TableHead>
-                           <TableHead>Date Recorded</TableHead>
-                        </TableRow>
-                     </TableHeader>
-                     <TableBody>
-                        <TableRow>
-                           <TableCell >International normalised ratio (INR) (latest in 24m)</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.INR_Value]}</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.INR_Date]}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                           <TableCell>INR values may not be recorded in the GP system and may be under required in this tool.</TableCell>
-                           
-                        </TableRow>
-                        <TableRow>
-                           <TableCell >Systolic/Diastolic BP (mmHg) (latest ever)</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.SystolicBPValue]}, {selectedPatientData[AFibColumns.DiastolicBPValue]}</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.SystolicBPDate]},{selectedPatientData[AFibColumns.DiastolicBPValue]}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                           <TableCell >Alcohol consumption </TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.AlcoholValue]}</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.AlcoholDate]}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                           <TableCell >Audit Scores * (latest ever)</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.AuditScoresValue]}</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.AuditScoresDate]}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                           <TableCell >Cockcroft-Gault CrCI (mL/min)(latest ever)</TableCell>
-                           <TableCell></TableCell>
-                           <TableCell></TableCell>
-                        </TableRow>
-                        <TableRow>
-                           <TableCell >Serum Creatinine Level (latest ever)</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.SerumCreatValue]}</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.SerumCreatDate]}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                           <TableCell >Serium ALT or ASP (latest ever)</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.ALT_LFT_Value]}</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.ALT_LFT_Date]}</TableCell>
-                        </TableRow><TableRow>
-                           <TableCell >Haemoglobin (latest ever)</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.HaemEstimateValue]}</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.HaemEstimateDate]}</TableCell>
-                        </TableRow><TableRow>
-                           <TableCell >Weight (kg)(latest ever)</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.WeightValue]}</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.WeightDate]}</TableCell>
-                        </TableRow>
-                     </TableBody>
-                  </Table>
+                                          </table>
+                                       </PopoverContent>
+                                    </Popover></span>
+                                    )}
 
-                  {/* MEDICATION REVIEW TABLE */}
-                  <Table>
-                     <TableHeader>
-                        <TableRow>
-                           <TableHead >Medication Review</TableHead>
 
-                           <TableHead>Date Recorded</TableHead>
-                        </TableRow>
-                     </TableHeader>
-                     <TableBody>
-                        <TableRow>
-                           <TableCell >Medication Reviewed (latest ever)</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.MedsReviewDate]}</TableCell>
-                        </TableRow>
-                     </TableBody>
-                  </Table>
+                                 </td>
+                                 <td></td>
+                                 <td className="py-1 pl-4">{item.score}</td>
+                                 <td className="py-1 pl-4">{item.dateRecorded}</td>
+                              </tr>
+                           ) )
+                        }
+                     </tbody>
+                  </table>
+                  
+                  {/* COMORBODITIES TABLE  */}
+                  <table className="w-full border mt-4">
+                     <thead className="bg-[#648DBC] text-left text-white font-semibold">
+                        <tr>
+                           <th className=" pl-2 py-1 w-[40%]">Comorboditiies</th>
+                           <th className="w-[10%]" colSpan="1">&nbsp;</th>
+                           <th className="py-1 pl-4">Description</th>
+                           <th className=" pl-2 w-[15%]">Date Recorded</th>
 
-                  <Table>
-                     <TableHeader>
-                        <TableRow>
-                           <TableHead >Exception Reporting</TableHead>
-                           <TableHead>Date Recorded</TableHead>
-                        </TableRow>
-                     </TableHeader>
-                     <TableBody>
-                        <TableRow>
-                           <TableCell >Anticoagulants contraindicated (latest ever)</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.AnticoagContraDate]}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                           <TableCell >Anticoagulants declined (latest ever)</TableCell>
-                           <TableCell>{selectedPatientData[AFibColumns.AnticoagDeclineDate]}</TableCell>
-                        </TableRow>
-                     </TableBody>
-                  </Table>
-                  <div className="flex flex-col pt-4">
-                     <textarea placeholder='Enter patient notes here' className="border w-full">
+                        </tr>
+                     </thead>
+                     <tbody>
+                        {
+                           comorbiditiesTableData.map((item, index) =>(
+                              <tr key={index} 
+                                 className ={
+                                 index % 2 === 0 ? "bg-gray-100 border-b" : "bg-white border-b" } 
+                              >
+                                 <td className="py-1 pl-4 font-semibold">{item.comorbidity}
+                                    
+                                 </td>
+                                 <td></td>
+                                 <td className="py-1 pl-4">{item.description}</td>
+                                 <td className="py-1 pl-4">{item.dateRecorded}</td>
+                              </tr>
+                           ) )
+                        }
+                     </tbody>
+                  </table>
+
+                  {/* PROCESS MEASURES */}
+                  <table className="w-full border mt-4">
+                     <thead className="bg-[#648DBC] text-left text-white font-semibold">
+                        <tr>
+                           <th className=" pl-2 py-1 w-[40%]">Process Measures</th>
+                           <th className="w-[10%]" colSpan="1">&nbsp;</th>
+                           <th className="py-1 pl-4">Value</th>
+                           <th className=" pl-2 w-[15%]">Date Recorded</th>
+
+                        </tr>
+                     </thead>
+                     <tbody>
+                        {
+                           processMeasuresTableData.map((item, index) =>(
+                              <tr key={index} 
+                              className ={
+                                 index % 2 === 0 ? "bg-gray-100 border-b" : "bg-white border-b" }    
+                              >
+                                 <td className="py-1 pl-4 font-semibold">{item.process}
+                                    {item.process === "Audit Scores * (latest ever)" && (
+                                       
+                                       <span><Popover >
+                                          <PopoverTrigger className="pl-2">
+         
+                                          <strong className="text-sm">i</strong>
+                                          
+                                       </PopoverTrigger>
+                                       <PopoverContent className="p-0 w-[25em] h-[8em] text-sm">
+                                          <table className="border w-full ">
+                                             <thead className="border bg-gray-100">
+                                                <tr className="py-2">
+                                                   <th className="py-1">AUDIT SCORES *</th>
+                                                </tr>
+                                             </thead>
+                                             <tbody >
+                                                <tr>
+                                                   <td className ="border-b border-gray-100 py-1 pl-2">AUDIT {">"} 15: High or severe drinking risk</td>
+                                                
+                                                </tr>
+                                                <tr>
+                                                   <td className ="border-b border-gray-100 py-1 pl-2">AUDIT-C {">"} 5: High or severe drinking risk</td>
+                                                
+                                                </tr>
+                                             </tbody>
+
+                                          </table>
+                                       </PopoverContent>
+                                    </Popover></span>
+                                    )}
+
+
+                                 </td>
+                                 <td></td>
+                                 <td className="py-1 pl-4">{item.description}</td>
+                                 <td className="py-1 pl-4">{item.dateRecorded}</td>
+                              </tr>
+                           ) )
+                        }
+                     </tbody>
+                  </table>
+                  {/* MEDICATION REVIEW */}
+                  <table className="w-full border mt-4">
+                     <thead className="bg-[#648DBC] text-left text-white font-semibold">
+                        <tr>
+                           <th className=" pl-2 py-1 w-[40%]">Medication Review</th>
+                           <th className="w-[10%]" colSpan="1">&nbsp;</th>
+                           <th className="py-1 pl-4"></th>
+                           <th className=" pl-2 w-[15%]">Date Recorded</th>
+
+                        </tr>
+                     </thead>
+                     <tbody>
+                           <tr className="bg-gray-100 border-b">
+                              <td className="py-1 pl-4 font-semibold ">Medication Reviews (latest ever)</td>
+                              <td></td>
+                              <td></td>
+                              <td className="py-1 pl-4">{selectedPatientData[AFibColumns.MedsReviewDate]}</td>
+                           </tr>
+                          
+                     </tbody>
+                  </table>
+
+                   {/* EXCEPTION REPORTING */}
+                   <table className="w-full border mt-4">
+                     <thead className="bg-[#648DBC] text-left text-white font-semibold">
+                        <tr>
+                           <th className=" pl-2 py-1 w-[40%]">Exception Reporting</th>
+                           <th className="w-[10%]" colSpan="1">&nbsp;</th>
+                           <th className="py-1 pl-4"></th>
+                           <th className=" pl-2 w-[15%]">Date Recorded</th>
+
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr className="bg-gray-100 border-b">
+                           <td className="py-1 pl-4 font-semibold ">Anticoagulants contraindicated (latest ever)</td>
+                           <td></td>
+                           <td></td>
+                           <td className="py-1 pl-4">{selectedPatientData[AFibColumns.AnticoagContraDate]}</td>
+                        </tr>
+                        <tr>
+                           <td className="py-1 pl-4 font-semibold ">Anticoagulants declined (latest ever)</td>
+                           <td></td>
+                           <td></td>
+                           <td className="py-1 pl-4">{selectedPatientData[AFibColumns.AnticoagDeclineDate]}</td>
+                        </tr>
+                          
+                     </tbody>
+                  </table>
+                  
+                  <div className="flex flex-col mt-6 mb-10">
+                     <textarea placeholder='Enter patient notes here' className="border w-full h-20 text-sm p-2">
 
                      </textarea>
-                     <button className="border w-10">
+                     <button className = "bg-[#648DBC] font-semibold text-white w-20 px-2 py-2 rounded-md mt-2 ml-auto" >
                         Save
                      </button>
-
                   </div>
-               </div>
-               
-               
             </div>
+         </div>
           {/* ))}  */}
 
       
-         </div>
+      </div>
       </>
    )
 }
@@ -336,38 +555,3 @@ const Modal = ({open, }) => {
 export default Modal
 
 
-// import React, { useState } from 'react'
-
-// const Modal = ({isOpen, onClose, content}) => {
-//    if(!isOpen) return null;
-
-//   return (
-//     <>
-//          <div className="flex flex-col justify-between w-[90vw]">  
-//             <header className=" flex px-2 py-2 rounded-t-lg bg-[#648DBC] text-white justify-between">
-//                <strong>PATIENT INFORMATION</strong>
-//                <button onClick={onClose} > <strong></strong>x </button>
-//             </header>
-//             <div>
-//                {/* content */}
-//             </div>
-//          </div>
-//     </>
-//   )
-// }
-
-// export default Modal
-
-
-
-  // useEffect(() =>{
-   //    if(open){
-   //       document.body.classList.add("overflow-hidden");
-   //    }else{
-   //       document.body.classList.remove("overflow-hidden")
-   //    }
-   //    //Cleanup function when modal is
-   //    return()=>{
-   //       document.body.classList.remove("overflow-hidden")
-   //    }
-   // }, [open])

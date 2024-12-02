@@ -4,6 +4,9 @@
 @tailwind components;
 @tailwind utilities;
 
+.no-scroll{
+   overflow: hidden;
+}
 
 /* body{
    margin: 0;

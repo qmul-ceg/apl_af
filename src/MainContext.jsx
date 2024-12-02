@@ -12,20 +12,21 @@ const MainProvider = ({ children }) => {
    const [isModalOpen, setIsModalOpen] =useState(false)
    const [selectedPatientData, setSelectedPatientData] =useState()
    const [selectedPatientIndex, setSelectedPatientIndex] =useState()
-   console.log(isModalOpen)
+   // const [tableData, setTableData] = useState([])
+   // console.log(isModalOpen)
 
 
 
    const handlePatientClick = (index) =>{
       console.log("Clicked row index:", index)
 
-      if(importedData.length > 0 && importedData[index]){
-         const selectedPatientRow = importedData[index] //Get the index of the the patient selected in imported Data
+      if(data.length > 0 && data[index]){
+         const selectedPatientRow = data[index] //Get the index of the the patient selected in imported Data
          setSelectedPatientData(selectedPatientRow) 
          setSelectedPatientIndex(index) //Stores index of the selected patient
          setIsModalOpen(true)  //Opens modal
-         console.log(selectedPatientRow)
-         console.log(selectedPatientData)
+         // console.log(selectedPatientRow)
+         // console.log(selectedPatientData)
       }
    
    }
@@ -33,8 +34,8 @@ const MainProvider = ({ children }) => {
    const handleNextPatient = () =>{
       setSelectedPatientIndex((prevIndex) =>{
          const nextIndex = prevIndex + 1 
-         const updatedIndex = nextIndex < importedData.length ? nextIndex : prevIndex;
-         setSelectedPatientData(importedData[updatedIndex])
+         const updatedIndex = nextIndex < data.length ? nextIndex : prevIndex;
+         setSelectedPatientData(data[updatedIndex])
          return updatedIndex
       })
    }
@@ -44,7 +45,7 @@ const MainProvider = ({ children }) => {
       setSelectedPatientIndex((prevIndex) => {
       const prevIndexValue = prevIndex - 1;
       const updatedIndex = prevIndexValue >= 0 ? prevIndexValue : prevIndex;
-      setSelectedPatientData(importedData[updatedIndex]);  // Update selected patient data
+      setSelectedPatientData(data[updatedIndex]);  // Update selected patient data
       return updatedIndex;
       });
    };
@@ -94,7 +95,7 @@ const MainProvider = ({ children }) => {
    const handleAntiFilter =(value) => {
       setSelectedAnti(value)
    }
-   console.log(selectedAnti)
+   // console.log(selectedAnti)
    //Age Filters
    const handleAgeSelection = (age) =>{
       if (selectedAges.includes(age)){
@@ -131,7 +132,7 @@ const MainProvider = ({ children }) => {
    const parseBloodPressure = (bp) => {
       if (!bp || typeof bp !== 'string') {
       // If the input is invalid or not a string, return default values
-      console.error('Invalid blood pressure data:', bp);
+      // console.error('Invalid blood pressure data:', bp);
       return { systolic: null, diastolic: null }; // Default values
       }
    
@@ -139,7 +140,7 @@ const MainProvider = ({ children }) => {
 
       // Check if the split results are valid numbers
       if (isNaN(systolic) || isNaN(diastolic)) {
-      console.error('Invalid blood pressure values:', bp);
+      // console.error('Invalid blood pressure values:', bp);
       return { systolic: null, diastolic: null }; // Default values
       }
    
@@ -221,8 +222,8 @@ const MainProvider = ({ children }) => {
       else return ""
       
    }
-   
-   console.log(convertRelativeRunDate(relativeRunDate))
+   // console.log(convertRelativeRunDate(relativeRunDate))
+    
 
    //FILTER LOGIC
    const getFilteredPatients = () =>{
@@ -305,22 +306,49 @@ const MainProvider = ({ children }) => {
                   convertDate(patient[AFibColumns.MedsReviewDate]), 
                   convertRelativeRunDate(relativeRunDate)
                ));
-
-
-            // medReview === "YES" ? 
-            //    !patient[AFibColumns.MedsReviewDate] ||
-            //    recordedOverTwelveMonths(convertDate(patient[AFibColumns.MedsReviewDate]), convertRelativeRunDate(relativeRunDate) )
-            //    :  true 
-                 //CHANGE THIS FROM JSON 
-
          
-            
          return ageFilter && nsaidFilter && cvdFilter && bloodPressureFilter && chdFilter && orbitFilter && medReviewFilter && antiFilterControl
          });   
    }
 
-   //MAINCONTEXT VALUES
+   
+
+   //TABLE DATA AND SORTING
+   const [sortChdValue, setSortChdValue] = useState("asc")
+   const [data, setData] = useState([])
+   const [dataCount, setDataCount] = useState()
+  
+   const filteredPatients = getFilteredPatients()
+
+   const handleSortClick = () => {
+      setSortChdValue(prevSort => prevSort === 'asc' ? 'desc' : 'asc');
+   }
+
+   const sortedPatients = () => {
+      if (sortChdValue === 'asc') {
+          return [...filteredPatients].sort((a, b) => {
+              const valueA = parseFloat(a[AFibColumns.CHADSVAScValue]) || 0;
+              const valueB = parseFloat(b[AFibColumns.CHADSVAScValue]) || 0;
+              return valueA - valueB; // Ascending
+          });
+      } else {
+          return [...filteredPatients].sort((a, b) => {
+              const valueA = parseFloat(a[AFibColumns.CHADSVAScValue]) || 0;
+              const valueB = parseFloat(b[AFibColumns.CHADSVAScValue]) || 0;
+              return valueB - valueA; // Descending
+          });
+      }
+  };
+
+   React.useEffect(() => {
+      const sortedData = sortedPatients();
+      setData(sortedData);
+      setDataCount(sortedData.length)
+   }, [, filteredPatients ]);
+
+//MAINCONTEXT VALUES
    //Values will be passed down to children of MainContext
+
 
    const contextValue ={
       patients, getFilteredPatients, 
@@ -339,7 +367,9 @@ const MainProvider = ({ children }) => {
       selectedPatientData,
       handleNextPatient,
       handlePreviousPatient,
-      resetFilters
+      resetFilters,
+      handleSortClick, data,
+      sortChdValue, dataCount
   
    }
 
