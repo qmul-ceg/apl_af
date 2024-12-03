@@ -7,13 +7,14 @@ import {Link, useNavigate} from'react-router-dom'
 import Papa from 'papaparse'
 import { GpSystems } from './enums/GPsystems.ts'
 import { MainContext } from './MainContext'
-import { GpInformationSystems } from './enums/GpInformationSystems'
+//import { GpInformationSystems } from './enums/GpInformationSystems'
 import { AFibColumns } from './enums/AFibColumns'
 import { getBloodPressure, hasCVD, hasHypertension, onAnticoagulantMeds, onAspirinAntiplateletMeds, onNSAIDMeds, onStatinsMeds } from './helper/AFibLTCmeds'
+import { transformS1ImportedData } from './helper/S1DataTransform'
 
 const Import = () => {
    const navigate = useNavigate()//Inititalised the navigate function
-   const [gpSystemSelected, setGpSystemSelected] = useState(GpSystems.NoneSelected)
+   const [gpSystemSelected, setGpSystemSelected] = useState(GpSystems.NotSelected)
    // console.log(gpSystemSelected)
    
    const { setImportedData, setRelativeRunDate } = useContext(MainContext)
@@ -22,7 +23,9 @@ const Import = () => {
       setGpSystemSelected(event.target.value)
    }
 
-   GpSystems.EMIS_Web
+   // Report columns
+   const EMIS_ReportColumnsCount = 91;
+   const S1ReportColumnsCount = 85;
    
    // FILE INPUT FUNCTIONALITY
    const fileInputRef = useRef(null)
@@ -43,36 +46,63 @@ const Import = () => {
       let skipRows = 0;
       let runDateTime;
       let relativeRunDate;
-   
       
-      //Check GP system 
-      if(gpSystemSelected === GpInformationSystems.EMIS_Web){
-         if(file){
-            const reader = new FileReader()
-            reader.readAsText(file)
+      const reader = new FileReader();
 
-            reader.onload = function() {
-               let lines = reader.result.split('\n');
-               
-               for (let i = 0; i < lines.length; i++){
-                  let line = lines[i].split(',');
-                  if(line[0].includes("Last Run") || line[0].includes("Last run")){
-                     runDateTime = line[3]
-                  }
-                  if(line[0].includes("Patient Details")){
-                     skipRows++;
-                     break;
-                  }
-                  skipRows++;
+      //Check GP system 
+      if(gpSystemSelected === GpSystems.EMIS_Web){         
+ 
+         reader.readAsText(file);
+
+         reader.onload = function() {
+            let lines = reader.result.split('\n');
+            
+            for (let i = 0; i < lines.length; i++){
+               let line = lines[i].split(',');
+               if(line[0].includes("Last Run") || line[0].includes("Last run")){
+                  runDateTime = line[3]
                }
-               parseData(file, skipRows) //?? HOISTING Function
+               if(line[0].includes("Patient Details") || line[0].toLowerCase().includes("patient details")){
+                  skipRows++;
+
+                  if (line.length !== EMIS_ReportColumnsCount) {
+                     alert("EMIS Web report is not valid, please import correct report version.");
+                     throw "EMIS Web report is not valid";
+                  }                     
+                  break;
+               }
+               skipRows++;
+            }
+            if (runDateTime) {                  
                relativeRunDate = runDateTime.split(' ')[0] // Splits the run date and time and saves the first value in the variable
                setRelativeRunDate(relativeRunDate)
-              
-             
-             };
-         }
+               parseData(file, skipRows) //?? HOISTING Function
+            }
+            else {
+               alert("EMIS Web report is not valid, please import correct report version.");
+               throw "EMIS Web report is not valid";
+            }
+         };         
       }
+      else if (gpSystemSelected === GpSystems.SystmOne) {
+         
+         relativeRunDate = '1-Apr-2024';  //file.lastModified;
+         setRelativeRunDate(relativeRunDate);
+
+         reader.readAsText(file);
+
+         reader.onload = function() {
+            let lines = reader.result.split('\n');
+            let line = lines[0].split(',');
+
+            if (line.length !== S1ReportColumnsCount) {
+               alert("S1 report is not valid, please import correct report version.");
+               throw "S1 report is not valid";
+            }
+            parseData(file, skipRows);
+         }
+         
+      }      
    }
 
    function parseData(file, skipLines) {
@@ -81,21 +111,42 @@ const Import = () => {
           skipEmptyLines: true,
           skipFirstNLines: skipLines,
           complete: function (result) {
-              const dataArray = [];
-              result.data.forEach((data, index) => {
-                  if (index >= skipLines) {
-                      dataArray.push(Object.values(data));
-                      dataArray[dataArray.length - 1][AFibColumns.OnAnticoagulant] = onAnticoagulantMeds(dataArray[dataArray.length - 1]);
-                      dataArray[dataArray.length - 1][AFibColumns.OnAspirinAntiplatelet] = onAspirinAntiplateletMeds(dataArray[dataArray.length - 1]);
-                      dataArray[dataArray.length - 1][AFibColumns.OnNSAID] = onNSAIDMeds(dataArray[dataArray.length - 1]);
-                      dataArray[dataArray.length - 1][AFibColumns.OnStatin] = onStatinsMeds(dataArray[dataArray.length - 1]);
-                      dataArray[dataArray.length - 1][AFibColumns.CVD] = hasCVD(dataArray[dataArray.length - 1]);
-                      dataArray[dataArray.length - 1][AFibColumns.Hypertension] = hasHypertension(dataArray[dataArray.length - 1]);
-                      dataArray[dataArray.length - 1][AFibColumns.BP] = getBloodPressure(dataArray[dataArray.length - 1]);
-                     
-                  }
-              });
-              console.log("Processed Data:", dataArray);
+
+              let dataArray = [];
+
+              if (gpSystemSelected === GpSystems.EMIS_Web) {
+
+                  result.data.forEach((data, index) => {
+                        if (index >= skipLines) {
+                           dataArray.push(Object.values(data));
+                           dataArray[dataArray.length - 1][AFibColumns.OnAnticoagulant] = onAnticoagulantMeds(dataArray[dataArray.length - 1]);
+                           dataArray[dataArray.length - 1][AFibColumns.OnAspirinAntiplatelet] = onAspirinAntiplateletMeds(dataArray[dataArray.length - 1]);
+                           dataArray[dataArray.length - 1][AFibColumns.OnNSAID] = onNSAIDMeds(dataArray[dataArray.length - 1]);
+                           dataArray[dataArray.length - 1][AFibColumns.OnStatin] = onStatinsMeds(dataArray[dataArray.length - 1]);
+                           dataArray[dataArray.length - 1][AFibColumns.CVD] = hasCVD(dataArray[dataArray.length - 1]);
+                           dataArray[dataArray.length - 1][AFibColumns.Hypertension] = hasHypertension(dataArray[dataArray.length - 1]);
+                           dataArray[dataArray.length - 1][AFibColumns.BP] = getBloodPressure(dataArray[dataArray.length - 1]);
+                        }
+                  });
+              }
+              else if (gpSystemSelected === GpSystems.SystmOne) {
+
+                  const rundate = '1-Apr-2024'; //relativeRunDate = '22-Feb-2024';  //file.lastModified;
+
+                  dataArray = transformS1ImportedData(result.data, rundate);
+
+                  dataArray.forEach((dataRow, index) => {
+                        dataArray[index][AFibColumns.OnAnticoagulant] = onAnticoagulantMeds(dataRow);
+                        dataArray[index][AFibColumns.OnAspirinAntiplatelet] = onAspirinAntiplateletMeds(dataRow);
+                        dataArray[index][AFibColumns.OnNSAID] = onNSAIDMeds(dataRow);
+                        dataArray[index][AFibColumns.OnStatin] = onStatinsMeds(dataRow);
+                        dataArray[index][AFibColumns.CVD] = hasCVD(dataRow);
+                        dataArray[index][AFibColumns.Hypertension] = hasHypertension(dataRow);
+                        dataArray[index][AFibColumns.BP] = getBloodPressure(dataRow);               
+                  });
+              }
+              
+              //console.log("Processed Data:", dataArray);
               setImportedData(dataArray)
               navigate("/display");
               
@@ -129,12 +180,12 @@ const Import = () => {
                <div>
                   <RadioGroup className ="flex justify-center items-center">
                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value={GpInformationSystems.EMIS_Web} id="option-one" 
+                        <RadioGroupItem value={GpSystems.EMIS_Web} id="option-one" 
                         onClick ={handleGpSystemSelect}/>
                         <label htmlFor="option-one">EMIS Web</label>
                      </div>
                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value={GpInformationSystems.SystmOne} id="option-two" 
+                        <RadioGroupItem value={GpSystems.SystmOne} id="option-two" 
                         onClick ={handleGpSystemSelect}/>
                         <label htmlFor="option-two">SystmOne</label>
                      </div>
