@@ -171,27 +171,10 @@ const Import = () => {
                         </div>
                         
 
-                        {/* <RadioGroupItem 
-                           value={GpInformationSystems.EMIS_Web} 
-                           id="option-one" 
-                           onClick ={handleGpSystemSelect}
-                           className="w-5 h-5 border-2 rounded-full checked:bg-[#648DBC]" 
-                           
-                        />
-                        <label htmlFor="option-one">EMIS Web</label>
-                     </div>
-                     <div className="flex items-center space-x-2">
-                        <RadioGroupItem 
-                           value={GpInformationSystems.SystmOne} 
-                           id="option-two" 
-                           onClick ={handleGpSystemSelect}
-                        />
-                        <label htmlFor="option-two">SystmOne</label>
-                     </div>
-                  </RadioGroup> */}
+                   
                </div>
             </div>
-            {/* </CardContent> */}
+         
 
             <div className="flex justify-center mt-2">
                {/* <Link to="/display"> */}

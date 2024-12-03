@@ -1,4 +1,4 @@
-import React, { useState, createContext, } from 'react'
+import React, { useState, createContext, useMemo, } from 'react'
 import patientsData from '/src/data/patient_data.json'
 import { GpSystems } from './enums/GPsystems'
 import { AFibColumns } from './enums/AFibColumns'
@@ -318,8 +318,12 @@ const MainProvider = ({ children }) => {
    const [data, setData] = useState([])
    const [dataCount, setDataCount] = useState()
   
-   const filteredPatients = getFilteredPatients()
+   // const filteredPatients = getFilteredPatients()
+   const filteredPatients = React.useMemo(() => {
+      return getFilteredPatients();  // Only recompute when dependencies (filters) change
+   }, [importedData, selectedAnti, selectedAges, nsaid, cvd, selectedBP, selectedChd, selectedOrbit, medReview, relativeRunDate]);
 
+   console.log(filteredPatients)
    const handleSortClick = () => {
       setSortChdValue(prevSort => prevSort === 'asc' ? 'desc' : 'asc');
    }
@@ -344,7 +348,7 @@ const MainProvider = ({ children }) => {
       const sortedData = sortedPatients();
       setData(sortedData);
       setDataCount(sortedData.length)
-   }, [, filteredPatients ]);
+   }, [ filteredPatients, sortChdValue ]);
 
 //MAINCONTEXT VALUES
    //Values will be passed down to children of MainContext
