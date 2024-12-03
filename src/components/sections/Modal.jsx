@@ -233,21 +233,41 @@ const Modal = ({open, }) => {
          
          
          <div className="fixed inset-0 max-h-[80vh] w-[60%] max-w-[900px] m-auto z-50  ">
+            
+
+
             {/* HEADER */}
             <div className="flex justify-between items-center  w-full h-12 px-4 rounded-t-lg bg-[#648DBC] text-white">
                <strong>Patient Information Modal </strong>
-            <button className="  p-1 text-2xl" onClick={()=>{
-               console.log('Closing Modal...')
-               setIsModalOpen((prevState) => !prevState)
-               }}> 
-                  x 
+               <button className="  p-1 text-xs  hover:text-sm" onClick={()=>{
+                  console.log('Closing Modal...')
+                  setIsModalOpen((prevState) => !prevState)
+                  }}> 
+                     close 
                </button>
             </div>
+
+            <div className=" flex justify-center  gap-6 p-2  bg-white">
+                  
+                  <button className=" " onClick={handlePreviousPatient}>
+                     <div className="flex flex-col text-xs font-semibold hover:text-sm">
+                        <span>previous patient</span>
+                        <span className="">&larr;</span>
+                     </div>
+                  </button>
+                  <button className=" " onClick={handleNextPatient}>
+                     <div className="flex flex-col text-xs font-semibold hover:text-sm">
+                        <span>next patient</span>
+                        <span className="">&rarr;</span>
+                     </div>
+                     
+                  </button>
+               </div>
 
             
            
               
-            <div className="border text-xs px-2 flex flex-col h-[90%] bg-white">
+            <div className=" text-xs px-2 flex flex-col h-[90%] bg-white">
                <div className="flex w-full  border-black border-dotted mt-2">
 
                   {/* TABLE 1 */}
@@ -291,14 +311,26 @@ const Modal = ({open, }) => {
                   </div>
                </div>
 
-               <div className=" flex justify-center p-2 gap-6 mt-4 mb-4">
-                  <button className="border border-black p-2" onClick={handleNextPatient}>Next patient</button>
-                  <button className="border border-black p-2" onClick={handlePreviousPatient}>Previous patient</button>
-               </div>
+               {/* <div className=" flex justify-center p-2 gap-6 mt-4 mb-2">
+                  
+                  <button className="border-black p-2" onClick={handlePreviousPatient}>
+                     <div className="flex flex-col text-xs font-semibold ">
+                        <span>Previous patient</span>
+                        <span className="">&larr;</span>
+                     </div>
+                  </button>
+                  <button className=" border-black p-2 " onClick={handleNextPatient}>
+                     <div className="flex flex-col text-xs font-semibold ">
+                        <span>Next patient</span>
+                        <span className="">&rarr;</span>
+                     </div>
+                     
+                  </button>
+               </div> */}
                
                
                {/* TABLES */}
-               <div className=" flex-1 overflow-y-auto max-h-full ">
+               <div className=" flex-1 overflow-y-auto max-h-full  mt-6">
                   {/* MEDICATIONS TABLE */}
                   <table className="w-full border">
                      <thead className="bg-[#648DBC] text-left text-white font-semibold">
@@ -344,8 +376,11 @@ const Modal = ({open, }) => {
                                  index % 2 === 0 ? "bg-gray-100 border-b" : "bg-white border-b" }  
                                  
                               >
-                                 <td className="py-1 pl-4 font-semibold">{item.risk}
-                                 {item.process}
+                                 <td className="py-1 pl-4 font-semibold">
+                                    {item.risk}
+                                    {item.process}
+                                    
+                                    {/* Check if item.risk is "CHA₂DS₂-VASc (latest ever)" */}
                                     {item.risk === "CHA₂DS₂-VASc (latest ever)" && (
                                        
                                        <span><Popover >
@@ -354,34 +389,159 @@ const Modal = ({open, }) => {
                                           <strong className="text-sm">i</strong>
                                           
                                        </PopoverTrigger>
-                                       <PopoverContent className="p-0 w-[30em] h-[8em] text-sm">
-                                          <table className="border w-full">
-                                             <thead className="border bg-gray-100 w-full">
-                                                <tr className="py-2">
-                                                   <th className="py-1 w-full">CHA₂DS₂-VASc Risk Factors</th>
+                                       <PopoverContent className="p-0 w-[30em] text-sm">
+                                          <div className="py-1 w-full border-b border-gray-200 bg-gray-100 font-bold text-center">CHA₂DS₂-VASc Risk Factors</div>
+                                          <table className=" w-full">
+                                             <thead className=" border-b border-gray-200 w-full">
+                                                <tr className="py-2 text-left">
+                                                   <th className="py-1  pl-2">Risk Factors</th>
+                                                   <th  className="py-1  pl-2 text-center">Points</th>
                                                 </tr>
                                              </thead>
                                              <tbody>
-                                                <thead>
-                                                   <tr className="flex w-full border">
-                                                      <th className="border text-left pl-2">Risk Factors</th>
-                                                      <th className="pl-2 border">Points</th>
-                                                   </tr>
-                                                </thead>
-                                                <tr>
-                                                   <td className="border w-[22em]">Congestive Heart Failure (CHF)</td>
-                                                   <td className ="border-b border-gray-100 py-1 pl-2 text-center">?</td>
-                                                </tr>
-                                                <tr>
-                                                   <td className ="border-b border-gray-100 py-1 pl-2">AUDIT-C {">"} 5: High or severe drinking risk</td>
                                                 
+                                                <tr className="border-b border-gray-200">
+                                                   <td className=" w-[22em] pl-2">Congestive Heart Failure (CHF)</td>
+                                                   <td className =" py-1 pl-2 text-center">1</td>
                                                 </tr>
+                                                <tr className="border-b border-gray-200">
+                                                   <td className=" w-[22em] pl-2">Hypertension</td>
+                                                   <td className ="py-1 pl-2 text-center">1</td>
+                                                </tr>
+                                                <tr className="border-b border-gray-200">
+                                                   <td className=" w-[22em] pl-2">Age ≥ 75</td>
+                                                   <td className ="py-1 pl-2 text-center">2</td>
+                                                </tr>
+                                                <tr className="border-b border-gray-200">
+                                                   <td className=" w-[22em] pl-2">Age 65 - 74</td>
+                                                   <td className =" py-1 pl-2 text-center">1</td>
+                                                </tr>
+                                                <tr className="border-b border-gray-200">
+                                                   <td className=" w-[22em] pl-2">Diabetes mellitus</td>
+                                                   <td className =" py-1 pl-2 text-center">1</td>
+                                                </tr>
+                                                <tr className="border-b border-gray-200">
+                                                   <td className=" w-[22em] pl-2">Ischaemic Stroke/TIA/Thromboembolism</td>
+                                                   <td className =" py-1 pl-2 text-center">2</td>
+                                                </tr>
+                                                <tr className="border-b border-gray-200">
+                                                   <td className=" w-[22em] pl-2">Vascular disease</td>
+                                                   <td className =" py-1 pl-2 text-center">1</td>
+                                                </tr>
+                                                <tr className="border-b border-gray-200">
+                                                   <td className=" w-[22em] pl-2">Sex Female</td>
+                                                   <td className =" py-1 pl-2 text-center">1</td>
+                                                </tr>
+                                                
+
                                              </tbody>
 
                                           </table>
                                        </PopoverContent>
-                                    </Popover></span>
+                                    </Popover>
+                                    </span>
                                     )}
+
+                                    {/* Check if item.risk is "ORBIT (latest ever)" */}
+                                    {item.risk === "ORBIT (latest ever)" && (
+        <span>
+            <Popover>
+                <PopoverTrigger className="pl-2">
+                    <strong className="text-sm">i</strong>
+                </PopoverTrigger>
+                <PopoverContent className="p-0 w-[40em] text-sm">
+                    <div className="py-1 w-full border-b border-gray-200 bg-gray-100 font-bold text-center">
+                    Orbit Bleeding Risk Score for AF
+                    </div>
+                    <table className=" w-full">
+                        <thead className=" w-full">
+                            <tr className="border-b border-gray-200 py-2 text-left">
+                                <th className="  py-1 pl-2 w-[32em]">Clinical Characteristics</th>
+                                <th className="py-1 pl-2 text-center">Points</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr className="border-b border-gray-200">
+                                <td className="w-[22em] pl-2">
+                                    <div>
+                                       <header className="font-semibold">Sex</header>
+                                       <p className="pl-4">- Males with haemoglobin {"<"}130 g/L or hematocrit {"<"}40%</p>
+                                       <p className="pl-4"> - Females with haemoglobin {"<"}120 g/L or hematocrit {"<"}36%</p>
+                                    </div>
+                                    
+
+
+                                </td>
+                                <td className="py-1 pl-2 text-center">?</td>
+                            </tr>
+                            <tr className="border-b border-gray-200">
+                                <td className="w-[22em] pl-2">Haemoglobin {"<"}120/130 g/L or hematocrit {"<"}36%/40% </td>
+                                <td className="py-1 pl-2 text-center">2</td>
+                            </tr>
+                            <tr className="border-b border-gray-200">
+                                <td className="w-[22em] pl-2">Age {">"} 74 years</td>
+                                <td className="py-1 pl-2 text-center">1</td>
+                            </tr>
+                            <tr className="border-b border-gray-200">
+                                <td className="w-[22em] pl-2">
+                                    <div>
+                                       <header className="font-semibold">Bleeding history</header>
+                                       <p className="pl-4">Any history of GI bleeding, intracranial bleeding, or hemorrhagic stroke</p>
+                                       
+                                    </div>
+                                </td>
+                                <td className="py-1 pl-2 text-center"> 2</td>
+                            </tr>
+                            <tr className="border-b border-gray-200">
+                                <td className="w-[22em] pl-2">eGFR {"<"}60 mL/min/1.73 m</td>
+                                <td className="py-1 pl-2 text-center">1</td>
+                            </tr>
+                            <tr className="border-b border-gray-200">
+                                <td className="w-[22em] pl-2">Treatment with antiplatelet agents</td>
+                                <td className="py-1 pl-2 text-center">1</td>
+                            </tr>
+
+
+                  
+                        </tbody>
+
+
+                        
+                    </table>
+                           <table className="w-full  "> 
+                           <thead className="">
+                                 <tr className="py-1 w-full border-b border-gray-200 bg-gray-100 font-bold text-center">
+                                       <th className=" w-1/4">ORBIT Score</th>
+                                       <th className=" w-1/3">Risk Group</th>
+                                       <th className="w-1/3 "> Bleeds per 100 patient years</th>
+
+                                 </tr>            
+                           </thead>
+                           <tbody className="text-center">
+                              <tr className="border-b border-gray-200">
+                                 <td>0-2</td>
+                                 <td>Low</td>
+                                 <td>2.4</td>
+                              </tr>
+                              <tr className="border-b border-gray-200">
+                                 <td>3</td>
+                                 <td>Medium</td>
+                                 <td>4.7</td>
+                              </tr>
+                              <tr className="border-b border-gray-200">
+                                 <td>4.7</td>
+                                 <td>High</td>
+                                 <td>8.1</td>
+                              </tr>
+                           </tbody>               
+                     
+                        </table>         
+                    
+                </PopoverContent>
+            </Popover>
+        </span>
+    )}
+
 
 
                                  </td>
@@ -436,12 +596,18 @@ const Modal = ({open, }) => {
                         </tr>
                      </thead>
                      <tbody>
+                        <tr>
+                           <td className="font-semibold text-red-500 pl-8 py-1" colSpan="3">*INR values may not be recorded in the GP system and may be under required in this tool.</td>
+                           <td ></td>
+                           <td></td>
+                        </tr>
                         {
                            processMeasuresTableData.map((item, index) =>(
                               <tr key={index} 
                               className ={
                                  index % 2 === 0 ? "bg-gray-100 border-b" : "bg-white border-b" }    
                               >
+                                 
                                  <td className="py-1 pl-4 font-semibold">{item.process}
                                     {item.process === "Audit Scores * (latest ever)" && (
                                        

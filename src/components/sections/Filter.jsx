@@ -182,7 +182,7 @@ const Filter = () => {
                                     {value: '0', label: '0' },
                                     {value: '>12m', label: 'Recorded > 12m' },
                                     {value: 'not_recorded', label: 'Not Recorded' },
-                                 ].map((item) =>
+                                 ].map((item, index) =>
                                     (
                                        <label
                                           value={item.value}

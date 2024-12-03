@@ -100,7 +100,7 @@ const Import = () => {
               });
               console.log("Processed Data:", dataArray);
               setImportedData(dataArray)
-              navigate("/display");
+              navigate("/display",);
               
               
          },

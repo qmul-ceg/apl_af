@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 
 
 import Data from './components/sections/Data'
@@ -10,25 +10,8 @@ import { MainContext } from './MainContext'
 
 
 import {  } from 'react'
+import { useNavigate } from 'react-router-dom'
 const Display = () => {
-   // const[filterMenu, setFilterMenu] = useState(true)
-   // const[quickFilter, setQuickFilter] = useState(true)
-
-   // const toggleFilter =() =>{
-   //    setFilterMenu(!filterMenu)
-   // }
-
-   // const toggleQuickFilter =()=>{
-   //    setQuickFilter(!quickFilter)
-   // }
-
-   // Selected Value
-   // const[openModal, setOpenModal] = useState(false)
-
-   // const triggerModal =() =>{
-   //    setModalOpen(!isModalOpen)
-   // }
-
   
 
    const { isModalOpen, dataCount } = useContext(MainContext)

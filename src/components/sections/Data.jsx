@@ -1,9 +1,8 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow,} from "@/components/ui/table"
 import { MainContext } from '@/MainContext'
 import { AFibColumns } from '@/enums/AFibColumns'
 import { useReactTable } from '@tanstack/react-table'
-
 
 
 const Data = () => {
@@ -13,7 +12,8 @@ const Data = () => {
       setIsModalOpen, 
       handlePatientClick,
       handleSortClick,
-      data, sortChdValue
+      data, sortChdValue,
+      setImportedData
       } = useContext(MainContext)
 
    // const filteredPatients = getFilteredPatients()
@@ -26,6 +26,13 @@ const Data = () => {
 //          return (prevDirection === "asc" ? "desc" : "asc")
 //       })
 //    }
+
+// useEffect(() => {
+//    return () => {
+//      // Clear data when the component unmounts
+//      setImportedData([]);
+//    };
+//  }, []);
 
 //    const sortedPatients = () => {
 //       if (sortChdValue === 'asc') {
@@ -48,7 +55,7 @@ const Data = () => {
 
   return (
    <>      
-       <Table className=" border border-gray-400 mb-10">
+       <Table className=" border border-gray-400 mb-10 ">
          
           <TableHeader>
              <TableRow className="font-bold text-xs">
