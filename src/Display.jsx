@@ -37,7 +37,7 @@ return (
          
       </section>
       
-      <div className=" mt-2 w-[98vw] mx-auto text-center">
+      <div className=" mt-2 w-[98vw] mx-auto text-left pl-2 ">
          <strong>Patient count: <span className='text-red-600'>{dataCount}</span></strong> 
       </div>
       {/* DISPLAY DATA */}

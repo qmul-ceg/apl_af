@@ -17,6 +17,11 @@ const MainProvider = ({ children }) => {
 
 
 
+
+
+
+
+//MODAL PATIENT CLICK
    const handlePatientClick = (index) =>{
       console.log("Clicked row index:", index)
 
@@ -63,9 +68,6 @@ const MainProvider = ({ children }) => {
       medReview:""
    }
 
-
-
-
    const [selectedAnti, setSelectedAnti] = useState(defaultFilters.selectedAnti)
    const [selectedAges, setSelectedAges] = useState(defaultFilters.selectedAges)
    const [nsaid, setNsaid] = useState (defaultFilters.nsaid)
@@ -76,7 +78,12 @@ const MainProvider = ({ children }) => {
    const [medReview, setMedReview] = useState (defaultFilters.medReview)
 
 
-  
+   //FILTER BREADCRUMBS
+
+
+
+
+
 
    const resetFilters = ()=>{
       setSelectedAnti(defaultFilters.selectedAnti);
@@ -88,7 +95,6 @@ const MainProvider = ({ children }) => {
       setSelectedOrbit(defaultFilters.selectedOrbit);
       setMedReview(defaultFilters.medReview); 
    }
-
 
    /////FILTER SELECTIONS
    //AntiFilter
@@ -193,7 +199,7 @@ const MainProvider = ({ children }) => {
    };
 
 
-   //Convert Date to JS Format 
+   //CONERT DATE TO JS FORMAT
    const convertDate = (dateString) => {
       if (dateString){
          const [day, month, year] = dateString.split('-');
@@ -205,7 +211,7 @@ const MainProvider = ({ children }) => {
       
   }
 
-   //Function to Check Against Relative run date 
+   //CHECK RELATIVE RUN DATE 
    const recordedOverTwelveMonths = (recordedDate, relativeRunDate) => {
       const recorded = new Date(recordedDate); // Convert to Date object
       const cutoffDate = new Date(relativeRunDate); // Reference date
@@ -213,7 +219,7 @@ const MainProvider = ({ children }) => {
       return recorded < cutoffDate; // Check if recorded is over 12 months ago
    }
 
-   //Convert Relative Run Date
+   //CONVERT RELATIVE RUN DATE 
    const convertRelativeRunDate = (dateString) =>{
       if(dateString){
          const [day, month, year] = dateString.split('/');
@@ -222,7 +228,7 @@ const MainProvider = ({ children }) => {
       else return ""
       
    }
-   // console.log(convertRelativeRunDate(relativeRunDate))
+ 
     
 
    //FILTER LOGIC
@@ -323,7 +329,7 @@ const MainProvider = ({ children }) => {
       return getFilteredPatients();  // Only recompute when dependencies (filters) change
    }, [importedData, selectedAnti, selectedAges, nsaid, cvd, selectedBP, selectedChd, selectedOrbit, medReview, relativeRunDate]);
 
-   console.log(filteredPatients)
+   // console.log(filteredPatients)
    const handleSortClick = () => {
       setSortChdValue(prevSort => prevSort === 'asc' ? 'desc' : 'asc');
    }
@@ -373,7 +379,8 @@ const MainProvider = ({ children }) => {
       handlePreviousPatient,
       resetFilters,
       handleSortClick, data,
-      sortChdValue, dataCount
+      sortChdValue, dataCount,
+      relativeRunDate
   
    }
 

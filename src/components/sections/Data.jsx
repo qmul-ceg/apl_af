@@ -55,28 +55,28 @@ const Data = () => {
 
   return (
    <>      
-       <Table className=" border border-gray-400 mb-10 ">
+       <Table className=" border border-gray-400 mb-10">
          
-          <TableHeader>
-             <TableRow className="font-bold text-xs">
-                <TableHead className="border-b border-r border-gray-400 text-center font-bold ">Full Name</TableHead>
-                <TableHead className="border-b border-r border-gray-400  font-bold ">Age</TableHead>
-                <TableHead className="border-b border-r border-gray-400 font-bold">Gender</TableHead>
-                <TableHead className="border-b border-r border-gray-400 font-bold ">Patience Reference No.</TableHead>
+          <TableHeader >
+             <TableRow className="font-bold text-xs bg-[#648DBC] hover:bg-bg-[#648DBC]">
+                <TableHead className="border-b border-r border-gray-400 text-center font-semibold text-white">Full Name</TableHead>
+                <TableHead className="border-b border-r border-gray-400  font-semibold text-white">Age</TableHead>
+                <TableHead className="border-b border-r border-gray-400 font-semibold text-white">Gender</TableHead>
+                <TableHead className="border-b border-r border-gray-400 font-semibold text-white">Patience Reference No.</TableHead>
                 <TableHead className="border-b border-r border-gray-400 w-44 p-0">
                    <tr className="border-none">
                       <th className="w-44 p-0">
                          <div className="h-full flex flex-col justify-center">
-                            <div className="h-full w-full border-b border-gray-400 flex justify-center items-center py-1">
+                            <div className="h-full w-full border-b border-gray-400 flex justify-center items-center py-1 font-semibold text-white">
                             CHA₂DS₂-VASc
                             </div>
                            <div className="flex w-full">
-                              <span className="w-full py-2 border-r border-gray-400 cursor-pointer" onClick={handleSortClick}
+                              <span className="w-full py-2 border-r border-gray-400 cursor-pointer font-semibold text-white" onClick={handleSortClick}
                               >
                                  Value<span>{sortChdValue === "asc" ? ' ↑' : ' ↓'}</span>
                               </span>
                            
-                              <span className="w-full py-2  border-gray-400">Latest Date</span>
+                              <span className="w-full py-2  border-gray-400 font-semibold text-white">Latest Date</span>
                            </div>
                          </div>
                       </th>
@@ -86,26 +86,26 @@ const Data = () => {
                    <tr className="border-none">
                       <th className="w-44 p-0">
                          <div className="h-full text-center flex flex-col justify-center">
-                            <div className="h-full w-full border-b border-gray-400 flex justify-center items-center py-1">
+                            <div className="h-full w-full border-b border-gray-400 flex justify-center items-center py-1 font-semibold text-white">
                                ORBIT
                             </div>
                          <div className="flex w-full">
-                            <span className="w-full py-2 border-r border-gray-400">Value</span>
+                            <span className="w-full py-2 border-r border-gray-400 font-semibold text-white">Value</span>
                           
-                            <span className="w-full py-2  border-gray-400">Latest Date</span>
+                            <span className="w-full py-2  border-gray-400 font-semibold text-white">Latest Date</span>
                          </div>
                          </div>
                       </th>
                    </tr>
                 </TableHead>
-                <TableHead className="border-b border-r border-gray-400 font-bold  ">Anticoagulant issued (6m)</TableHead>
-                <TableHead className="border-b border-r border-gray-400 font-bold ">Aspirin / Antiplatelet <br />issued (6m)</TableHead>
-                <TableHead className="border-b border-r border-gray-400 font-bold ">NSAID issued excl. <br /> Aspirin(6m)</TableHead>
-                <TableHead className="border-b border-r border-gray-400 font-bold ">Statin issued (6m)</TableHead>
-                <TableHead className="border-b border-r border-gray-400 font-bold">CVD</TableHead>
-               <TableHead className="border-b border-r border-gray-400 font-bold">HTN</TableHead>
-               <TableHead className="border-b border-r border-gray-400 font-bold">BP</TableHead>
-                <TableHead className="border-b border-gray-400 font-bold ">Medication Review Latest date</TableHead>
+                <TableHead className="border-b border-r border-gray-400 font-semibold text-white">Anticoagulant issued (6m)</TableHead>
+                <TableHead className="border-b border-r border-gray-400 font-semibold text-white ">Aspirin / Antiplatelet <br />issued (6m)</TableHead>
+                <TableHead className="border-b border-r border-gray-400 font-semibold text-white ">NSAID issued excl. <br /> Aspirin(6m)</TableHead>
+                <TableHead className="border-b border-r border-gray-400 font-semibold text-white ">Statin issued (6m)</TableHead>
+                <TableHead className="border-b border-r border-gray-400 font-semibold text-white">CVD</TableHead>
+               <TableHead className="border-b border-r border-gray-400 font-semibold text-white">HTN</TableHead>
+               <TableHead className="border-b border-r border-gray-400 font-semibold text-white">BP</TableHead>
+                <TableHead className="border-b border-gray-400 font-semibold text-white ">Medication Review Latest date</TableHead>
              </TableRow>
           </TableHeader>
          

@@ -26,7 +26,7 @@ const Filter = () => {
    const[quickFilter, setQuickFilter] = useState(true)
 
    //FILTER FEATURE
-   const [selectedFilters, setSelectedFilters] = useState([])
+   // const [selectedFilters, setSelectedFilters] = useState([])
 
 
 
@@ -41,20 +41,20 @@ const Filter = () => {
 
    const handleChange = (value, label, name )=> {
       handleAntiFilter(value)
-      setSelectedFilters((prevFilters) => [...prevFilters, {value, label, name}])
+      // setSelectedFilters((prevFilters) => [...prevFilters, {value, label, name}])
    }
 
-   const createSubFilters = () => {
-      return selectedFilters.map((filter) => (
-         <button
-           key={filter.value}
-           className="px-4 py-2 m-2 border rounded-md bg-blue-500 text-white"
-           onClick={() => handleButtonClick(filter)}
-         >
-           {filter.name} ({filter.value})
-         </button>
-       ));
-   }
+   // const createSubFilters = () => {
+   //    return selectedFilters.map((filter) => (
+   //       <button
+   //         key={filter.value}
+   //         className="px-4 py-2 m-2 border rounded-md bg-blue-500 text-white"
+   //         onClick={() => handleButtonClick(filter)}
+   //       >
+   //         {filter.name} ({filter.value})
+   //       </button>
+   //     ));
+   // }
 
 
    // console.log(selectedFilters)
@@ -64,7 +64,7 @@ const Filter = () => {
             <strong>FILTERS</strong>
             <div >
                {/* Hi */}
-               {createSubFilters()}
+               {/* {createSubFilters()} */}
             </div>
             
             
