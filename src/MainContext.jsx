@@ -65,7 +65,8 @@ const MainProvider = ({ children }) => {
       selectedBP: [],
       selectedChd: [],
       selectedOrbit: [],
-      medReview:""
+      medReview:"",
+      selectedVulnerabilities: []
    }
 
    const [selectedAnti, setSelectedAnti] = useState(defaultFilters.selectedAnti)
@@ -76,6 +77,7 @@ const MainProvider = ({ children }) => {
    const [selectedChd, setSelectedChd] = useState(defaultFilters.selectedChd) //CHA₂DS₂-VASc
    const [selectedOrbit, setSelectedOrbit] = useState (defaultFilters.selectedOrbit)
    const [medReview, setMedReview] = useState (defaultFilters.medReview)
+   const [selectedVulnerabilities, setSelectedVulnerabilities] = useState (defaultFilters.selectedVulnerabilities)  //Vulnerabilities
 
 
    //FILTER BREADCRUMBS
@@ -93,7 +95,8 @@ const MainProvider = ({ children }) => {
       setSelectedBP(defaultFilters.selectedBP);
       setSelectedChd(defaultFilters.selectedChd);
       setSelectedOrbit(defaultFilters.selectedOrbit);
-      setMedReview(defaultFilters.medReview); 
+      setMedReview(defaultFilters.medReview);
+      setSelectedVulnerabilities(defaultFilters.selectedVulnerabilities);
    }
 
    /////FILTER SELECTIONS
@@ -198,6 +201,15 @@ const MainProvider = ({ children }) => {
       setMedReview((prev) => (prev === value ? "" : value)); // Toggle value off
    };
 
+   //Vulnerabilities
+   const handleVulnerabilities = (value) => {
+      if (selectedVulnerabilities.includes(value)) {
+         setSelectedVulnerabilities(selectedVulnerabilities.filter((item) => item !== value));
+      } 
+      else {
+         setSelectedVulnerabilities([...selectedVulnerabilities,value]);
+      }
+   };     
 
    //CONERT DATE TO JS FORMAT
    const convertDate = (dateString) => {
@@ -312,22 +324,30 @@ const MainProvider = ({ children }) => {
                   convertDate(patient[AFibColumns.MedsReviewDate]), 
                   convertRelativeRunDate(relativeRunDate)
                ));
-         
-         return ageFilter && nsaidFilter && cvdFilter && bloodPressureFilter && chdFilter && orbitFilter && medReviewFilter && antiFilterControl
+
+         const vulnerabFilter = 
+            selectedVulnerabilities.length === 0 ||
+            selectedVulnerabilities.includes("smi") && patient[AFibColumns.SMI_Concept].trim() !== "" ||
+            selectedVulnerabilities.includes("learning_disability") && patient[AFibColumns.LD_Concept].trim() !== "" ||
+            selectedVulnerabilities.includes("dementia") && patient[AFibColumns.DementiaConcept].trim() !== "" ||
+            selectedVulnerabilities.includes("housebound") && patient[AFibColumns.HouseboundConcept].trim() !== ""         
+   
+               
+         return ageFilter && nsaidFilter && cvdFilter && bloodPressureFilter && chdFilter && orbitFilter && medReviewFilter && antiFilterControl && vulnerabFilter
          });   
    }
 
    
 
    //TABLE DATA AND SORTING
-   const [sortChdValue, setSortChdValue] = useState("asc")
+   const [sortChdValue, setSortChdValue] = useState("desc")
    const [data, setData] = useState([])
    const [dataCount, setDataCount] = useState()
   
    // const filteredPatients = getFilteredPatients()
    const filteredPatients = React.useMemo(() => {
       return getFilteredPatients();  // Only recompute when dependencies (filters) change
-   }, [importedData, selectedAnti, selectedAges, nsaid, cvd, selectedBP, selectedChd, selectedOrbit, medReview, relativeRunDate]);
+   }, [importedData, selectedAnti, selectedAges, nsaid, cvd, selectedBP, selectedChd, selectedOrbit, medReview, relativeRunDate, selectedVulnerabilities]);
 
    // console.log(filteredPatients)
    const handleSortClick = () => {
@@ -370,8 +390,9 @@ const MainProvider = ({ children }) => {
       selectedOrbit, handleOrbit,
       medReview, handleMedReview,
       importedData, setImportedData,
-      setRelativeRunDate,
+      relativeRunDate, setRelativeRunDate,
       selectedAnti, handleAntiFilter,
+      selectedVulnerabilities, handleVulnerabilities,
       isModalOpen, setIsModalOpen,
       handlePatientClick,
       selectedPatientData,

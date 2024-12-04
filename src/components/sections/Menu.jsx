@@ -1,10 +1,28 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Popover, PopoverContent, PopoverTrigger, } from "@/components/ui/popover"
 import { Link } from 'react-router-dom'
+import { MainContext } from '@/MainContext'
+import { exportAccuRxList, exportNHS_list } from '@/helper/ExportData';
+import { GpSystems } from '@/enums/GPsystems';
 
 
 
 const Menu = () => {
+
+
+   const { getFilteredPatients } = useContext(MainContext);
+   const filteredPatients = getFilteredPatients();
+
+   const handleExportNHS = () => {
+      exportNHS_list(filteredPatients);
+      this.preventDefault();
+   }      
+
+   const handleExporAccuRxList = () => {
+      exportAccuRxList(filteredPatients, GpSystems.EMIS_Web);
+      this.preventDefault();
+   }    
+
    return (
       <>
          <div className="flex border border-gray rounded-lg">
@@ -20,8 +38,8 @@ const Menu = () => {
                         <strong className="text-sm">EXPORT SELECTED PATIENTS</strong>
                         <ul className=" ml-4 text-sm">
                            <li>EXCEL LIST</li>
-                           <li>ACCURX LIST</li>
-                           <li>NHS NO. LIST</li>
+                           <li><a href='#' onClick={handleExporAccuRxList}>ACCURX LIST</a></li>
+                           <li><a href='#' onClick={handleExportNHS}>NHS NO. LIST</a></li>
                         </ul>
                      </div>
                      <div>

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Popover, PopoverContent, PopoverTrigger, } from "@/components/ui/popover"
 import { MainContext } from '@/MainContext'
 import { useContext } from 'react'
+import { AFibColumns } from '@/enums/AFibColumns'
 
 const Filter = () => {
 
@@ -17,6 +18,8 @@ const Filter = () => {
          selectedOrbit, handleOrbit,
          medReview, handleMedReview,
          selectedAnti, handleAntiFilter,
+         selectedVulnerabilities, handleVulnerabilities,
+         importedData, relativeRunDate,
          resetFilters} = useContext(MainContext);
 
 
@@ -63,6 +66,91 @@ const Filter = () => {
    //       </button>
    //     ));
    // }
+
+   const chadsvasce2 = (chadsvasc2Cnt, patient) => {
+      if (parseInt(patient[AFibColumns.CHADSVAScValue]) >= 2)           
+         chadsvasc2Cnt += 1;
+      return chadsvasc2Cnt;
+   }
+
+   const chadsvasce2Anticoag = (anticoagCnt, patient) => {
+      if (parseInt(patient[AFibColumns.CHADSVAScValue]) >= 2 && patient[AFibColumns.OnAnticoagulant].includes('YES'))           
+         anticoagCnt += 1;
+      return anticoagCnt;
+   }
+
+   const chadsvasce2NotOnAnticoag = (notOnAnticoagCnt, patient) => {
+      if (parseInt(patient[AFibColumns.CHADSVAScValue]) >= 2 && !patient[AFibColumns.OnAnticoagulant].includes('YES'))           
+         notOnAnticoagCnt += 1;
+      return notOnAnticoagCnt;
+   }
+
+   const chadsvasce2OnAspAntipOnly = (onAspAntipOnlyCnt, patient) => {
+      if (parseInt(patient[AFibColumns.CHADSVAScValue]) >= 2 &&           
+          !patient[AFibColumns.OnAnticoagulant].includes('YES') &&
+          patient[AFibColumns.OnAspirinAntiplatelet].includes('YES') )           
+            onAspAntipOnlyCnt += 1;
+      return onAspAntipOnlyCnt;
+   }
+
+   const chadsvasce2OnAnticoagAspAntip = (onAnticoagAspAntipCnt, patient) => {
+      if (parseInt(patient[AFibColumns.CHADSVAScValue]) >= 2 && 
+          patient[AFibColumns.OnAnticoagulant].includes('YES') &&
+          patient[AFibColumns.OnAspirinAntiplatelet].includes('YES'))                     
+            onAnticoagAspAntipCnt += 1;
+      return onAnticoagAspAntipCnt;
+   }
+
+   const chadsvasce2DOAC = (DOAC_Cnt, patient) => {
+      if (parseInt(patient[AFibColumns.CHADSVAScValue]) >= 2 && patient[AFibColumns.OnAnticoagulant].includes('DOAC'))           
+         DOAC_Cnt += 1;
+      return DOAC_Cnt;
+   }
+
+   const newChadsvasce2 = (newChadsvasc2Cnt, patient) => {
+
+      if (patient[AFibColumns.CHADSVAScDate]) {
+
+         const dtRelRunDate = new Date(relativeRunDate);
+         dtRelRunDate.setMonth(dtRelRunDate.getMonth() - 12);
+         //const dtRelRunDate = new Date("02/22/2024");
+         //console.log(dtRelRunDate.toLocaleDateString());
+
+         if ( Date.parse(patient[AFibColumns.CHADSVAScDate]) >= dtRelRunDate.getTime() )           
+            newChadsvasc2Cnt += 1;
+      }
+      return newChadsvasc2Cnt;
+   }
+
+   const chadsvasc2RecordedPrior12m = (chadsvasc2Prior12mCnt, patient) => {
+
+      if (patient[AFibColumns.CHADSVAScDate]) {
+
+         const dtRelRunDate = new Date(relativeRunDate);
+         dtRelRunDate.setMonth(dtRelRunDate.getMonth() - 12);
+         //const dtRelRunDate = new Date("02/22/2024");   
+         //console.log(dtRelRunDate.toLocaleDateString());
+         
+         if ( Date.parse(patient[AFibColumns.CHADSVAScDate]) <= dtRelRunDate.getTime() && parseInt(patient[AFibColumns.CHADSVAScValue]) >= 2)           
+            chadsvasc2Prior12mCnt += 1;
+      }
+      return chadsvasc2Prior12mCnt;
+   }
+
+   function percentageFormatter(numerator, denominator) {
+      
+      if (denominator < numerator || denominator <= 0) {
+         return '0%';
+      }
+      else {
+
+         return new Intl.NumberFormat('default', {
+         style: 'percent',
+         minimumFractionDigits: 0,
+         maximumFractionDigits: 0,
+         }).format(numerator / denominator);
+      }
+   }
 
 
    // console.log(selectedFilters)
@@ -157,16 +245,34 @@ const Filter = () => {
 
                         {/*VULNERABILITIES FILTER */}
                         <Select>
-                              <SelectTrigger className=" bg-[#648DBC]  text-white ">
-                                 <h1 className="text-xs text-left xl:text-sm 2xl:text-sm">VULNERABILITIES</h1>
-                                 {/* <SelectValue placeholder="VULNERABILITIES" /> */}
-                              </SelectTrigger>
-                              <SelectContent>
-                                 <SelectItem value="light">SMI</SelectItem>
-                                 <SelectItem value="dark">Learning Disability</SelectItem>
-                                 <SelectItem value="system">Dementia</SelectItem>
-                                 <SelectItem value="system">Housebound</SelectItem> 
-                              </SelectContent>
+                           <SelectTrigger className=" bg-[#648DBC]  text-white">
+                           <h1 className="text-xs text-left xl:text-sm 2xl:text-sm pr-2">VULNERABILITIES</h1>
+                           {/* <SelectValue placeholder="VULNERABILITIES" /> */}
+                           </SelectTrigger>
+                           <SelectContent>
+
+                              {[
+                                    {value: 'smi', label: 'SMI' },
+                                    {value: 'learning_disability', label: 'Learning Disability' },
+                                    {value: 'dementia', label: 'Dementia' },
+                                    {value: 'housebound', label: 'Housebound' },
+                                 ].map((item, index) =>
+                                    (
+                                       <label
+                                          value={item.value}
+                                          className="flex items-center space-x-2 ml-4" 
+                                       >
+                                          <input
+                                             type="checkbox"
+                                             value={item.value}
+                                             checked={selectedVulnerabilities.includes(item.value)}
+                                             onChange={() => handleVulnerabilities(item.value)}
+                                       />
+                                          <span>{item.label}</span>       
+                                       </label>
+                                    ))}
+                           
+                           </SelectContent>
                         </Select>
 
                         {/* CHA₂DS₂-VASc FILTER */}
@@ -452,38 +558,38 @@ const Filter = () => {
                               <tbody className=" ">
                                  <tr className="border-b border-gray-200">
                                     <td className=" font-bold">Atrial Fibrillation Register</td>
-                                    <td className=" font-semibold text-right">0</td>
-                                    <td className="  font-semibold text-right">0%</td>
+                                    <td className=" font-semibold text-right">{importedData.length}</td>
+                                    <td className="  font-semibold text-right">{ percentageFormatter(importedData.length, importedData.length) }</td>
                                  </tr>
                                  <tr className="border-b border-gray-200 bg-gray-100">
                                     <td className="">*Modified AF008: CHA₂DS₂-VASc ≥ 2 issued Anticoagulants (6m)</td>
-                                    <td className=" text-right">0</td>
-                                    <td className=" text-right">0%</td>
+                                    <td className=" text-right">{ importedData.reduce(chadsvasce2Anticoag,0) }</td>
+                                    <td className=" text-right">{ percentageFormatter(importedData.reduce(chadsvasce2Anticoag,0), importedData.reduce(chadsvasce2,0)) }</td>
                                  </tr>
                                  <tr className="border-b border-gray-200">
                                     <td className="">CHA₂DS₂-VASc ≥ 2 and NOT issued Anticoagulants (6m)</td>
-                                    <td className=" text-right">0</td>
-                                    <td className=" text-right">0%</td>
+                                    <td className=" text-right">{ importedData.reduce(chadsvasce2NotOnAnticoag,0) }</td>
+                                    <td className=" text-right">{ percentageFormatter(importedData.reduce(chadsvasce2NotOnAnticoag,0), importedData.reduce(chadsvasce2,0)) }</td>
                                  </tr>
                                  <tr className="border-b border-gray-200 bg-gray-100">
                                     <td className="">CHA₂DS₂-VASc ≥ 2 issued Aspirin/Antiplatelets ONLY (6m)</td>
-                                    <td className=" text-right">0</td>
-                                    <td className=" text-right">0%</td>
+                                    <td className=" text-right">{ importedData.reduce(chadsvasce2OnAspAntipOnly,0) }</td>
+                                    <td className=" text-right">{ percentageFormatter(importedData.reduce(chadsvasce2OnAspAntipOnly,0), importedData.reduce(chadsvasce2,0)) }</td>
                                  </tr>
                                     <tr className="border-b border-gray-200">
                                     <td className="">CHA₂DS₂-VASc ≥ 2 issued BOTH Anticoagulants + Antiplatelets (6m)</td>
-                                    <td className=" text-right">0</td>
-                                    <td className=" text-right">0%</td>
+                                    <td className=" text-right">{ importedData.reduce(chadsvasce2OnAnticoagAspAntip,0) }</td>
+                                    <td className=" text-right">{ percentageFormatter(importedData.reduce(chadsvasce2OnAnticoagAspAntip,0), importedData.reduce(chadsvasce2,0)) }</td>
                                  </tr>
                                  <tr className="border-b border-gray-200 bg-gray-100">
                                     <td className="">CHA₂DS₂-VASc ≥ 2 issued DOAC(6m)</td>
-                                    <td className=" text-right">0</td>
-                                    <td className=" text-right">0%</td>
+                                    <td className=" text-right">{ importedData.reduce(chadsvasce2DOAC,0) }</td>
+                                    <td className=" text-right">{ percentageFormatter(importedData.reduce(chadsvasce2DOAC,0), importedData.reduce(chadsvasce2,0)) }</td>
                                  </tr>
                                  <tr className="border-b border-gray-200">
                                     <td className="">*Modified AF006: new CHA₂DS₂-VASc ≥ 2 in last 12m</td>
-                                    <td className=" text-right">0</td>
-                                    <td className=" text-right">0%</td>
+                                    <td className=" text-right">{ importedData.reduce(newChadsvasce2,0) }</td>
+                                    <td className=" text-right">{ percentageFormatter(importedData.reduce(newChadsvasce2,0), (importedData.length - importedData.reduce(chadsvasc2RecordedPrior12m,0)) ) }</td>
                                  </tr>
                               </tbody>
                            </table>
