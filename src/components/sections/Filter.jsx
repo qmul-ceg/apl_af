@@ -439,40 +439,40 @@ const Filter = () => {
                            <strong className ="text-xs text-left xl:text-sm 2xl:text-sm pr-2">SUMMARY</strong>
                         </header>
 
-                        <div className="border border-t-0 border-gray-300 flex flex-col pt-2 px-2" >
+                        <div className="border border-t-0 border-gray-200 flex flex-col pt-2 px-2" >
                            <table className=" text-xs ">
                               <tbody className=" ">
-                                 <tr className="border-b border-gray-300">
+                                 <tr className="border-b border-gray-200">
                                     <td className=" font-bold">Atrial Fibrillation Register</td>
                                     <td className=" font-semibold text-right">0</td>
                                     <td className="  font-semibold text-right">0%</td>
                                  </tr>
-                                 <tr className="border-b border-gray-300 ">
+                                 <tr className="border-b border-gray-200 bg-gray-100">
                                     <td className="">*Modified AF008: CHA₂DS₂-VASc ≥ 2 issued Anticoagulants (6m)</td>
                                     <td className=" text-right">0</td>
                                     <td className=" text-right">0%</td>
                                  </tr>
-                                 <tr className="border-b border-gray-300 bg-gray-200">
+                                 <tr className="border-b border-gray-200">
                                     <td className="">CHA₂DS₂-VASc ≥ 2 and NOT issued Anticoagulants (6m)</td>
                                     <td className=" text-right">0</td>
                                     <td className=" text-right">0%</td>
                                  </tr>
-                                 <tr className="border-b border-gray-300">
+                                 <tr className="border-b border-gray-200 bg-gray-100">
                                     <td className="">CHA₂DS₂-VASc ≥ 2 issued Aspirin/Antiplatelets ONLY (6m)</td>
                                     <td className=" text-right">0</td>
                                     <td className=" text-right">0%</td>
                                  </tr>
-                                    <tr className="border-b border-gray-300 bg-gray-200">
+                                    <tr className="border-b border-gray-200">
                                     <td className="">CHA₂DS₂-VASc ≥ 2 issued BOTH Anticoagulants + Antiplatelets (6m)</td>
                                     <td className=" text-right">0</td>
                                     <td className=" text-right">0%</td>
                                  </tr>
-                                 <tr className="border-b border-gray-300">
+                                 <tr className="border-b border-gray-200 bg-gray-100">
                                     <td className="">CHA₂DS₂-VASc ≥ 2 issued DOAC(6m)</td>
                                     <td className=" text-right">0</td>
                                     <td className=" text-right">0%</td>
                                  </tr>
-                                 <tr className="border-b border-gray-300 bg-gray-200">
+                                 <tr className="border-b border-gray-200">
                                     <td className="">*Modified AF006: new CHA₂DS₂-VASc ≥ 2 in last 12m</td>
                                     <td className=" text-right">0</td>
                                     <td className=" text-right">0%</td>

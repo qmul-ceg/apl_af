@@ -282,22 +282,22 @@ const Modal = ({open, }) => {
                </button>
             </div>
 
+            {/* GET PREVIOUS AND NEXT PATIENT */}
             <div className=" flex justify-center  gap-6 p-2  bg-white">
-                  
-                  <button className=" " onClick={handlePreviousPatient}>
-                     <div className="flex flex-col text-xs font-semibold hover:text-sm">
-                        <span>previous patient</span>
-                        <span className="">&larr;</span>
-                     </div>
-                  </button>
-                  <button className=" " onClick={handleNextPatient}>
-                     <div className="flex flex-col text-xs font-semibold hover:text-sm">
-                        <span>next patient</span>
-                        <span className="">&rarr;</span>
-                     </div>
-                     
-                  </button>
-               </div>
+
+               <button className=" " onClick={handlePreviousPatient}>
+                  <div className="flex flex-col text-xs font-semibold hover:text-sm">
+                     <span>previous patient</span>
+                     <span className="">&larr;</span>
+                  </div>
+               </button>
+               <button className=" " onClick={handleNextPatient}>
+                  <div className="flex flex-col text-xs font-semibold hover:text-sm">
+                     <span>next patient</span>
+                     <span className="">&rarr;</span>
+                  </div>  
+               </button>
+            </div>
 
             
            
@@ -346,9 +346,40 @@ const Modal = ({open, }) => {
                   </div>
                </div>
                
-                  <div className=" text-center mt-6">
-                     <strong>NOTE: This list of medications is not exhaustive and the patient may be on additional medications not shown below</strong>
-                  </div>
+               {/* NOTE AND COLOURS LEGEND */}
+               <div className=" text-center mt-6  flex justify-between items-center pl-2 pr-4">
+                  <strong>*NOTE: This list of medications is not exhaustive and the patient may be on additional medications not shown below</strong>
+                  
+                  <div className=" flex">
+                     <span>
+                           <Popover>
+                              <PopoverTrigger >
+                                 <strong className="text-sm">i</strong>            
+                              </PopoverTrigger>
+                                 <PopoverContent className="p-0 w-[16em] text-sm">
+                                    <div className="px-4 py-2 flex flex-col gap-2">
+                                       <div className="flex gap-2">
+                                          <div className=" w-14 h-5 bg-red-500"></div>
+                                          <span>High Risk</span>
+                                       </div>
+                                       <div className="flex  gap-2">
+                                          <div className=" w-14 h-5 bg-orange-400"></div>
+                                          <span>Moderate Risk</span>
+                                       </div>
+                                       <div className="flex  gap-2">
+                                          <div className=" w-14 h-5 bg-yellow-300"></div>
+                                          <span>Mild Risk</span>
+                                       </div>
+                                       <div className="flex  gap-2">
+                                          <div className=" w-14 h-5 bg-green-600"></div>
+                                          <span>Optimal Treatment</span>
+                                       </div>
+                                       
+                                    </div>
+                                 </PopoverContent>
+                              </Popover></span>
+                     </div>  
+               </div>
 
                
                {/* TABLES */}
@@ -807,11 +838,6 @@ const Modal = ({open, }) => {
                   </table>
 
 
-
-
-
-
-
                   {/* PROCESS MEASURES */}
                   <table className="w-full border mt-4">
                      <thead className="bg-[#648DBC] text-left text-white font-semibold">
@@ -845,7 +871,7 @@ const Modal = ({open, }) => {
                                           <strong className="text-sm">i</strong>
                                           
                                        </PopoverTrigger>
-                                       <PopoverContent className="p-0 w-[25em] h-[8em] text-sm">
+                                       <PopoverContent className="p-0 w-[25em] text-sm">
                                           <table className="border w-full ">
                                              <thead className="border bg-gray-100">
                                                 <tr className="py-2">
@@ -875,7 +901,7 @@ const Modal = ({open, }) => {
                                        ${
                                           item.process === "Systolic/Diastolic BP (mmHg)(latest ever)" 
                                           && selectedPatientData[AFibColumns.SystolicBPValue] >= 160
-                                          ? "bg-red-600" : null
+                                          ? "bg-red-500" : null
                                        }
                                         ${
                                           (item.process === "Systolic/Diastolic BP (mmHg)(latest ever)" 
@@ -886,7 +912,7 @@ const Modal = ({open, }) => {
                                              && ((selectedPatientData[AFibColumns.eGFR_Value] < 60) &&
                                                 (selectedPatientData[AFibColumns.eGFR_Value] > 0)))
                                           
-                                          ? "bg-orange-500" : null
+                                          ? "bg-orange-400" : null
                                        }
                                     `
                                  }></td>
@@ -918,7 +944,7 @@ const Modal = ({open, }) => {
                                  ${
                                     selectedPatientData[AFibColumns.MedsReviewConcept]
                                     ? "bg-green-600"
-                                    : "bg-red-600"
+                                    : "bg-red-500"
                                  }
                                  ${
                                     recordedOverTwelveMonths(

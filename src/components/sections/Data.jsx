@@ -129,15 +129,15 @@ const Data = () => {
                <TableCell >{patient[AFibColumns.PatientReference]}</TableCell>
                <TableCell>
                <div className="flex w-full">
-                  <span className="text-xs w-[50%] border">{patient[AFibColumns.CHADSVAScValue]}</span>
-                  <span className="text-xs w-full border">{patient[AFibColumns.CHADSVAScDate]}</span>
+                  <span className="text-xs w-[50%] ">{patient[AFibColumns.CHADSVAScValue]}</span>
+                  <span className=" text-xs w-full pl-6 ">{patient[AFibColumns.CHADSVAScDate]}</span>
                </div>
                </TableCell>
                
                <TableCell >
                   <div className="flex w-full">
-                     <span className="text-xs w-[50%] border ">{patient[AFibColumns.ORBIT_Value]}</span>
-                     <span className="text-xs w-full border ">{patient[AFibColumns.ORBIT_Date]}</span>
+                     <span className="text-xs w-[50%] ">{patient[AFibColumns.ORBIT_Value]}</span>
+                     <span className="text-xs w-full pl-6 ">{patient[AFibColumns.ORBIT_Date]}</span>
                   </div>
                </TableCell>
                <TableCell>{patient[AFibColumns.OnAnticoagulant]}</TableCell>
