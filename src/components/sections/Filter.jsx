@@ -39,10 +39,18 @@ const Filter = () => {
       setQuickFilter(!quickFilter)
    }
 
-   const handleChange = (value, label, name )=> {
-      handleAntiFilter(value)
-      // setSelectedFilters((prevFilters) => [...prevFilters, {value, label, name}])
-   }
+   // const displayFilter =[
+   //    {
+   //       name: "Anti",
+   //       value : selectedAnti
+   //    }
+   // ]
+
+   
+   // const handleChange = (value, label, name )=> {
+   //    handleAntiFilter(value)
+   //    // setSelectedFilters((prevFilters) => [...prevFilters, {value, label, name}])
+   // }
 
    // const createSubFilters = () => {
    //    return selectedFilters.map((filter) => (
@@ -108,7 +116,7 @@ const Filter = () => {
                                     value={item.value}
                                     name="antiFilter"
                                     checked={selectedAnti === item.value}
-                                    onChange={(event) => handleChange(event.target.value, item.label, item.name)}
+                                    onChange={(event) => handleAntiFilter(event.target.value)}
                                     />
                                     <span>{item.label}</span>
                                  </label>
