@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 
 
 import Data from './components/sections/Data'
@@ -10,31 +10,14 @@ import { MainContext } from './MainContext'
 
 
 import {  } from 'react'
+import { useNavigate } from 'react-router-dom'
 const Display = () => {
-   // const[filterMenu, setFilterMenu] = useState(true)
-   // const[quickFilter, setQuickFilter] = useState(true)
-
-   // const toggleFilter =() =>{
-   //    setFilterMenu(!filterMenu)
-   // }
-
-   // const toggleQuickFilter =()=>{
-   //    setQuickFilter(!quickFilter)
-   // }
-
-   // Selected Value
-   // const[openModal, setOpenModal] = useState(false)
-
-   // const triggerModal =() =>{
-   //    setModalOpen(!isModalOpen)
-   // }
-
   
 
-   const { isModalOpen } = useContext(MainContext)
+   const { isModalOpen, dataCount } = useContext(MainContext)
 
 return (
-   <div>
+   <div className="">
       {/* HEADER */}
       <section id="header" className =" flex justify-center mt-2">
             <div className="w-[98vw]">
@@ -54,9 +37,12 @@ return (
          
       </section>
       
+      <div className=" mt-2 w-[98vw] mx-auto text-left pl-2 ">
+         <strong>Patient count: <span className='text-red-600'>{dataCount}</span></strong> 
+      </div>
       {/* DISPLAY DATA */}
-      <section className= "flex justify-center  mt-4" id="display_data">
-         <div className=" w-[98vw]">
+      <section className= "flex justify-center  mt-2" id="display_data">
+         <div className=" w-[98vw] ">
             <Data />
          </div>
          

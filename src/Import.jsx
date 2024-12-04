@@ -13,12 +13,15 @@ import { getBloodPressure, hasCVD, hasHypertension, onAnticoagulantMeds, onAspir
 import { transformS1ImportedData } from './helper/S1DataTransform'
 
 const Import = () => {
+   
+
    const navigate = useNavigate()//Inititalised the navigate function
    const [gpSystemSelected, setGpSystemSelected] = useState(GpSystems.NotSelected)
-   // console.log(gpSystemSelected)
-   
+ 
+   //Imports from our main context
    const { setImportedData, setRelativeRunDate } = useContext(MainContext)
 
+   //Sets GPsystem 
    const handleGpSystemSelect = (event) =>{
       setGpSystemSelected(event.target.value)
    }
@@ -148,7 +151,7 @@ const Import = () => {
               
               //console.log("Processed Data:", dataArray);
               setImportedData(dataArray)
-              navigate("/display");
+              navigate("/display",);
               
               
          },
@@ -163,39 +166,70 @@ const Import = () => {
 
   return (
    <>
-      <div className = "flex justify-center  items-start h-screen border border-dotted">
-         <Card  className = " w-[500px] mt-[25vh]">
-            <CardHeader className="text-center">
-               {/* <CardTitle >Card Title</CardTitle> */}
+      <div className = "flex justify-center  items-start h-screen ">
+      {/* <div>
+            <img />
+            <h1>Atrial Fibrillation Tool </h1>
+            <div>
+               <h2>Select clinical system and import CSV file </h2>
+            </div>
+         </div> */}
+         <div  className = "w-[50vw] mt-[25vh] ">
+
+            <header className="mb-4">
                <img 
                   src={CegLogo} 
                   alt="Ceg Logo" 
-                  className="w-[100px] mx-auto"
+                  className="w-[20%] mx-auto "
                />
-               <CardDescription >Atrial Fibrillation Tool </CardDescription>
-            </CardHeader>
-
-            <CardContent className ="text-center">
-               <p>Select clinical system and import CSV file </p>
+               <h1 className="text-2xl text-center mt-4 font-bold">Atrial Fibrillation Tool </h1>
+            </header>
+               {/* <CardTitle>Card Title</CardTitle> */}
+               
+               
+            
+            
+            {/* <CardContent className ="text-center"> */}
+               
                <div>
-                  <RadioGroup className ="flex justify-center items-center">
-                     <div className="flex items-center space-x-2">
-                        <RadioGroupItem value={GpSystems.EMIS_Web} id="option-one" 
-                        onClick ={handleGpSystemSelect}/>
-                        <label htmlFor="option-one">EMIS Web</label>
-                     </div>
-                     <div className="flex items-center space-x-2">
-                        <RadioGroupItem value={GpSystems.SystmOne} id="option-two" 
-                        onClick ={handleGpSystemSelect}/>
-                        <label htmlFor="option-two">SystmOne</label>
-                     </div>
-                  </RadioGroup>
-               </div>
-            </CardContent>
 
-            <div className="flex justify-center mt-4">
+               </div>
+               <div className="flex flex-col justify-center items-center">
+                  <h2 className="text-2xl mb-2">Select clinical system and import CSV file </h2>
+                  {/* <RadioGroup className ="flex justify-center items-center"> */}
+                     <div className="flex items-center space-x-2">
+                        <div className="flex items-center">
+                           <input
+                              type="radio"
+                              id="option-one"
+                              name="gp-system"
+                              value={GpSystems.EMIS_Web}
+                              onClick={handleGpSystemSelect}
+                              className="w-4 h-4 border-2 rounded-full  checked:bg-[#648DBC] mr-2"
+                           />
+                           <label className="text-lg" htmlFor="option-one">EMIS Web</label>
+                        </div>
+                        <div className="flex items-center">
+                           <input
+                              type="radio"
+                              id="option-two"
+                              name="gp-system"
+                              value={GpSystems.SystmOne}
+                              onClick={handleGpSystemSelect}
+                              className="w-4 h-4 border-2 rounded-full  checked:bg-[#648DBC] mr-2"
+                           />
+                           <label className="text-lg" htmlFor="option-two ">SystmOne</label>
+                        </div>
+                        
+
+                   
+               </div>
+            </div>
+         
+
+            <div className="flex justify-center mt-2">
                {/* <Link to="/display"> */}
-                  <Button className="text-center" onClick={handleButtonClick}>Import</Button>
+                  <Button className="text-center bg-[#648DBC] w-[6em] text-lg" onClick={handleButtonClick}>Import</Button>
                {/* </Link> */}
                
                <input
@@ -206,7 +240,7 @@ const Import = () => {
                   style ={{display: 'none'}}
                />
             </div>
-         </Card>
+         </div>
       </div>
      
 
