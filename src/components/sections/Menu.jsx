@@ -10,7 +10,7 @@ import { GpSystems } from '@/enums/GPsystems';
 const Menu = () => {
 
 
-   const { getFilteredPatients } = useContext(MainContext);
+   const { getFilteredPatients, resetFilters } = useContext(MainContext);
    const filteredPatients = getFilteredPatients();
 
    const handleExportNHS = () => {
@@ -58,8 +58,8 @@ const Menu = () => {
 
             <div className="ml-2">
                <Link to="/">
-                  <button className=" py-2 px-6">
-                     <strong className="text-gray-800 hover:text-black">Import</strong>
+                  <button className=" py-2 px-6 " onClick={resetFilters}>
+                     <strong className="text-gray-800 hover:text-black ">Import</strong>
                   </button>
                </Link>
                

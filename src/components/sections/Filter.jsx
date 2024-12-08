@@ -16,24 +16,93 @@ const Filter = () => {
          selectedBP, handleBP,
          selectedChd, handleChd,
          selectedOrbit, handleOrbit,
-         medReview, handleMedReview,
+         medReview, handleMedReview, setMedReview,
+         setSelectedAnti,
          selectedAnti, handleAntiFilter,
          selectedVulnerabilities, handleVulnerabilities,
          importedData, relativeRunDate,
-         resetFilters} = useContext(MainContext);
+         resetFilters, data} = useContext(MainContext);
 
 
 
-   //FILTER FUNCTIONALITY
+   //FILTER AND QUICK FILTERS FUNCTIONALITY
    const[filterMenu, setFilterMenu] = useState(true)
    const[quickFilter, setQuickFilter] = useState(true)
 
-   //FILTER FEATURE
-   // const [selectedFilters, setSelectedFilters] = useState([])
+   //FILTER DISPLAY FEATURE
+   // const [displayAntiFilter] = useState(selectedAnti)
+
+   const [selectedAntiLabel, setSelectedAntiLabel] = useState()
+  
+   
+
+
+
+   const displayAntiFilter =[
+      {
+         name: "Anti",
+         value : selectedAnti,
+         label: selectedAntiLabel
+      }
+   ]
+
+   const displayMedReview =[
+      {
+         name: "Med Review",
+         value: medReview,
+      }
+   ]
+
+   const displayNsaid=[
+      {
+         name :"NSAID",
+         value: nsaid
+      }
+   ]
+   const displayCvd=[
+      {
+         name : "CVD",
+         value: cvd
+      }
+   ]
+
+   const removeAntiFilter = ()=>{
+      handleAntiFilter("none")
+   }
+
+   const removeMedReviewFilter = () => {
+      handleMedReview("")
+   }
+
+   const removeNsaidFilter =()=>{
+      handleNSAID("")
+   }
+
+   const removeCvdFilter =()=>{
+      handleCVD("")
+   }
+   //Display the value of selected anti
+
+      
+
+   React.useEffect(() =>{
+      console.log("displayCVD: ", displayCvd)
+   }, [cvd])
+
+
+
+   const handleAntiChange = (event, label)=>{
+      handleAntiFilter(event.target.value)
+      setSelectedAntiLabel(label)
+   }
 
 
 
 
+
+
+
+   //FILTER MENU 
    const toggleFilter =() =>{
       setFilterMenu(!filterMenu)
    }
@@ -41,32 +110,7 @@ const Filter = () => {
    const toggleQuickFilter =()=>{
       setQuickFilter(!quickFilter)
    }
-
-   // const displayFilter =[
-   //    {
-   //       name: "Anti",
-   //       value : selectedAnti
-   //    }
-   // ]
-
-   
-   // const handleChange = (value, label, name )=> {
-   //    handleAntiFilter(value)
-   //    // setSelectedFilters((prevFilters) => [...prevFilters, {value, label, name}])
-   // }
-
-   // const createSubFilters = () => {
-   //    return selectedFilters.map((filter) => (
-   //       <button
-   //         key={filter.value}
-   //         className="px-4 py-2 m-2 border rounded-md bg-blue-500 text-white"
-   //         onClick={() => handleButtonClick(filter)}
-   //       >
-   //         {filter.name} ({filter.value})
-   //       </button>
-   //     ));
-   // }
-
+   //SUMMARY TABLE FUNCTIONALITY
    const chadsvasce2 = (chadsvasc2Cnt, patient) => {
       if (parseInt(patient[AFibColumns.CHADSVAScValue]) >= 2)           
          chadsvasc2Cnt += 1;
@@ -156,11 +200,34 @@ const Filter = () => {
    // console.log(selectedFilters)
    return (
       <>
-         <div className= "flex justify-between items-center  w-full h-14 px-4 rounded-t-lg bg-[#648DBC] text-white">
-            <strong>FILTERS</strong>
-            <div >
-               {/* Hi */}
-               {/* {createSubFilters()} */}
+         <div className= "flex justify-between items-center  w-full h-16 px-4 rounded-t-lg bg-[#648DBC] text-white">
+            <div className="flex items-center ">
+               <strong className=" text-center">FILTERS</strong>
+               <div className="px-2 ml-6  h-16 items-center">
+                  {(data.length > 0 && displayAntiFilter[0].value !== "none") && (
+                     <button className="border text-xs bg-white text-[#648DBC] px-2 rounded-md">
+                        {displayAntiFilter[0].name} - {displayAntiFilter[0].label } {<button className=" ml-2 "onClick={removeAntiFilter}>x</button>}
+                     </button>
+                  )}
+                  {(data.length > 0 && displayMedReview[0].value !== "") && (
+                     <button className="border text-xs bg-white text-[#648DBC] px-2 rounded-md flex items-center text-center">
+                        {displayMedReview[0].name} - {displayMedReview[0].value } 
+                        {<button className=" ml-2 "onClick={removeMedReviewFilter}>x</button>}
+                     </button>
+                  )}
+                  {(data.length > 0 && displayNsaid[0].value !== "") && (
+                     <button className="border text-xs bg-white text-[#648DBC] px-2 rounded-md flex items-center text-center">
+                        {displayNsaid[0].name} - {displayNsaid[0].value } 
+                        {<button className="ml-2"onClick={removeNsaidFilter}>x</button>}
+                     </button>
+                  )}
+                  {/* {(data.length > 0 && displayCvd[0].value !== "none")  && (
+                     <button className="border text-xs bg-white text-[#648DBC] px-2 rounded-md flex items-center text-center">
+                        {displayCvd[0].name} - {displayCvd[0].value } 
+                        {<button className="ml-2"onClick={removeCvdFilter}>x</button>}
+                     </button>
+                  )} */}
+               </div>
             </div>
             
             
@@ -204,7 +271,8 @@ const Filter = () => {
                                     value={item.value}
                                     name="antiFilter"
                                     checked={selectedAnti === item.value}
-                                    onChange={(event) => handleAntiFilter(event.target.value)}
+                                    onChange={(event) => handleAntiChange(event, item.label, item.name)}
+                                    // onChange={(event) => handleAntiFilter(event.target.value)}
                                     />
                                     <span>{item.label}</span>
                                  </label>
@@ -276,10 +344,7 @@ const Filter = () => {
                         </Select>
 
                         {/* CHA₂DS₂-VASc FILTER */}
-                        
-
-                        
-
+                     
                      </div>
 
                      {/* FILTER COLUMN 2 */}
@@ -514,6 +579,7 @@ const Filter = () => {
                      </div>
                   </div>
                   
+                  
                   {/* QUICK FILTERS */}
                   <div className =" flex-1 w-full flex flex-col justify-between max-w-[300px]">
                      <div className =" flex flex-col">
@@ -526,11 +592,11 @@ const Filter = () => {
                      
                         {
                            quickFilter && (
-                              <div className="border  border-gray-400 border-t-0">
+                              <div className="border  border-gray-200 h-28 border-t-0">
                                  <ul>
                                     <li>???</li>
                                     <li>???</li>
-                                    <li>??</li>
+                                    
                                  </ul>
                               </div>
                            )
