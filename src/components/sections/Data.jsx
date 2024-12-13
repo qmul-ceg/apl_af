@@ -16,6 +16,29 @@ const Data = () => {
       setImportedData
       } = useContext(MainContext)
 
+   
+   const [selectAll, setSelectAll] = useState(false)
+   const [selectedRows, setSelectedRows] = useState([])
+
+   const handleSelectAll = (event) =>{
+      const isChecked = event.target.checked;
+      setSelectAll(isChecked)
+      setSelectedRows(
+         isChecked?
+         data.map((item) => item.id)
+         : [])
+   }
+
+   const handleSelectedRow = (id) =>{
+      setSelectedRows((prev) =>
+         prev.includes(id) ?
+         prev.filter((rowId) => rowId !== id)
+         : [...prev, id]
+      )
+   }
+
+   // console.log(selectedRows)
+
    // const filteredPatients = getFilteredPatients()
 //    const [sortChdValue, setSortChdValue] = useState("asc")
   
@@ -27,30 +50,6 @@ const Data = () => {
 //       })
 //    }
 
-// useEffect(() => {
-//    return () => {
-//      // Clear data when the component unmounts
-//      setImportedData([]);
-//    };
-//  }, []);
-
-//    const sortedPatients = () => {
-//       if (sortChdValue === 'asc') {
-//           return [...filteredPatients].sort((a, b) => {
-//               const valueA = parseFloat(a[AFibColumns.CHADSVAScValue]) || 0;
-//               const valueB = parseFloat(b[AFibColumns.CHADSVAScValue]) || 0;
-//               return valueA - valueB; // Ascending
-//           });
-//       } else {
-//           return [...filteredPatients].sort((a, b) => {
-//               const valueA = parseFloat(a[AFibColumns.CHADSVAScValue]) || 0;
-//               const valueB = parseFloat(b[AFibColumns.CHADSVAScValue]) || 0;
-//               return valueB - valueA; // Descending
-//           });
-//       }
-//   };
-
-//    const tableData = sortedPatients()
 
 
   return (
@@ -59,6 +58,13 @@ const Data = () => {
          
           <TableHeader >
              <TableRow className="font-bold text-xs bg-[#648DBC] hover:bg-bg-[#648DBC]">
+               <TableHead className="border-b border-r border-gray-400 text-center">
+                  <input
+                     type="checkbox"
+                     onChange={handleSelectAll}
+                     checked={selectAll}
+                  />
+               </TableHead>
                 <TableHead className="border-b border-r border-gray-400 text-center font-semibold text-white">Full Name</TableHead>
                 <TableHead className="border-b border-r border-gray-400  font-semibold text-white">Age</TableHead>
                 <TableHead className="border-b border-r border-gray-400 font-semibold text-white">Gender</TableHead>
@@ -115,12 +121,20 @@ const Data = () => {
             <TableRow key={index} className={index % 2 === 0 ? 'bg-gray-50' : ''} >
                {/* <Dialog>
                   <DialogTrigger asChild> */}
-                     <TableCell className="font-medium  cursor-pointer text-blue-600 hover:underline"
-                        onClick={()=>handlePatientClick(index)}
+                  <TableCell>
+                     <input
+                        type="checkbox"
+                        checked={selectedRows.includes(patient.index)}
+                        onChange={()=>handleSelectedRow(patient.index)}
                      >
-                        {patient[AFibColumns.FullName]}
+                     </input>
+                  </TableCell>
+                  <TableCell className="font-medium  cursor-pointer text-blue-600 hover:underline"
+                     onClick={()=>handlePatientClick(index)}
+                  >
+                     {patient[AFibColumns.FullName]}
 
-                     </TableCell>
+                  </TableCell>
                  
 
                
@@ -160,3 +174,31 @@ const Data = () => {
 }
 
 export default Data
+
+
+
+
+// useEffect(() => {
+//    return () => {
+//      // Clear data when the component unmounts
+//      setImportedData([]);
+//    };
+//  }, []);
+
+//    const sortedPatients = () => {
+//       if (sortChdValue === 'asc') {
+//           return [...filteredPatients].sort((a, b) => {
+//               const valueA = parseFloat(a[AFibColumns.CHADSVAScValue]) || 0;
+//               const valueB = parseFloat(b[AFibColumns.CHADSVAScValue]) || 0;
+//               return valueA - valueB; // Ascending
+//           });
+//       } else {
+//           return [...filteredPatients].sort((a, b) => {
+//               const valueA = parseFloat(a[AFibColumns.CHADSVAScValue]) || 0;
+//               const valueB = parseFloat(b[AFibColumns.CHADSVAScValue]) || 0;
+//               return valueB - valueA; // Descending
+//           });
+//       }
+//   };
+
+//    const tableData = sortedPatients()

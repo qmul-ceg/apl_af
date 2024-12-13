@@ -26,6 +26,14 @@ const Menu = () => {
    return (
       <>
          <div className="flex border border-gray rounded-lg">
+         <div className="ml-2">
+               <Link to="/">
+                  <button className=" py-2 px-6 " onClick={resetFilters}>
+                     <strong className="text-gray-800 hover:text-black ">Import</strong>
+                  </button>
+               </Link>
+               
+            </div>
             <div className=" mr-2">
                <Popover>
                   <PopoverTrigger className ="flex justify-center py-2 px-6 ">
@@ -56,14 +64,7 @@ const Menu = () => {
             
            
 
-            <div className="ml-2">
-               <Link to="/">
-                  <button className=" py-2 px-6 " onClick={resetFilters}>
-                     <strong className="text-gray-800 hover:text-black ">Import</strong>
-                  </button>
-               </Link>
-               
-            </div>
+           
          </div>  
     </>
   )

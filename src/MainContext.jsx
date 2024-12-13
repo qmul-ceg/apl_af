@@ -3,6 +3,7 @@ import patientsData from '/src/data/patient_data.json'
 import { GpSystems } from './enums/GPsystems'
 import { AFibColumns } from './enums/AFibColumns'
 
+
 export const MainContext = createContext()
 
 const MainProvider = ({ children }) => {
@@ -58,12 +59,12 @@ const MainProvider = ({ children }) => {
 
    //FILTER STATES
    const defaultFilters ={
-      selectedAnti:"none",
+      selectedAnti:null,
       selectedAges: [],
       nsaid:"",
-      cvd: "",
+      cvd: null,
       selectedBP: [],
-      selectedChd: [],
+      selectedChdValue: [],
       selectedOrbit: [],
       medReview:"",
       selectedVulnerabilities: []
@@ -74,7 +75,7 @@ const MainProvider = ({ children }) => {
    const [nsaid, setNsaid] = useState (defaultFilters.nsaid)
    const [cvd, setCvd] = useState (defaultFilters.cvd)
    const [selectedBP, setSelectedBP] = useState(defaultFilters.selectedBP)
-   const [selectedChd, setSelectedChd] = useState(defaultFilters.selectedChd) //CHA₂DS₂-VASc
+   const [selectedChdValue, setSelectedChdValue] = useState(defaultFilters.selectedChdValue) //CHA₂DS₂-VASc
    const [selectedOrbit, setSelectedOrbit] = useState (defaultFilters.selectedOrbit)
    const [medReview, setMedReview] = useState (defaultFilters.medReview)
    const [selectedVulnerabilities, setSelectedVulnerabilities] = useState (defaultFilters.selectedVulnerabilities)  //Vulnerabilities
@@ -93,7 +94,6 @@ const MainProvider = ({ children }) => {
       setNsaid(defaultFilters.nsaid);
       setCvd(defaultFilters.setCvd);
       setSelectedBP(defaultFilters.selectedBP);
-      setSelectedChd(defaultFilters.selectedChd);
       setSelectedOrbit(defaultFilters.selectedOrbit);
       setMedReview(defaultFilters.medReview);
       setSelectedVulnerabilities(defaultFilters.selectedVulnerabilities);
@@ -101,18 +101,28 @@ const MainProvider = ({ children }) => {
 
    /////FILTER SELECTIONS
    //AntiFilter
-   const handleAntiFilter =(value) => {
-      setSelectedAnti(value)
+   const handleAntiFilter =(value, label) => {
+      if (selectedAnti && selectedAnti.value === value) {
+         setSelectedAnti(null);
+      } else {
+         setSelectedAnti({ value, label });
+      }
    }
    // console.log(selectedAnti)
    //Age Filters
-   const handleAgeSelection = (age) =>{
-      if (selectedAges.includes(age)){
-         setSelectedAges(selectedAges.filter((item) => item !== age))
-      }
-      else {
-         setSelectedAges([...selectedAges, age] )
-      } 
+   const handleAgeSelection = (value, label) =>{
+      setSelectedAges((prev) => {
+         const exists = selectedAges.some(object => object.value === value)
+
+         if(exists){
+            return prev.filter(object => object.value !== value);
+         }
+         else {
+            return [...prev, {value, label}]
+         }
+         
+      })
+      
    }
 
    //NSAID Filter Logic
@@ -121,23 +131,54 @@ const MainProvider = ({ children }) => {
    };
 
     //CVD Filter Logic
-    const handleCVD = (value) => {
-      setCvd((prev) => (prev === value ? "" : value)); // Toggle value off
+    const handleCVD = (value, label) => {
+      if (cvd && cvd.value === value) {
+         setCvd(null);
+      } else {
+         setCvd({ value, label });
+      }
    };
 
    //BP Filters
-   const handleBP = (bp) =>{
-      if(selectedBP.includes(bp)){
-         setSelectedBP(selectedBP.filter((item) => item !== bp ))
-      }
-      else{
-         setSelectedBP([...selectedBP, bp])
-      }
+   const handleBP = (value, label)=>{
+      setSelectedBP((prev) => {
+         const exists = selectedBP.some(object => object.value === value)
+
+         if(exists){
+            return prev.filter(object => object.value !== value);
+         }
+         else {
+            return [...prev, {value, label}]
+         }
+         
+      })
+   }
+   
+   const removeBP = (value) => {
+      setSelectedBP((prev) => (
+         prev.filter(object => object.value !== value)
+      ))
+
    }
 
+   const removeOrbitDisplay = (value) => {
+      setSelectedOrbit((prev) => (
+         prev.filter(object => object.value !== value)
+      ))
+   }
+
+   const removeAgeDisplay = (value) => {
+      setSelectedAges((prev) => (
+         prev.filter(object => object.value !== value)
+      ))
+   }
+
+   const removeCvdDisplay = (value) => {
+      setCvd(null);
+   }
    
 
-
+   //BLOOD PRESSURE FILTER
    const parseBloodPressure = (bp) => {
       if (!bp || typeof bp !== 'string') {
       // If the input is invalid or not a string, return default values
@@ -159,17 +200,17 @@ const MainProvider = ({ children }) => {
 
 
    const checkPatientBloodPressure = (systolic, diastolic) => {
-      for (let value of selectedBP){
-         if(value === "lt130-80" && systolic < 130 && diastolic < 80) {
+      for (let object of selectedBP){
+         if(object.value === "lt130-80" && systolic < 130 && diastolic < 80) {
             return true
          }
-         if(value === "lt140-90" && systolic < 140 && diastolic < 90 ){
+         if(object.value === "lt140-90" && systolic < 140 && diastolic < 90 ){
             return true
          }
-         if(value === "140/90-159/90" && (systolic >= 140 && systolic <= 159 || diastolic >= 90)){
+         if(object.value === "140/90-159/90" && (systolic >= 140 && systolic <= 159 || diastolic >= 90)){
             return true
          }
-         if(value ==="gte160-100" && (systolic >= 160 || diastolic >= 100)){
+         if(object.value ==="gte160-100" && (systolic >= 160 || diastolic >= 100)){
             return true
          }
       }
@@ -177,23 +218,55 @@ const MainProvider = ({ children }) => {
    }
 
    //CHA₂DS₂-VASc Filters
-   const handleChd = (value) => {
-      if(selectedChd.includes(value)){
-         setSelectedChd(selectedChd.filter((item) => item !== value))
-      }
-      else{
-         setSelectedChd ([...selectedChd, value])
+   const [selectedChdDate, setSelectedChdDate] = useState(null)
+   const handleChdValue = (value, label) => {
+      setSelectedChdValue((prev) => {
+         const exists = prev.some(object => object.value === value)
+         if(exists){
+            return prev.filter((object) => object.value != value)
+         }else{
+            return [...prev, {value, label}]
+         }
+      })
+   }
+
+   const handleChdDate = (value, label) => {
+      if (selectedChdDate && selectedChdDate.value === value) {
+         setSelectedChdDate(null);
+      } else {
+         setSelectedChdDate({ value, label });
       }
    }
 
-   const handleOrbit = (value => {
-      if(selectedOrbit.includes(value)){
-         setSelectedOrbit(selectedOrbit.filter((item) => item !== value))
-      }
-      else{
-         setSelectedOrbit([...selectedOrbit, value])
-      }
-   })
+   const removeChdValue = (value) =>{
+      setSelectedChdValue((prev) => (
+         prev.filter(object => object.value !== value)
+      ))
+   }
+
+   const removeChdDate = () =>{
+      setSelectedChdDate(null);
+   }
+
+// console.log(selectedChdDate)
+// console.log(selectedChdValue)
+
+// console.log(selectedChdValue.some(item => item.value === "gte2"));
+// console.log(selectedChdDate)
+
+
+
+   const handleOrbit = (value, label) => {
+      setSelectedOrbit((prev) => {
+         const exists = prev.some(object => object.value === value);
+
+         if(exists){
+            return prev.filter((object) => object.value !== value)
+         }else {
+            return [...prev, {value, label}]
+         }
+      });
+   }
 
 
    //MedReview
@@ -202,14 +275,18 @@ const MainProvider = ({ children }) => {
    };
 
    //Vulnerabilities
-   const handleVulnerabilities = (value) => {
-      if (selectedVulnerabilities.includes(value)) {
-         setSelectedVulnerabilities(selectedVulnerabilities.filter((item) => item !== value));
-      } 
-      else {
-         setSelectedVulnerabilities([...selectedVulnerabilities,value]);
-      }
-   };     
+   const handleVulnerabilitesFilter = (value, label) => {
+      setSelectedVulnerabilities((prev) => {
+         const exists = prev.some((item) => item.value === value)
+
+         if (exists){
+            return prev.filter((item) => item.value !== value)
+           
+         }else {
+            return [...prev, {value, label}]
+         };
+      })
+   }    
 
    //CONERT DATE TO JS FORMAT
    const convertDate = (dateString) => {
@@ -248,23 +325,31 @@ const MainProvider = ({ children }) => {
       return importedData.filter((patient) =>{
 
          //none, doac_warf, doac, warf, antiplatelets, dual
+         const doacWarf = selectedAnti && selectedAnti.value === "doac_warf";
+         const doac = selectedAnti && selectedAnti.value === "doac";
+         const warfarin = selectedAnti && selectedAnti.value === "warf";
+         const antiplatelets = selectedAnti && selectedAnti.value === "antiplatelets";
+         const none = selectedAnti && selectedAnti.value === "no_anticoagulant";
+         const dualTherapy = selectedAnti && selectedAnti.value === "dual";
+
+
          const antiFilterControl = 
-            selectedAnti === "none"||
-            (selectedAnti === "doac_warf" && 
+            selectedAnti === null||
+            (doacWarf && 
                (patient[AFibColumns.OnAnticoagulant].includes("YES - DOAC") || 
                 patient[AFibColumns.OnAnticoagulant].includes("YES - WARF"))) ||
-            (selectedAnti === "doac" && 
+            (doac && 
                patient[AFibColumns.OnAnticoagulant].includes("YES - DOAC")) ||
-            (selectedAnti === "warf" && 
+            (warfarin && 
                patient[AFibColumns.OnAnticoagulant].includes("YES - WARF")) ||
-            (selectedAnti === "antiplatelets" && 
+            (antiplatelets && 
                patient[AFibColumns.OnAspirinAntiplatelet] === "YES" &&
                patient[AFibColumns.OnAnticoagulant] ==="NO")  ||
-            (selectedAnti === "dual" && 
+            (dualTherapy && 
                   patient[AFibColumns.OnAspirinAntiplatelet] === "YES" && 
                    (patient[AFibColumns.OnAnticoagulant].includes("YES - DOAC") ||
                    patient[AFibColumns.OnAnticoagulant].includes("YES - WARF"))) ||
-            (selectedAnti === "no_anticoagulant" && 
+            (none && 
                !patient[AFibColumns.OnAnticoagulant].includes("YES - DOAC") &&
                (!patient[AFibColumns.OnAnticoagulant].includes("YES - WARF")))
                // (patient[AFibColumns.OnAnticoagulant] != "YES - WARF"))
@@ -273,9 +358,9 @@ const MainProvider = ({ children }) => {
 
 
          const ageFilter = 
-            (selectedAges.includes("<65") && patient[AFibColumns.Age] < 65) ||
-            (selectedAges.includes("65-79") && patient[AFibColumns.Age] >= 65 && patient[AFibColumns.Age] <= 79) ||
-            (selectedAges.includes("80+") && patient[AFibColumns.Age] >= 80) ||
+            (selectedAges.some(item => item.value === "<65") && patient[AFibColumns.Age] < 65) ||
+            (selectedAges.some(item => item.value === "65-79") && patient[AFibColumns.Age] >= 65 && patient[AFibColumns.Age] <= 79) ||
+            (selectedAges.some(item => item.value === "80+") && patient[AFibColumns.Age] >= 80) ||
             selectedAges.length === 0;
       
          const nsaidFilter =
@@ -284,30 +369,64 @@ const MainProvider = ({ children }) => {
             !nsaid;
 
          const cvdFilter =
-            cvd === "YES" && patient[AFibColumns.CVD]  ==="YES" ||
-            cvd === "NO" && patient[AFibColumns.CVD]  === "NO" ||
+            (cvd && cvd.value === "Yes" && patient[AFibColumns.CVD]  ==="YES") ||
+            (cvd && cvd.value === "No" && patient[AFibColumns.CVD]  === "NO") ||
             !cvd;
          
 
          const { systolic, diastolic } = parseBloodPressure(patient[AFibColumns.BP] );
          const bloodPressureFilter = selectedBP.length === 0 || checkPatientBloodPressure(systolic, diastolic);
          
-
+         
+         
+         
+         
+         // CHADVASC FILTER
+         //Value variables
+         const gteTwo = selectedChdValue.some(item => item.value === "gte2" && patient[AFibColumns.CHADSVAScValue] >= 2);
+         const equalToOne = selectedChdValue.some(item => item.value === "1" && patient[AFibColumns.CHADSVAScValue]  == 1)
+         const equalToZero = selectedChdValue.some(item => item.value === "0" && patient[AFibColumns.CHADSVAScValue]  === '0')
+         //Date Variables
+         const overTwelveMonths = (selectedChdDate && selectedChdDate.value === ">12m" && recordedOverTwelveMonths(patient[AFibColumns.CHADSVAScDate], convertRelativeRunDate(relativeRunDate)));    
+         const notRecorded = (selectedChdDate && selectedChdDate.value === "not_recorded" && (!convertDate(patient[AFibColumns.CHADSVAScDate]) || convertDate(patient[AFibColumns.CHADSVAScDate]).trim() === ""));
+         const lessThanTwelveMonths = (selectedChdDate && selectedChdDate.value === "<12m" && 
+            !recordedOverTwelveMonths(patient[AFibColumns.CHADSVAScDate], convertRelativeRunDate(relativeRunDate)) && 
+            convertDate(patient[AFibColumns.CHADSVAScDate]) && 
+            convertDate(patient[AFibColumns.CHADSVAScDate]).trim() !== "");
 
          const chdFilter =
-            selectedChd.length === 0||
-            selectedChd.includes("gte2") && patient[AFibColumns.CHADSVAScValue]  >= 2 ||
-            selectedChd.includes("1") && patient[AFibColumns.CHADSVAScValue] == 1 ||
-            selectedChd.includes("0") && patient[AFibColumns.CHADSVAScValue] == 0 ||
-            selectedChd.includes(">12m") && recordedOverTwelveMonths(patient[AFibColumns.CHADSVAScDate], convertRelativeRunDate(relativeRunDate))||
-            selectedChd.includes("not_recorded") && (!convertDate(patient[AFibColumns.CHADSVAScDate]) || convertDate(patient[AFibColumns.CHADSVAScDate]).trim() === "")
-            
+            //Ony value selection no date selection 
+            selectedChdValue.length === 0 && selectedChdDate === null ||
+            //One CHADVASC value selection
+            (gteTwo && selectedChdDate === null) ||
+            (equalToOne && selectedChdDate === null) ||
+            (equalToZero && selectedChdDate === null) ||
+   
+            //Only dates selection
+            (selectedChdValue.length === 0 && overTwelveMonths) ||
+            (selectedChdValue.length === 0 && notRecorded) ||
+            (selectedChdValue.length === 0 && lessThanTwelveMonths) ||
+
+            //CHDVASC Value and Date combinations
+            (gteTwo && overTwelveMonths) ||     
+            (gteTwo && notRecorded) ||      
+            (gteTwo && lessThanTwelveMonths) ||
+           
+            (equalToOne && overTwelveMonths) ||   
+            (equalToOne && notRecorded) ||           
+            (equalToOne && lessThanTwelveMonths) ||
+           
+            (equalToZero && overTwelveMonths) ||   
+            (equalToZero && notRecorded) ||           
+            (equalToZero && lessThanTwelveMonths); 
+           
+                
             
          const orbitFilter = 
             selectedOrbit.length === 0 ||
-            selectedOrbit.includes("gte4") && patient[AFibColumns.ORBIT_Value] >=4 ||
-            selectedOrbit.includes(">12m") && recordedOverTwelveMonths(patient[AFibColumns.ORBIT_Date], convertRelativeRunDate(relativeRunDate)) ||
-            selectedOrbit.includes("not_recorded") && (!convertDate(patient[AFibColumns.ORBIT_Date]) || convertDate(patient[AFibColumns.ORBIT_Date]).trim() === "")
+            selectedOrbit.some(object => object.value === "gte4") && patient[AFibColumns.ORBIT_Value] >=4 ||
+            selectedOrbit.some(object => object.value === ">12m") && recordedOverTwelveMonths(patient[AFibColumns.ORBIT_Date], convertRelativeRunDate(relativeRunDate)) ||
+            selectedOrbit.some(object => object.value === "not_recorded") && (!convertDate(patient[AFibColumns.ORBIT_Date]) || convertDate(patient[AFibColumns.ORBIT_Date]).trim() === "")
             
          
          const medReviewFilter = 
@@ -327,10 +446,14 @@ const MainProvider = ({ children }) => {
 
          const vulnerabFilter = 
             selectedVulnerabilities.length === 0 ||
-            selectedVulnerabilities.includes("smi") && patient[AFibColumns.SMI_Concept].trim() !== "" ||
-            selectedVulnerabilities.includes("learning_disability") && patient[AFibColumns.LD_Concept].trim() !== "" ||
-            selectedVulnerabilities.includes("dementia") && patient[AFibColumns.DementiaConcept].trim() !== "" ||
-            selectedVulnerabilities.includes("housebound") && patient[AFibColumns.HouseboundConcept].trim() !== ""         
+            (selectedVulnerabilities.some(item => item.value === "smi") && patient[AFibColumns.SMI_Concept].trim() !== "") ||
+            (selectedVulnerabilities.some(item => item.value === "learning_disability") && patient[AFibColumns.LD_Concept].trim() !== "") ||
+            (selectedVulnerabilities.some(item => item.value === "dementia") && patient[AFibColumns.DementiaConcept].trim() !== "") ||
+            (selectedVulnerabilities.some(item => item.value === "housebound") && patient[AFibColumns.HouseboundConcept].trim() !== "");
+            // selectedVulnerabilities.includes("smi") && patient[AFibColumns.SMI_Concept].trim() !== "" ||
+            // selectedVulnerabilities.includes("learning_disability") && patient[AFibColumns.LD_Concept].trim() !== "" ||
+            // selectedVulnerabilities.includes("dementia") && patient[AFibColumns.DementiaConcept].trim() !== "" ||
+            // selectedVulnerabilities.includes("housebound") && patient[AFibColumns.HouseboundConcept].trim() !== ""         
    
                
          return ageFilter && nsaidFilter && cvdFilter && bloodPressureFilter && chdFilter && orbitFilter && medReviewFilter && antiFilterControl && vulnerabFilter
@@ -347,7 +470,7 @@ const MainProvider = ({ children }) => {
    // const filteredPatients = getFilteredPatients()
    const filteredPatients = React.useMemo(() => {
       return getFilteredPatients();  // Only recompute when dependencies (filters) change
-   }, [importedData, selectedAnti, selectedAges, nsaid, cvd, selectedBP, selectedChd, selectedOrbit, medReview, relativeRunDate, selectedVulnerabilities]);
+   }, [importedData, selectedAnti, selectedAges, nsaid, cvd, selectedBP, selectedChdValue, selectedChdDate, selectedOrbit, medReview, relativeRunDate, selectedVulnerabilities]);
 
    // console.log(filteredPatients)
    const handleSortClick = () => {
@@ -382,17 +505,17 @@ const MainProvider = ({ children }) => {
 
    const contextValue ={
       patients, getFilteredPatients, 
-      selectedAges, handleAgeSelection,
+      selectedAges, handleAgeSelection, removeAgeDisplay,
       nsaid, handleNSAID,
-      cvd, handleCVD,
-      selectedBP, handleBP,
-      selectedChd,handleChd,
-      selectedOrbit, handleOrbit,
+      cvd, handleCVD, removeCvdDisplay,
+      selectedBP, handleBP, removeBP,
+      // selectedChd,handleChd,
+      selectedOrbit, handleOrbit, removeOrbitDisplay,
       medReview, handleMedReview, setMedReview,
       importedData, setImportedData,
       relativeRunDate, setRelativeRunDate,
       selectedAnti, handleAntiFilter,
-      selectedVulnerabilities, handleVulnerabilities,
+      setSelectedVulnerabilities, selectedVulnerabilities, handleVulnerabilitesFilter,
       isModalOpen, setIsModalOpen,
       handlePatientClick,
       selectedPatientData,
@@ -401,8 +524,9 @@ const MainProvider = ({ children }) => {
       resetFilters,
       handleSortClick, data,
       sortChdValue, dataCount,
-      relativeRunDate
-  
+      relativeRunDate,
+      handleChdValue,  selectedChdValue, removeChdValue,
+      handleChdDate,selectedChdDate, removeChdDate
    }
 
 
@@ -427,3 +551,4 @@ export default MainProvider
       // parseBloodPressure,
       // checkPatientBloodPressure
 
+// handleVulnerabilities,

@@ -10,16 +10,19 @@ import { AFibColumns } from '@/enums/AFibColumns'
 const Filter = () => {
 
    const{  
-         selectedAges, handleAgeSelection, 
+         selectedAges, handleAgeSelection, removeAgeDisplay,
          nsaid, handleNSAID, 
-         cvd, handleCVD,
-         selectedBP, handleBP,
-         selectedChd, handleChd,
-         selectedOrbit, handleOrbit,
+         cvd, handleCVD, removeCvdDisplay,
+         selectedBP, handleBP, removeBP,
+         selectedChdValue,handleChdValue,  removeChdValue,
+         selectedChdDate,handleChdDate, removeChdDate,
+         // selectedChd, handleChd,
+         selectedOrbit, handleOrbit, removeOrbitDisplay,
          medReview, handleMedReview, setMedReview,
-         setSelectedAnti,
-         selectedAnti, handleAntiFilter,
-         selectedVulnerabilities, handleVulnerabilities,
+         handleVulnerabilitesFilter,
+         selectedAnti, handleAntiFilter, setSelectedAnti,
+         selectedVulnerabilities, 
+         setSelectedVulnerabilities, 
          importedData, relativeRunDate,
          resetFilters, data} = useContext(MainContext);
 
@@ -33,8 +36,8 @@ const Filter = () => {
    // const [displayAntiFilter] = useState(selectedAnti)
 
    const [selectedAntiLabel, setSelectedAntiLabel] = useState()
-  
-   
+
+   // console.log(selectedVulnerabilities)
 
 
 
@@ -66,13 +69,12 @@ const Filter = () => {
       }
    ]
 
+
    const removeAntiFilter = ()=>{
-      handleAntiFilter("none")
+      setSelectedAnti(null)
    }
 
-   const removeMedReviewFilter = () => {
-      handleMedReview("")
-   }
+
 
    const removeNsaidFilter =()=>{
       handleNSAID("")
@@ -81,13 +83,6 @@ const Filter = () => {
    const removeCvdFilter =()=>{
       handleCVD("")
    }
-   //Display the value of selected anti
-
-      
-
-   React.useEffect(() =>{
-      console.log("displayCVD: ", displayCvd)
-   }, [cvd])
 
 
 
@@ -96,9 +91,20 @@ const Filter = () => {
       setSelectedAntiLabel(label)
    }
 
+   
+
+
+   const removeVulnerabilities = (value) =>{
+      setSelectedVulnerabilities((prev) => 
+         prev.filter((item) => item.value !== value)
+     );
+
+   };
 
 
 
+   
+   
 
 
 
@@ -110,6 +116,8 @@ const Filter = () => {
    const toggleQuickFilter =()=>{
       setQuickFilter(!quickFilter)
    }
+
+
    //SUMMARY TABLE FUNCTIONALITY
    const chadsvasce2 = (chadsvasc2Cnt, patient) => {
       if (parseInt(patient[AFibColumns.CHADSVAScValue]) >= 2)           
@@ -202,40 +210,108 @@ const Filter = () => {
       <>
          <div className= "flex justify-between items-center  w-full h-16 px-4 rounded-t-lg bg-[#648DBC] text-white">
             <div className="flex items-center ">
-               <strong className=" text-center">FILTERS</strong>
-               <div className="px-2 ml-6  h-16 items-center">
-                  {(data.length > 0 && displayAntiFilter[0].value !== "none") && (
+               <strong className=" text-center ">FILTERS</strong>
+               {/* DISPLAY FILTERS */}
+               <div className=" ml-6  h-16 items-center flex row border border-dotted">
+                  {(data.length > 0 && selectedAnti) && (
                      <button className="border text-xs bg-white text-[#648DBC] px-2 rounded-md">
-                        {displayAntiFilter[0].name} - {displayAntiFilter[0].label } {<button className=" ml-2 "onClick={removeAntiFilter}>x</button>}
+                        <strong className ="mr-2">AntiCoag/AntiP:</strong> {displayAntiFilter[0].label } 
+                        {<button className=" ml-2 font-bold"onClick={()=>removeAntiFilter}>x</button>}
                      </button>
                   )}
                   {(data.length > 0 && displayMedReview[0].value !== "") && (
                      <button className="border text-xs bg-white text-[#648DBC] px-2 rounded-md flex items-center text-center">
-                        {displayMedReview[0].name} - {displayMedReview[0].value } 
-                        {<button className=" ml-2 "onClick={removeMedReviewFilter}>x</button>}
+                         <strong className ="mr-2">Med Review:</strong> {displayMedReview[0].value } 
+                        {<button className=" ml-2 font-bold"onClick={() => handleMedReview("")}>x</button>}
                      </button>
                   )}
                   {(data.length > 0 && displayNsaid[0].value !== "") && (
                      <button className="border text-xs bg-white text-[#648DBC] px-2 rounded-md flex items-center text-center">
-                        {displayNsaid[0].name} - {displayNsaid[0].value } 
-                        {<button className="ml-2"onClick={removeNsaidFilter}>x</button>}
+                         <strong className ="mr-2">NSAID:</strong> {displayNsaid[0].value } 
+                        {<button className="ml-2 font-bold"onClick={removeNsaidFilter}>x</button>}
                      </button>
                   )}
-                  {/* {(data.length > 0 && displayCvd[0].value !== "none")  && (
+                  {(data.length > 0 && cvd)  && (
                      <button className="border text-xs bg-white text-[#648DBC] px-2 rounded-md flex items-center text-center">
-                        {displayCvd[0].name} - {displayCvd[0].value } 
-                        {<button className="ml-2"onClick={removeCvdFilter}>x</button>}
+                         <strong className ="mr-2">CVD:</strong> {cvd.value } 
+                        {<button className="ml-2 font-bold"onClick={removeCvdDisplay}>x</button>}
                      </button>
-                  )} */}
+                  )}
+                  {(data.length > 0 && selectedVulnerabilities.length > 0) && (
+                     selectedVulnerabilities.map((item, id) => 
+                        <button key = {id} className="border text-xs bg-white text-[#648DBC] px-2 rounded-md flex items-center text-center">
+                           <strong className ="mr-2">Vulnerabilities: </strong> {item.label} 
+                           {<button className="ml-2 font-bold" onClick={()=>removeVulnerabilities(item.value)}>x</button>}
+                        </button>
+                     )
+                  )}
+                  
+                  {/* BP DISPLAY */}
+                  {(data.length > 0 && selectedBP.length > 0) && (
+                     selectedBP.map((item, id) => 
+                        <button key = {id} className="border text-xs bg-white text-[#648DBC] px-2 rounded-md flex items-center text-center">
+                           <strong className ="mr-2">BP:</strong> {item.label} 
+                           {<button className="ml-2 font-bold" onClick={()=>removeBP(item.value)}>x</button>}
+                        </button>
+                     )
+                  )}
+                  {/* CHA₂DS₂-VASc DISPLAY */}
+                  {(data.length > 0 && selectedChdValue.length > 0 && selectedChdDate === null) && (
+                     selectedChdValue.map((item, id) => 
+                        <button key = {id} className="border text-xs bg-white text-[#648DBC] px-2 rounded-md flex items-center text-center">
+                           <strong className ="mr-2">CHA₂DS₂-VASc: </strong> {item.label} 
+                           {<button className="ml-2 font-bold" onClick={()=>removeChdValue(item.value)}>x</button>}
+                        </button>
+                     )
+                  )}
+                  {(data.length > 0 && selectedChdValue.length === 0 && selectedChdDate) && (
+                     // selectedChdDate.map((item, id) => 
+                        <button key = {selectedChdDate.value} className="border text-xs bg-white text-[#648DBC] px-2 rounded-md flex items-center text-center">
+                           <strong className ="mr-2">CHA₂DS₂-VASc: </strong> {selectedChdDate.label} 
+                           {<button className="ml-2 font-bold" onClick={()=>removeChdDate()}>x</button>}
+                        </button>
+                     
+                  )}
+                  {(data.length > 0 && selectedChdValue.length > 0 && selectedChdDate) && (
+                      selectedChdValue.map((item, id) => 
+                        <button key = {id} className="border text-xs bg-white text-[#648DBC] px-2 rounded-md flex items-center text-center">
+                           <strong className ="mr-2">CHA₂DS₂-VASc: </strong>{item.label} 
+                           {<button className="ml-2 font-bold" onClick={()=>removeChdValue(item.value)}>x</button>}
+                           <span className="ml-2">- {selectedChdDate.label} </span>
+                           {<button className="ml-2 font-bold" onClick={()=>removeChdDate()}>x</button>}
+                        </button>
+                  ))}
+
+                  {/* ORBIT DISPLAY */}
+                  {(data.length > 0 && selectedOrbit.length > 0) && (
+                     selectedOrbit.map((item, id) => 
+                        <button key = {id} className="border text-xs bg-white text-[#648DBC] px-2 rounded-md flex items-center text-center">
+                           <strong className ="mr-2">ORBIT:</strong> {item.label} 
+                           {<button className="ml-2 font-bold" onClick={()=>removeOrbitDisplay(item.value)}>x</button>}
+                        </button>
+                     )
+                  )}
+
+                  {(data.length > 0 && selectedAges.length > 0) && (
+                     selectedAges.map((item, id) => 
+                        <button key = {id} className="border text-xs bg-white text-[#648DBC] px-2 rounded-md flex items-center text-center">
+                           <strong className ="mr-2">Age:</strong> {item.label} 
+                           {<button className="ml-2 font-bold" onClick={()=>removeAgeDisplay(item.value)}>x</button>}
+                        </button>
+                     )
+                  )}
+                  
                </div>
             </div>
             
-            
+            {/* TOGGLE COLLAPSE BUTTON */}
             <button onClick={toggleFilter}>
                {filterMenu ? <FiChevronDown /> : <FiChevronUp/>}
             </button>
          </div>
          
+
+
          {
             filterMenu && (
                <div className= "flex justify-between border border-gray-400 px-2 py-2 h-80" id="collapsible_filter ">
@@ -246,33 +322,35 @@ const Filter = () => {
 
                      {/* FILTER COLUMN 1 */}
                      <div className= "flex flex-col gap-6">
+                        
                         {/* ANTICOAGULANT FILTER */}
-                        <Select className="">
+                        <Select>
                            <SelectTrigger className=" bg-[#648DBC] text-white">
                               <h1 className="text-xs text-left xl:text-sm 2xl:text-sm pr-2">ANTICOAGULANTS / ANTIPLATELETS</h1>
                               {/* <SelectValue placeholder="" /> */}
                            </SelectTrigger>
                            <SelectContent>
                               {[
-                                 {value: "none", label:"NONE", name: 'Anti'},
-                                 {value: "doac_warf", label: "DOAC or WARFARIN", name: 'Anti'},
+                                 // {value: "none", label:"NONE", name: 'Anti'},
+                                 {value: "doac_warf", label: "DOAC or Warfarin", name: 'Anti'},
                                  {value: "doac", label: "DOAC", name: 'Anti'},
-                                 {value: "warf", label: "WARFARIN", name: 'Anti'},
-                                 {value: "antiplatelets", label: "ANTIPLATELETS ONLY" , name: 'Anti'},
-                                 {value: "no_anticoagulant", label: "NO ANTICOAGULANT" , name: 'Anti'},
-                                 {value: "dual", label: "DUAL THERAPY" , name: 'Anti'},
+                                 {value: "warf", label: "Warfarin", name: 'Anti'},
+                                 {value: "antiplatelets", label: "Antiplatelets only" , name: 'Anti'},
+                                 {value: "no_anticoagulant", label: "None" , name: 'Anti'},
+                                 {value: "dual", label: "Dual therapy" , name: 'Anti'},
                               ].map((item) => (
                                  <label 
                                     key ={item.value}
                                     className="flex items-center space-x-2 ml-4"
                                  >
                                     <input
-                                    type="radio"
+                                    type="checkbox"
                                     value={item.value}
                                     name="antiFilter"
-                                    checked={selectedAnti === item.value}
+                                    // selectedChdDate && selectedChdDate.value === item.value
+                                    checked={selectedAnti && selectedAnti.value === item.value}
                                     onChange={(event) => handleAntiChange(event, item.label, item.name)}
-                                    // onChange={(event) => handleAntiFilter(event.target.value)}
+                                    
                                     />
                                     <span>{item.label}</span>
                                  </label>
@@ -330,11 +408,12 @@ const Filter = () => {
                                           value={item.value}
                                           className="flex items-center space-x-2 ml-4" 
                                        >
-                                          <input
-                                             type="checkbox"
-                                             value={item.value}
-                                             checked={selectedVulnerabilities.includes(item.value)}
-                                             onChange={() => handleVulnerabilities(item.value)}
+                                       <input
+                                          type="checkbox"
+                                          value={item.value}
+                                          checked={selectedVulnerabilities.some(object =>object.value === item.value)}
+                                          onChange = {() => handleVulnerabilitesFilter(item.value, item.label)}
+                                          
                                        />
                                           <span>{item.label}</span>       
                                        </label>
@@ -343,40 +422,55 @@ const Filter = () => {
                            </SelectContent>
                         </Select>
 
-                        {/* CHA₂DS₂-VASc FILTER */}
+                        
                      
                      </div>
 
                      {/* FILTER COLUMN 2 */}
                      <div className= "flex flex-col gap-6">
-                     <Select>
+                        
+                        {/* CHA₂DS₂-VASc FILTER */}
+                        <Select>
                               <SelectTrigger className=" bg-[#648DBC] text-white">
                                  <h1 className="text-xs text-left xl:text-sm 2xl:text-sm pr-2">CHA₂DS₂-VASc</h1>
                                  {/* <SelectValue placeholder="CHA₂DS₂-VASc" /> */}
                               </SelectTrigger>
                               <SelectContent>
-                                 {[
-                                    {value: 'gte2', label: '≥ 2' },
-                                    {value: '1', label: '1' },
-                                    {value: '0', label: '0' },
-                                    {value: '>12m', label: 'Recorded > 12m' },
-                                    {value: 'not_recorded', label: 'Not Recorded' },
-                                 ].map((item, index) =>
-                                    (
-                                       <label
-                                          value={item.value}
-                                          className="flex items-center space-x-2 ml-4" 
-                                       >
-                                          <input
-                                             type="checkbox"
-                                             value={item.value}
-                                             checked={selectedChd.includes(item.value)}
-                                             onChange={() => handleChd(item.value)}
-                                       />
-                                          <span>{item.label}</span>       
-                                       </label>
-                                    ))}
-                                 
+                              {[
+                                 { value: 'gte2', label: '≥ 2' },
+                                 { value: '1', label: '1' },
+                                 { value: '0', label: '0' }
+                              ].map((item, index) => (
+                                 <label key={index} className="flex items-center space-x-2 ml-4">
+                                    <input
+                                       type="checkbox"
+                                       value={item.value}
+                                       checked={selectedChdValue.some(object => object.value === item.value)}
+                                       onChange={() => handleChdValue(item.value, item.label)}
+                                    />
+                                    <span>{item.label}</span>
+                                 </label>
+                              ))}
+                              
+                              <div className="w-full border"></div>
+                              
+                              {[
+                                 { value: '>12m', label: 'Recorded > 12m' },
+                                 { value: 'not_recorded', label: 'Not Recorded' },
+                                 { value: '<12m', label: 'Recorded < 12m' }
+                              ].map((item, index) => (
+                                 <label key={index + 3} className="flex items-center space-x-2 ml-4">
+                                    <input
+                                    type="checkbox"
+                                    // name="chdGroup" // Ensures only one radio button can be selected at a time
+                                    value={item.value}
+                                    checked= {selectedChdDate && selectedChdDate.value === item.value}
+                                    onChange={() => handleChdDate(item.value, item.label)}
+                                    />
+                                    <span>{item.label}</span>
+                                 </label>
+                              ))}
+                                
                               </SelectContent>
                         </Select>
 
@@ -387,34 +481,23 @@ const Filter = () => {
                               {/* <SelectValue placeholder="VULNERABILITIES" /> */}
                            </SelectTrigger>
                            <SelectContent>
-                              <label className="flex items-center space-x-2 ml-4">
-                                 <input
+                              {[
+                                 {value: "gte4", label : "≥ 4"},
+                                 {value: ">12m", label : "Recorded > 12m"},
+                                 {value: "not_recorded", label : "Not recorded"}
+                              ].map((item, index) =>{
+                                 return (
+                                    <label key={index + 3} className="flex items-center space-x-2 ml-4">
+                                    <input
                                     type="checkbox"
-                                    value="gte4"
-                                    checked={selectedOrbit.includes("gte4")}
-                                    onChange={() => handleOrbit("gte4")}
-                                 />
-                                 <span>≥ 4</span>
-                              </label>
-                              <label className="flex items-center space-x-2 ml-4">
-                                 <input
-                                    type="checkbox"
-                                    value=">12m"
-                                    checked={selectedOrbit.includes(">12m")}
-                                    onChange={() => handleOrbit(">12m")}
-                                 />
-                                 <span>Recorded {'>'} 12m</span>
-                              </label>
-                              <label className="flex items-center space-x-2 ml-4">
-                                 <input
-                                    type="checkbox"
-                                    value="not_recorded"
-                                    checked={selectedOrbit.includes("not_recorded")}
-                                    onChange={() => handleOrbit("not_recorded")}
-                                 />
-                                 <span>Not Recorded</span>
-                              </label>
-                              
+                                    value={item.value}
+                                    checked={selectedOrbit.some(object =>object.value === item.value)}
+                                    onChange={() => handleOrbit(item.value, item.label)}
+                                    />
+                                    <span>{item.label}</span>
+                                 </label>
+                                 )
+                              })}
                               
                            </SelectContent>
                         </Select>      
@@ -425,40 +508,27 @@ const Filter = () => {
                               <h1 className="text-xs text-left xl:text-sm 2xl:text-sm">AGE</h1>
                            </SelectTrigger>
                            <SelectContent >
-                              <label className="flex items-center space-x-2 ml-4">
-                                 <input
+                           {[
+                                 {value: "<65", label : "< 65"},
+                                 {value: "65-79", label : "65 - 79"},
+                                 {value: "80+", label : "80+"}
+                              ].map((item, index) =>{
+                                 return (
+                                    <label key={index + 3} className="flex items-center space-x-2 ml-4">
+                                    <input
                                     type="checkbox"
-                                    value="<65"
-                                    checked={selectedAges.includes("<65")}
-                                    onChange={() => handleAgeSelection("<65")}
-                                 />
-                                 <span>{"< 65"}</span>
-                              </label>
+                                    value={item.value}
+                                    checked={selectedAges.some(object =>object.value === item.value)}
+                                    onChange={() => handleAgeSelection(item.value, item.label)}
+                                    />
+                                    <span>{item.label}</span>
+                                 </label>
+                                 )
+                              })}
 
-                              <label className="flex items-center space-x-2 ml-4">
-                                 <input
-                                    type="checkbox"
-                                    value="65-79"
-                                    checked={selectedAges.includes("65-79")}
-                                    onChange={() => handleAgeSelection("65-79")}
-                                 />
-                                 <span>65 - 79</span>
-                              </label>
-                              <label className="flex items-center space-x-2 ml-4">
-                                 <input
-                                    type="checkbox"
-                                    value="80+"
-                                    checked={selectedAges.includes("80+")}
-                                    onChange={() => handleAgeSelection("80+")}
-                                 />
-                                 <span>80+</span>
-                              </label>
                            </SelectContent>
                         </Select>
 
-                        
-
-                         
                      </div>
                      
                      {/* FILTER COLUMN 3 */}
@@ -500,8 +570,24 @@ const Filter = () => {
                                  <h1 className="text-xs text-left xl:text-sm 2xl:text-sm">CVD</h1>
                                  {/* <SelectValue placeholder="CHA₂DS₂-VASc" /> */}
                               </SelectTrigger>
-                              <SelectContent>
-                                 <label className="flex items-center space-x-2 ml-4">
+                              <SelectContent> {[
+                                 {value: "Yes", label : "Yes"},
+                                 {value: "No", label : "No"},
+                        
+                                 ].map((item, index) =>{
+                                 return (
+                                    <label key={index + 3} className="flex items-center space-x-2 ml-4">
+                                    <input
+                                    type="checkbox"
+                                    value={item.value}
+                                    checked={cvd && cvd.value === item.value}
+                                    onChange={() => handleCVD(item.value, item.label)}
+                                    />
+                                    <span>{item.label}</span>
+                                 </label>
+                                 )
+                              })}
+                                 {/* <label className="flex items-center space-x-2 ml-4">
                                        <input
                                           type="checkbox"
                                           name="cvd"
@@ -520,7 +606,7 @@ const Filter = () => {
                                           onChange={()=>handleCVD("NO")}
                                        />
                                        <span>{"NO"}</span>
-                                 </label>
+                                 </label> */}
                               </SelectContent>
                         </Select>
 
@@ -531,47 +617,30 @@ const Filter = () => {
                                  {/* <SelectValue placeholder="VULNERABILITIES" /> */}
                               </SelectTrigger>
                               <SelectContent>
-                              <label className="flex items-center space-x-2 ml-4">
-                                    <input
-                                       type="checkbox"
-                                       value="lt130-80"
-                                       checked={selectedBP.includes("lt130-80")}
-                                       onChange={() => handleBP("lt130-80")}
-                                    />
-                                    <span>{"<"} 130/80</span>
-                                 </label>
+                                 {[
+                                    { value: "lt130-80", label: "< 130/80"},
+                                    { value: "lt140-90", label: "< 140/90"},
+                                    { value: "140/90-159/90", label: "140/90 - 159/90"},
+                                    { value: "gte160-100", label: "≥ 160/100"}
+                                 ].map((item) => {
+                                    return (
+                                       <label
+                                          value={item.value}
+                                          className="flex items-center space-x-2 ml-4" 
+                                       >
+                                       <input
+                                          type="checkbox"
+                                          value={item.value}
+                                          checked={selectedBP.some(object =>object.value === item.value)}
+                                          onChange = {() => handleBP(item.value, item.label)}
+                                          
+                                       />
+                                          <span>{item.label}</span>       
+                                       </label>
 
-                                 <label className="flex items-center space-x-2 ml-4">
-                                    <input
-                                       type="checkbox"
-                                       value="lt140-90"
-                                       checked={selectedBP.includes("lt140-90")}
-                                       onChange={() => handleBP("lt140-90")}
-                                    />
-                                    <span>{"<"} 140/90</span>
-                                 </label>
-                                 <label className="flex items-center space-x-2 ml-4">
-                                    <input
-                                       type="checkbox"
-                                       value="140/90-159/90"
-                                       checked={selectedBP.includes("140/90-159/90")}
-                                       onChange={() => handleBP("140/90-159/90")}
-                                    />
-                                    <span>140/90 - 159/90</span>
-                                 </label>
-                                 <label className="flex items-center space-x-2 ml-4">
-                                    <input
-                                       type="checkbox"
-                                       value="gte160-100"
-                                       checked={selectedBP.includes("gte160-100")}
-                                       onChange={() => handleBP("gte160-100")}
-                                    />
-                                    <span> ≥ 160/100</span>
-                                 </label>
-                                 {/* <SelectItem value="light"> {'<'} 130/80</SelectItem>
-                                 <SelectItem value="dark"> {'<'} 140/90</SelectItem>
-                                 <SelectItem value="system">140/90 - 159/90</SelectItem>
-                                 <SelectItem value="system"> ≥ 160/100</SelectItem> */}
+                                    )
+                                 })}
+                              
 
                               </SelectContent>
                         </Select>
@@ -698,3 +767,52 @@ const Filter = () => {
 }
 
 export default Filter
+
+
+
+ // setDisplayVulnerabilities((prev) => prev.filter((item) => item.value !== value));
+      // selectedVulnerabilities.map((item) => {
+      //    if(item === value){
+      //       return selectedVulnerabilities.filter((currentItems) => currentItems !== value )
+      //    }
+      // })
+      
+      
+      // setDisplayVulnerabilities((prev) => {
+
+      //    const exists = prev.some((item)=> item.value === value)
+
+      //    if(exists){
+      //       return prev.filter((item) => item.value !== value)
+      //    }else{
+      //       return [...prev, {value, label}];
+      //    }
+      // });
+      
+      
+      // handleVulnerabilities,
+
+      // {[
+      //    {value: "none", label:"NONE", name: 'Anti'},
+      //    {value: "doac_warf", label: "DOAC or WARFARIN", name: 'Anti'},
+      //    {value: "doac", label: "DOAC", name: 'Anti'},
+      //    {value: "warf", label: "WARFARIN", name: 'Anti'},
+      //    {value: "antiplatelets", label: "ANTIPLATELETS ONLY" , name: 'Anti'},
+      //    {value: "no_anticoagulant", label: "NO ANTICOAGULANT" , name: 'Anti'},
+      //    {value: "dual", label: "DUAL THERAPY" , name: 'Anti'},
+      // ].map((item) => (
+      //    <label 
+      //       key ={item.value}
+      //       className="flex items-center space-x-2 ml-4"
+      //    >
+      //       <input
+      //       type="radio"
+      //       value={item.value}
+      //       name="antiFilter"
+      //       checked={selectedAnti === item.value}
+      //       onChange={(event) => handleAntiChange(event, item.label, item.name)}
+            
+      //       />
+      //       <span>{item.label}</span>
+      //    </label>
+      // ))}

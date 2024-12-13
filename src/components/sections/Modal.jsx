@@ -973,7 +973,7 @@ const Modal = ({open, }) => {
                   </table>
 
                    {/* EXCEPTION REPORTING */}
-                   <table className="w-full border mt-4">
+                   <table className="w-full border mt-4 mb-6">
                      <thead className="bg-[#648DBC] text-left text-white font-semibold">
                         <tr>
                            <th className=" pl-2 py-1 w-[40%]">Exception Reporting</th>
@@ -1009,14 +1009,14 @@ const Modal = ({open, }) => {
                   </table>
                   
                   {/* PATIENT NOTES */}
-                  <div className="flex flex-col mt-6 mb-10">
+                  {/* <div className="flex flex-col mt-6 mb-10">
                      <textarea placeholder='Enter patient notes here' className="border w-full h-20 text-sm p-2">
 
                      </textarea>
                      <button className = "bg-[#648DBC] font-semibold text-white w-20 px-2 py-2 rounded-md mt-2 ml-auto" >
                         Save
                      </button>
-                  </div>
+                  </div> */}
             </div>
          </div>
           {/* ))}  */}
