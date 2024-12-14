@@ -59,12 +59,13 @@ const MainProvider = ({ children }) => {
 
    //FILTER STATES
    const defaultFilters ={
-      selectedAnti:null,
+      selectedAnti: null,
       selectedAges: [],
       nsaid:"",
       cvd: null,
       selectedBP: [],
       selectedChdValue: [],
+      selectedChdDate: null,
       selectedOrbit: [],
       medReview:"",
       selectedVulnerabilities: []
@@ -72,10 +73,13 @@ const MainProvider = ({ children }) => {
 
    const [selectedAnti, setSelectedAnti] = useState(defaultFilters.selectedAnti)
    const [selectedAges, setSelectedAges] = useState(defaultFilters.selectedAges)
+   const [selectedChdValue, setSelectedChdValue] = useState(defaultFilters.selectedChdValue) //CHA₂DS₂-VASc
+   const [selectedChdDate, setSelectedChdDate] = useState(defaultFilters.selectedAges)
+
    const [nsaid, setNsaid] = useState (defaultFilters.nsaid)
    const [cvd, setCvd] = useState (defaultFilters.cvd)
    const [selectedBP, setSelectedBP] = useState(defaultFilters.selectedBP)
-   const [selectedChdValue, setSelectedChdValue] = useState(defaultFilters.selectedChdValue) //CHA₂DS₂-VASc
+   
    const [selectedOrbit, setSelectedOrbit] = useState (defaultFilters.selectedOrbit)
    const [medReview, setMedReview] = useState (defaultFilters.medReview)
    const [selectedVulnerabilities, setSelectedVulnerabilities] = useState (defaultFilters.selectedVulnerabilities)  //Vulnerabilities
@@ -94,6 +98,10 @@ const MainProvider = ({ children }) => {
       setNsaid(defaultFilters.nsaid);
       setCvd(defaultFilters.setCvd);
       setSelectedBP(defaultFilters.selectedBP);
+      setSelectedChdDate(defaultFilters.selectedChdDate);
+
+      setSelectedChdValue(defaultFilters.selectedChdValue);
+
       setSelectedOrbit(defaultFilters.selectedOrbit);
       setMedReview(defaultFilters.medReview);
       setSelectedVulnerabilities(defaultFilters.selectedVulnerabilities);
@@ -107,6 +115,10 @@ const MainProvider = ({ children }) => {
       } else {
          setSelectedAnti({ value, label });
       }
+   }
+
+   const removeAntiFilter = ()=>{
+      setSelectedAnti(null)
    }
    // console.log(selectedAnti)
    //Age Filters
@@ -122,7 +134,6 @@ const MainProvider = ({ children }) => {
          }
          
       })
-      
    }
 
    //NSAID Filter Logic
@@ -218,7 +229,7 @@ const MainProvider = ({ children }) => {
    }
 
    //CHA₂DS₂-VASc Filters
-   const [selectedChdDate, setSelectedChdDate] = useState(null)
+   // const [selectedChdDate, setSelectedChdDate] = useState(null)
    const handleChdValue = (value, label) => {
       setSelectedChdValue((prev) => {
          const exists = prev.some(object => object.value === value)
@@ -334,23 +345,23 @@ const MainProvider = ({ children }) => {
 
 
          const antiFilterControl = 
-            selectedAnti === null||
+            selectedAnti === null ||
             (doacWarf && 
                (patient[AFibColumns.OnAnticoagulant].includes("YES - DOAC") || 
-                patient[AFibColumns.OnAnticoagulant].includes("YES - WARF"))) ||
+                (patient[AFibColumns.OnAnticoagulant].includes("YES - WARF")))) ||
             (doac && 
-               patient[AFibColumns.OnAnticoagulant].includes("YES - DOAC")) ||
+               (patient[AFibColumns.OnAnticoagulant].includes("YES - DOAC"))) ||
             (warfarin && 
-               patient[AFibColumns.OnAnticoagulant].includes("YES - WARF")) ||
+               (patient[AFibColumns.OnAnticoagulant].includes("YES - WARF"))) ||
             (antiplatelets && 
-               patient[AFibColumns.OnAspirinAntiplatelet] === "YES" &&
-               patient[AFibColumns.OnAnticoagulant] ==="NO")  ||
+               (patient[AFibColumns.OnAspirinAntiplatelet] === "YES") &&
+               (patient[AFibColumns.OnAnticoagulant] === "NO"))  ||
             (dualTherapy && 
-                  patient[AFibColumns.OnAspirinAntiplatelet] === "YES" && 
+                  (patient[AFibColumns.OnAspirinAntiplatelet] === "YES") && 
                    (patient[AFibColumns.OnAnticoagulant].includes("YES - DOAC") ||
-                   patient[AFibColumns.OnAnticoagulant].includes("YES - WARF"))) ||
+                   (patient[AFibColumns.OnAnticoagulant].includes("YES - WARF")))) ||
             (none && 
-               !patient[AFibColumns.OnAnticoagulant].includes("YES - DOAC") &&
+               (!patient[AFibColumns.OnAnticoagulant].includes("YES - DOAC")) &&
                (!patient[AFibColumns.OnAnticoagulant].includes("YES - WARF")))
                // (patient[AFibColumns.OnAnticoagulant] != "YES - WARF"))
             
@@ -364,8 +375,8 @@ const MainProvider = ({ children }) => {
             selectedAges.length === 0;
       
          const nsaidFilter =
-            nsaid === "YES" && patient[AFibColumns.OnNSAID] ==="YES" ||
-            nsaid === "NO" && patient[AFibColumns.OnNSAID] === "NO" ||
+            nsaid === "Yes" && patient[AFibColumns.OnNSAID] ==="YES" ||
+            nsaid === "No" && patient[AFibColumns.OnNSAID] === "NO" ||
             !nsaid;
 
          const cvdFilter =
@@ -431,13 +442,13 @@ const MainProvider = ({ children }) => {
          
          const medReviewFilter = 
             !medReview ||
-            (medReview === "YES" && 
+            (medReview === "Yes" && 
                (!patient[AFibColumns.MedsReviewDate] || 
                recordedOverTwelveMonths(
                   convertDate(patient[AFibColumns.MedsReviewDate]), 
                   convertRelativeRunDate(relativeRunDate)
                ))) || 
-            (medReview === "NO" && 
+            (medReview === "No" && 
                patient[AFibColumns.MedsReviewDate] && 
                !recordedOverTwelveMonths(
                   convertDate(patient[AFibColumns.MedsReviewDate]), 
@@ -514,7 +525,7 @@ const MainProvider = ({ children }) => {
       medReview, handleMedReview, setMedReview,
       importedData, setImportedData,
       relativeRunDate, setRelativeRunDate,
-      selectedAnti, handleAntiFilter,
+      selectedAnti, handleAntiFilter, removeAntiFilter,
       setSelectedVulnerabilities, selectedVulnerabilities, handleVulnerabilitesFilter,
       isModalOpen, setIsModalOpen,
       handlePatientClick,

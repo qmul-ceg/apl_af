@@ -20,7 +20,7 @@ const Filter = () => {
          selectedOrbit, handleOrbit, removeOrbitDisplay,
          medReview, handleMedReview, setMedReview,
          handleVulnerabilitesFilter,
-         selectedAnti, handleAntiFilter, setSelectedAnti,
+         selectedAnti, handleAntiFilter, setSelectedAnti, removeAntiFilter,
          selectedVulnerabilities, 
          setSelectedVulnerabilities, 
          importedData, relativeRunDate,
@@ -70,10 +70,6 @@ const Filter = () => {
    ]
 
 
-   const removeAntiFilter = ()=>{
-      setSelectedAnti(null)
-   }
-
 
 
    const removeNsaidFilter =()=>{
@@ -86,10 +82,9 @@ const Filter = () => {
 
 
 
-   const handleAntiChange = (event, label)=>{
-      handleAntiFilter(event.target.value)
-      setSelectedAntiLabel(label)
-   }
+   // const handleAntiChange = (event, label)=>{
+   //    handleAntiFilter(event.target.value)
+   // }
 
    
 
@@ -208,15 +203,15 @@ const Filter = () => {
    // console.log(selectedFilters)
    return (
       <>
-         <div className= "flex justify-between items-center  w-full h-16 px-4 rounded-t-lg bg-[#648DBC] text-white">
+         <div className= "flex justify-between items-center  w-full h-20 px-4 rounded-t-lg bg-[#648DBC] text-white">
             <div className="flex items-center ">
-               <strong className=" text-center ">FILTERS</strong>
+               <strong className=" text-center text-2xl">Filters</strong>
                {/* DISPLAY FILTERS */}
-               <div className=" ml-6  h-16 items-center flex row border border-dotted">
+               <div className=" ml-6 items-center flex gap-2 border border-dotted w-[950px] flex-wrap max-h-20">
                   {(data.length > 0 && selectedAnti) && (
                      <button className="border text-xs bg-white text-[#648DBC] px-2 rounded-md">
-                        <strong className ="mr-2">AntiCoag/AntiP:</strong> {displayAntiFilter[0].label } 
-                        {<button className=" ml-2 font-bold"onClick={()=>removeAntiFilter}>x</button>}
+                        <strong className ="mr-2">AntiCoag/AntiP:</strong> {selectedAnti.label } 
+                        {<button className=" ml-2 font-bold" onClick={()=>removeAntiFilter()}>x</button>}
                      </button>
                   )}
                   {(data.length > 0 && displayMedReview[0].value !== "") && (
@@ -326,7 +321,7 @@ const Filter = () => {
                         {/* ANTICOAGULANT FILTER */}
                         <Select>
                            <SelectTrigger className=" bg-[#648DBC] text-white">
-                              <h1 className="text-xs text-left xl:text-sm 2xl:text-sm pr-2">ANTICOAGULANTS / ANTIPLATELETS</h1>
+                              <h1 className="text-xs text-left xl:text-sm 2xl:text-sm pr-2">Anticoagulants / Antiplatelets</h1>
                               {/* <SelectValue placeholder="" /> */}
                            </SelectTrigger>
                            <SelectContent>
@@ -348,8 +343,8 @@ const Filter = () => {
                                     value={item.value}
                                     name="antiFilter"
                                     // selectedChdDate && selectedChdDate.value === item.value
-                                    checked={selectedAnti && selectedAnti.value === item.value}
-                                    onChange={(event) => handleAntiChange(event, item.label, item.name)}
+                                    checked={selectedAnti && selectedAnti.value === item.value || false}
+                                    onChange={() => handleAntiFilter(item.value, item.label)}
                                     
                                     />
                                     <span>{item.label}</span>
@@ -361,7 +356,7 @@ const Filter = () => {
                         {/* MED REVIEW FILTER*/}
                         <Select>
                            <SelectTrigger className=" bg-[#648DBC]  text-white">
-                              <h1 className="text-xs text-left xl:text-sm 2xl:text-sm">MED REVIEW {">"} 12m</h1>
+                              <h1 className="text-xs text-left xl:text-sm 2xl:text-sm">Med review {">"} 12m</h1>
                               {/* <SelectValue placeholder="CHA₂DS₂-VASc" /> */}
                            </SelectTrigger>
                            <SelectContent>
@@ -369,22 +364,22 @@ const Filter = () => {
                                  <input
                                     type="checkbox"
                                     name="medReview"
-                                    value="YES"
-                                    checked = {medReview=== "YES"}
-                                    onChange= {()=>handleMedReview("YES")}
+                                    value="Yes"
+                                    checked = {medReview=== "Yes"}
+                                    onChange= {()=>handleMedReview("Yes")}
                                  />
-                                 <span>{"YES"}</span>
+                                 <span>Yes</span>
                               </label>
 
                               <label className="flex items-center space-x-2 ml-4">
                                  <input
                                        type="checkbox"
                                        name="medReview"
-                                       value="NO"
-                                       checked={medReview === "NO"}
-                                       onChange={()=>handleMedReview("NO")}
+                                       value="No"
+                                       checked={medReview === "No"}
+                                       onChange={()=>handleMedReview("No")}
                                     />
-                                    <span>{"NO"}</span>
+                                    <span>No</span>
                               </label>
                            </SelectContent>
                         </Select>
@@ -392,14 +387,14 @@ const Filter = () => {
                         {/*VULNERABILITIES FILTER */}
                         <Select>
                            <SelectTrigger className=" bg-[#648DBC]  text-white">
-                           <h1 className="text-xs text-left xl:text-sm 2xl:text-sm pr-2">VULNERABILITIES</h1>
+                           <h1 className="text-xs text-left xl:text-sm 2xl:text-sm pr-2">Vulnerabilities</h1>
                            {/* <SelectValue placeholder="VULNERABILITIES" /> */}
                            </SelectTrigger>
                            <SelectContent>
 
                               {[
                                     {value: 'smi', label: 'SMI' },
-                                    {value: 'learning_disability', label: 'Learning Disability' },
+                                    {value: 'learning_disability', label: 'Learning disability' },
                                     {value: 'dementia', label: 'Dementia' },
                                     {value: 'housebound', label: 'Housebound' },
                                  ].map((item, index) =>
@@ -464,7 +459,7 @@ const Filter = () => {
                                     type="checkbox"
                                     // name="chdGroup" // Ensures only one radio button can be selected at a time
                                     value={item.value}
-                                    checked= {selectedChdDate && selectedChdDate.value === item.value}
+                                    checked= {selectedChdDate && selectedChdDate.value === item.value || false}
                                     onChange={() => handleChdDate(item.value, item.label)}
                                     />
                                     <span>{item.label}</span>
@@ -505,7 +500,7 @@ const Filter = () => {
                         {/* AGE FILTER*/}
                         <Select>
                            <SelectTrigger className=" bg-[#648DBC]  text-white">
-                              <h1 className="text-xs text-left xl:text-sm 2xl:text-sm">AGE</h1>
+                              <h1 className="text-xs text-left xl:text-sm 2xl:text-sm">Age</h1>
                            </SelectTrigger>
                            <SelectContent >
                            {[
@@ -544,22 +539,22 @@ const Filter = () => {
                                     <input
                                        type="checkbox"
                                        name="nsaid"
-                                       value="YES"
-                                       checked= {nsaid=== "YES"}
-                                       onChange= {()=>handleNSAID("YES")}
+                                       value="Yes"
+                                       checked= {nsaid=== "Yes"}
+                                       onChange= {()=>handleNSAID("Yes")}
                                     />
-                                    <span>{"YES"}</span>
+                                    <span>{"Yes"}</span>
                                  </label>
 
                                  <label className="flex items-center space-x-2 ml-4">
                                     <input
                                           type="checkbox"
                                           name="nsaid"
-                                          value="NO"
-                                          checked={nsaid === "NO"}
-                                          onChange={()=>handleNSAID("NO")}
+                                          value="No"
+                                          checked={nsaid === "No"}
+                                          onChange={()=>handleNSAID("No")}
                                        />
-                                       <span>{"NO"}</span>
+                                       <span>{"No"}</span>
                                  </label>
                               </SelectContent>
                         </Select>
@@ -587,26 +582,7 @@ const Filter = () => {
                                  </label>
                                  )
                               })}
-                                 {/* <label className="flex items-center space-x-2 ml-4">
-                                       <input
-                                          type="checkbox"
-                                          name="cvd"
-                                          value="YES"
-                                          checked= {cvd=== "YES"}
-                                          onChange= {()=>handleCVD("YES")}
-                                       />
-                                       <span>{"YES"}</span>
-                                 </label>
-                                 <label className="flex items-center space-x-2 ml-4">
-                                    <input
-                                          type="checkbox"
-                                          name="cvd"
-                                          value="NO"
-                                          checked={cvd === "NO"}
-                                          onChange={()=>handleCVD("NO")}
-                                       />
-                                       <span>{"NO"}</span>
-                                 </label> */}
+                           
                               </SelectContent>
                         </Select>
 
@@ -653,7 +629,7 @@ const Filter = () => {
                   <div className =" flex-1 w-full flex flex-col justify-between max-w-[300px]">
                      <div className =" flex flex-col">
                         <header className="flex justify-between px-2 py-2 rounded-t-lg  bg-black text-white" >
-                           <strong className ="text-xs text-left xl:text-sm 2xl:text-sm pr-2">QUICK FILTERS</strong>
+                           <strong className ="text-xs text-left xl:text-sm 2xl:text-sm pr-2">Quick filters</strong>
                            <button onClick={toggleQuickFilter}>
                               { quickFilter  ? <FiChevronDown /> : <FiChevronUp/> }
                            </button>
@@ -676,7 +652,7 @@ const Filter = () => {
                         <Button 
                            className = "bg-[#648DBC] font-bold text-white"
                            variant="outline"
-                           onClick={resetFilters}>RESET FILTERS</Button>
+                           onClick={resetFilters}>Reset filters</Button>
                      </div>
                   </div>
 
@@ -685,7 +661,7 @@ const Filter = () => {
                   <div className=" w-full max-w-[560px] flex flex-col justify-between">
                      <div>
                         <header className=" flex  rounded-t-lg px-2 py-2 bg-[#648DBC] text-white">
-                           <strong className ="text-xs text-left xl:text-sm 2xl:text-sm pr-2">SUMMARY</strong>
+                           <strong className ="text-xs text-left xl:text-sm 2xl:text-sm pr-2">Summary</strong>
                         </header>
 
                         <div className="border border-t-0 border-gray-200 flex flex-col pt-2 px-2" >
