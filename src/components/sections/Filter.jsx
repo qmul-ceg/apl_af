@@ -207,7 +207,7 @@ const Filter = () => {
             <div className="flex items-center ">
                <strong className=" text-center text-2xl">Filters</strong>
                {/* DISPLAY FILTERS */}
-               <div className=" ml-6 items-center flex gap-2 border border-dotted w-[950px] flex-wrap max-h-20">
+               <div className=" ml-6 items-center flex gap-2 border border-dotted  flex-wrap max-h-20">
                   {(data.length > 0 && selectedAnti) && (
                      <button className="border text-xs bg-white text-[#648DBC] px-2 rounded-md">
                         <strong className ="mr-2">AntiCoag/AntiP:</strong> {selectedAnti.label } 
@@ -272,7 +272,7 @@ const Filter = () => {
                         <button key = {id} className="border text-xs bg-white text-[#648DBC] px-2 rounded-md flex items-center text-center">
                            <strong className ="mr-2">CHA₂DS₂-VASc: </strong>{item.label} 
                            {<button className="ml-2 font-bold" onClick={()=>removeChdValue(item.value)}>x</button>}
-                           <span className="ml-2">- {selectedChdDate.label} </span>
+                           <span className="ml-2">{selectedChdDate.label} </span>
                            {<button className="ml-2 font-bold" onClick={()=>removeChdDate()}>x</button>}
                         </button>
                   ))}

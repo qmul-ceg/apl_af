@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow,} from "@/components/ui/table"
 import { MainContext } from '@/MainContext'
 import { AFibColumns } from '@/enums/AFibColumns'
-import { useReactTable } from '@tanstack/react-table'
+// import { useReactTable } from '@tanstack/react-table'
 
 
 const Data = () => {
@@ -17,40 +17,58 @@ const Data = () => {
       } = useContext(MainContext)
 
    
-   const [selectAll, setSelectAll] = useState(false)
+   const [selectAll, setSelectAll] = useState(true)
    const [selectedRows, setSelectedRows] = useState([])
 
-   const handleSelectAll = (event) =>{
-      const isChecked = event.target.checked;
-      setSelectAll(isChecked)
-      setSelectedRows(
-         isChecked?
-         data.map((item) => item.id)
-         : [])
+   const handleSelectAll = () => {
+      setSelectAll(!selectAll)
    }
+   // console.log(data)
+   
 
-   const handleSelectedRow = (id) =>{
-      setSelectedRows((prev) =>
-         prev.includes(id) ?
-         prev.filter((rowId) => rowId !== id)
-         : [...prev, id]
-      )
-   }
+   // useEffect(() => {
+   //    if(data && data.length > 0){
+   //       setSelectedRows(data.map((row) => row.id))
+   //    }
+   // }, [data])
 
    // console.log(selectedRows)
+//    useEffect(() => {
+//       // Initialize selectedRows with all IDs when data changes
+//       setSelectedRows(data.map((row) => row.id));
+//   }, [data]);
 
-   // const filteredPatients = getFilteredPatients()
-//    const [sortChdValue, setSortChdValue] = useState("asc")
-  
+//    const handleSelectAll = () => {
+//       setSelectAll(!selectAll);
+//       if(!selectAll){
+//          setSelectedRows([])
+//       }
+      // if (!selectAll) {
+      //     // Add all row IDs to selectedRows
+      //     setSelectedRows(data.map((row) => row.id));
+      // } else {
+      //     // Clear selectedRows
+      //     setSelectedRows([]);
+      // }
+//   };
+   
 
-//    // console.log(filteredPatients)
-//    const handleSortClick = () => {
-//       setSortChdValue (prevDirection => {
-//          return (prevDirection === "asc" ? "desc" : "asc")
-//       })
-//    }
+   // const handleSelectedRow= (id)=>{
+   //    if(selectAll){
+   //       //add all my data.id to my selected rows
+   //       setSelectedRows((prev) =>{
+   //          return data.map((row) => row.id)
+   //       })
+   //       console.log("All selected")
+   //    }
+   //    else console.log("All not selected")
+   // }
 
-
+   // useEffect(()=>{
+   //    console.log(selectedRows)
+   // }, [selectedRows])
+   
+   // handleSelectedRow()
 
   return (
    <>      
@@ -117,20 +135,20 @@ const Data = () => {
          
           
          <TableBody className="text-center text-xs">
-             {data.map((patient, index)=> (
-            <TableRow key={index} className={index % 2 === 0 ? 'bg-gray-50' : ''} >
+             {data.map((patient, id)=> (
+            <TableRow key={id} className={id % 2 === 0 ? 'bg-gray-50' : ''} >
                {/* <Dialog>
                   <DialogTrigger asChild> */}
                   <TableCell>
                      <input
                         type="checkbox"
-                        checked={selectedRows.includes(patient.index)}
-                        onChange={()=>handleSelectedRow(patient.index)}
+                        checked={selectAll}
+                        // onChange={()=>handleSelectedRow(patient.id)}
                      >
                      </input>
                   </TableCell>
                   <TableCell className="font-medium  cursor-pointer text-blue-600 hover:underline"
-                     onClick={()=>handlePatientClick(index)}
+                     onClick={()=>handlePatientClick(id)}
                   >
                      {patient[AFibColumns.FullName]}
 
@@ -202,3 +220,34 @@ export default Data
 //   };
 
 //    const tableData = sortedPatients()
+ // if (selectAll){
+      //    setSelectedRows((prev) => {
+      //       return prev.filter
+      //    })
+      // }
+      // const isChecked = event.target.checked;
+      // setSelectAll(isChecked)
+      // setSelectedRows(
+      //    isChecked?
+      //    data.map((item) => item.id)
+      //    : [])
+      // const handleSelectedRow = (id) =>{
+   //    setSelectedRows((prev) =>
+   //       prev.includes(id) ?
+   //       prev.filter((rowId) => rowId !== id)
+   //       : [...prev, id]
+   //    )
+   // }
+
+   // console.log(selectedRows)
+
+   // const filteredPatients = getFilteredPatients()
+//    const [sortChdValue, setSortChdValue] = useState("asc")
+  
+
+//    // console.log(filteredPatients)
+//    const handleSortClick = () => {
+//       setSortChdValue (prevDirection => {
+//          return (prevDirection === "asc" ? "desc" : "asc")
+//       })
+//    }
