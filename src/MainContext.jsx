@@ -13,8 +13,6 @@ const MainProvider = ({ children }) => {
    const [isModalOpen, setIsModalOpen] =useState(false)
    const [selectedPatientData, setSelectedPatientData] =useState()
    const [selectedPatientIndex, setSelectedPatientIndex] =useState()
-   // const [tableData, setTableData] = useState([])
-   // console.log(isModalOpen)
 
 
 
@@ -328,7 +326,8 @@ const MainProvider = ({ children }) => {
       else return ""
       
    }
- 
+   // console.log(relativeRunDate)
+//  console.log(convertRelativeRunDate(relativeRunDate))
     
 
    //FILTER LOGIC

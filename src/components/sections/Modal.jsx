@@ -33,7 +33,13 @@ const Modal = ({open, }) => {
 //       //     document.body.classList.remove('no-scroll');
 //       // };
 //   }, [open]);
-   
+   const cegColors = {
+      navy: "#21376A",
+      green: "#0C746A",
+      red: "#BD1D1D",
+      orange: "#D35D0C",
+      yellow: "#CDA70A"
+   }
 
    const OVERLAY ={
       position : 'fixed',
@@ -272,13 +278,13 @@ const Modal = ({open, }) => {
 
 
             {/* HEADER */}
-            <div className="flex justify-between items-center  w-full h-12 px-4 rounded-t-lg bg-[#648DBC] text-white">
-               <strong>Patient Information Modal </strong>
-               <button className="  p-1 text-xs  hover:text-sm" onClick={()=>{
-                  console.log('Closing Modal...')
+            <div className="flex justify-between items-center  w-full h-12 px-4 rounded-t-lg bg-[#21376A] text-white">
+               <strong>Patient Information</strong>
+               <button className="  p-1 text-xs  hover:text-sm font-extrabold" onClick={()=>{
+                  // console.log('Closing Modal...')
                   setIsModalOpen((prevState) => !prevState)
                   }}> 
-                     close 
+                     X 
                </button>
             </div>
 
@@ -287,13 +293,13 @@ const Modal = ({open, }) => {
 
                <button className=" " onClick={handlePreviousPatient}>
                   <div className="flex flex-col text-xs font-semibold hover:text-sm">
-                     <span>previous patient</span>
+                     <span>Previous patient</span>
                      <span className="">&larr;</span>
                   </div>
                </button>
                <button className=" " onClick={handleNextPatient}>
                   <div className="flex flex-col text-xs font-semibold hover:text-sm">
-                     <span>next patient</span>
+                     <span>Next patient</span>
                      <span className="">&rarr;</span>
                   </div>  
                </button>
@@ -308,40 +314,40 @@ const Modal = ({open, }) => {
                   {/* TABLE 1 */}
                   <div className="flex flex-col gap-2  w-[50%] text-left">
                      <div className="flex ">
-                        <h2 className=" w-[30%] text-white pl-2 bg-[#648DBC] font-semibold py-1">Full Name</h2>
-                        <div className="border-b border-gray-400 w-[65%]  pl-2 py-1">{selectedPatientData[AFibColumns.FullName]}</div>
+                        <h2 className=" w-[30%] text-white pl-2 bg-[#21376A] font-semibold py-1 rounded-l-lg">Full name</h2>
+                        <div className="border border-gray-400 w-[65%] rounded-r-lg pl-2 py-1">{selectedPatientData[AFibColumns.FullName]}</div>
                      </div>
                      <div className="flex">
-                        <h2 className=" w-[30%] text-white pl-2 bg-[#648DBC] font-semibold py-1">Date of Birth</h2>
-                        <div className="border-b border-gray-400 w-[65%]  pl-2 py-1">{selectedPatientData[AFibColumns.DateOfBirth]}</div>
+                        <h2 className=" w-[30%] text-white pl-2 bg-[#21376A] font-semibold py-1 rounded-l-lg">Date of birth</h2>
+                        <div className="border border-gray-400 w-[65%] rounded-r-lg pl-2 py-1">{selectedPatientData[AFibColumns.DateOfBirth]}</div>
                      </div>
                      <div className="flex">
-                        <h2 className=" w-[30%] text-white pl-2 bg-[#648DBC] font-semibold py-1">NHS Number</h2>
-                        <div className="border-b border-gray-400 w-[65%]  pl-2 py-1">{selectedPatientData[AFibColumns.NHS_Number]}</div>
+                        <h2 className=" w-[30%] text-white pl-2 bg-[#21376A] font-semibold py-1 rounded-l-lg">NHS number</h2>
+                        <div className="border border-gray-400 w-[65%] rounded-r-lg pl-2 py-1">{selectedPatientData[AFibColumns.NHS_Number]}</div>
                      </div>
                      <div className="flex">
-                        <h2 className=" w-[30%] text-white pl-2 bg-[#648DBC] font-semibold py-1">Ethnicity</h2>
-                        <div className="border-b border-gray-400 w-[65%]  pl-2 py-1">{selectedPatientData[AFibColumns.EthnicityCodeTerm]}</div>
+                        <h2 className=" w-[30%] text-white pl-2 bg-[#21376A] font-semibold py-1 rounded-l-lg">Ethnicity</h2>
+                        <div className="border border-gray-400 w-[65%] rounded-r-lg pl-2 py-1">{selectedPatientData[AFibColumns.EthnicityCodeTerm]}</div>
                      </div>
                   </div>
 
                   {/* TABLE 2 */}
                   <div className="flex flex-col gap-2 w-[50%] text-left">
                      <div className="flex">
-                        <h2 className=" w-[30%] text-white pl-2 bg-[#648DBC] font-semibold py-1">Patient record #</h2>
-                        <div className="border-b border-gray-400 w-[65%]  pl-2 py-1">{selectedPatientData[AFibColumns.PatientReference]}</div>
+                        <h2 className="w-[30%] text-white pl-2 bg-[#21376A] font-semibold py-1 rounded-l-lg">Patient record #</h2>
+                        <div className="border border-gray-400 w-[65%] rounded-r-lg pl-2 py-1">{selectedPatientData[AFibColumns.PatientReference]}</div>
                      </div>
                      <div className="flex">
-                        <h2 className=" w-[30%] text-white pl-2 bg-[#648DBC] font-semibold py-1">Gender</h2>
-                        <div className="border-b border-gray-400 w-[65%]  pl-2 py-1">{selectedPatientData[AFibColumns.Gender]}</div>
+                        <h2 className="w-[30%] text-white pl-2 bg-[#21376A] font-semibold py-1 rounded-l-lg">Gender</h2>
+                        <div className="border border-gray-400 w-[65%] rounded-r-lg pl-2 py-1">{selectedPatientData[AFibColumns.Gender]}</div>
                      </div>
                      <div className="flex">
-                        <h2 className=" w-[30%] text-white pl-2 bg-[#648DBC] font-semibold py-1">Age</h2>
-                        <div className="border-b border-gray-400 w-[65%]  pl-2 py-1">{selectedPatientData[AFibColumns.Age]}</div>
+                        <h2 className="w-[30%] text-white pl-2 bg-[#21376A] font-semibold py-1 rounded-l-lg">Age</h2>
+                        <div className="border border-gray-400 w-[65%] rounded-r-lg pl-2 py-1">{selectedPatientData[AFibColumns.Age]}</div>
                      </div>
                      <div className="flex">
-                        <h2 className=" w-[30%] text-white pl-2 bg-[#648DBC] font-semibold py-1">Mobile Telephone</h2>
-                        <div className="border-b border-gray-400 w-[65%]  pl-2 py-1">{selectedPatientData[AFibColumns.MobileTelephone]}</div>
+                        <h2 className="w-[30%] text-white pl-2 bg-[#21376A] font-semibold py-1 rounded-l-lg">Mobile telephone</h2>
+                        <div className="border border-gray-400 w-[65%] rounded-r-lg pl-2 py-1">{selectedPatientData[AFibColumns.MobileTelephone]}</div>
                      </div>
                   </div>
                </div>
@@ -350,28 +356,33 @@ const Modal = ({open, }) => {
                <div className=" text-center mt-6  flex justify-between items-center pl-2 pr-4">
                   <strong>*NOTE: This list of medications is not exhaustive and the patient may be on additional medications not shown below</strong>
                   
-                  <div className=" flex">
+                  <div className=" flex " >
                      <span>
                            <Popover>
                               <PopoverTrigger >
-                                 <strong className="text-sm">i</strong>            
+                                 <button className="px-2 py-1 rounded-full font-serif font-semibold bg-gradient-to-r from-[#7B0E72] from-70%   to-[#E6007E] text-white text-xs">i</button>            
                               </PopoverTrigger>
                                  <PopoverContent className="p-0 w-[16em] text-sm">
                                     <div className="px-4 py-2 flex flex-col gap-2">
                                        <div className="flex gap-2">
-                                          <div className=" w-14 h-5 bg-red-500"></div>
+                                          <div className=" w-14 h-5 "
+                                             style={{backgroundColor: cegColors.red}}
+                                          ></div>
                                           <span>High Risk</span>
                                        </div>
                                        <div className="flex  gap-2">
-                                          <div className=" w-14 h-5 bg-orange-400"></div>
+                                          <div className=" w-14 h-5"
+                                          style={{backgroundColor: cegColors.orange}}></div>
                                           <span>Moderate Risk</span>
                                        </div>
                                        <div className="flex  gap-2">
-                                          <div className=" w-14 h-5 bg-yellow-300"></div>
+                                          <div className=" w-14 h-5"
+                                          style={{backgroundColor: cegColors.yellow}}></div>
                                           <span>Mild Risk</span>
                                        </div>
                                        <div className="flex  gap-2">
-                                          <div className=" w-14 h-5 bg-green-600"></div>
+                                          <div className=" w-14 h-5 "
+                                          style={{backgroundColor: cegColors.green}}></div>
                                           <span>Optimal Treatment</span>
                                        </div>
                                        
@@ -385,50 +396,37 @@ const Modal = ({open, }) => {
                {/* TABLES */}
                <div className=" flex-1 overflow-y-auto max-h-full mt-2 ">
                   {/* MEDICATIONS TABLE */}
-                  <table className="w-full border">
-                     <thead className="bg-[#648DBC] text-left text-white font-semibold">
+                  <table className="w-full">
+                     <thead className="bg-[#21376A] text-left text-white font-semibold ">
                         <tr>
-                           <th className=" pl-2 py-1 w-[40%]">Medications</th>
+                           <th className=" pl-2 py-1 w-[40%] rounded-tl-lg ">Medications</th>
                            <th className=" w-[6%] " colSpan="1">&nbsp;</th>
-                           <th className=" border-black pl-2">Medication Name</th>
-                           <th className=" border-black pl-2  w-[15%]">Date of Issue</th>
+                           <th className=" border-black pl-2">Medication name</th>
+                           <th className=" border-black pl-2  w-[15%] rounded-tr-lg">Date of issue</th>
 
                         </tr>
                      </thead>
-                     <tbody>
+                     <tbody className="border-l border-b ">
                         {
                            medicationTableData.map((item, index) =>(
                               <tr key={index} 
                                  className ={
                                  index % 2 === 0 ? "bg-gray-100 border-b" : "bg-white border-b" }>
                                  <td className="py-1 pl-4 font-semibold">{item.medication}</td>
-                                 <td className={`text-center text-white font-semibold
-                                       ${
-                                          (item.medication ==="Warfarin (6m)" ||
+                                 <td 
+                                    className="text-center text-white font-semibold"
+                                    style = {{
+                                       backgroundColor : (item.medication ==="Warfarin (6m)" ||
                                           item.medication ==="DOAC (6m)" ||
                                           item.medication === "Third Party Prescribing (12m)" ||
                                           item.medication === "Other Oral Anticoagulants (12m)" ||
                                           item.medication === "PPI medication (6m)" ||
-                                          item.medication === "Statins (6m)"
-                                          )
-                                          &&
-                                          item.medicationName ? "bg-green-600" : null
-                                       }
-
-                                       ${
-                                          (item.medication ==="Aspirin (12m)"||
-                                          item.medication ==="Other Antiplatelets (12m)")
-                                          &&
-                                          item.medicationName ? "bg-orange-400" : null
-                                       }
-
-                                       ${
-                                          item.medication ==="NSAID (excluding Aspirin)(6m)"
-                                          &&
-                                          item.medicationName ? "bg-orange-400" : null
-                                       }
-                                    
-                                    `}>
+                                          item.medication === "Statins (6m)")&& item.medicationName ? cegColors.green
+                                          : (item.medication ==="Aspirin (12m)"|| item.medication ==="Other Antiplatelets (12m)") && item.medicationName ? cegColors.orange
+                                          : item.medication ==="NSAID (excluding Aspirin)(6m)" && item.medicationName ? cegColors.orange 
+                                          : null
+                                    }}
+                                 >
                                        {item.medicationName ? "YES" : ""}
                                  </td>
                                  <td className="py-1 pl-4">{item.medicationName}</td>
@@ -439,17 +437,17 @@ const Modal = ({open, }) => {
                      </tbody>
                   </table>
                   {/* RISK SCORE TABLE */}
-                  <table className="w-full border mt-4">
-                     <thead className="bg-[#648DBC] text-left text-white font-semibold">
+                  <table className="w-full  mt-4">
+                     <thead className="bg-[#21376A] text-left text-white font-semibold">
                         <tr>
-                           <th className=" pl-2 py-1 w-[40%]">Risk Score</th>
+                           <th className=" pl-2 py-1 w-[40%] rounded-tl-lg">Risk score</th>
                            <th className="w-[6%]" colSpan="1">&nbsp;</th>
                            <th className=" pl-2">Score</th>
-                           <th className=" pl-2 w-[15%]">Date Recorded</th>
+                           <th className=" pl-2 w-[15%] rounded-tr-lg">Date recorded</th>
 
                         </tr>
                      </thead>
-                     <tbody>
+                     <tbody className="border-l border-b ">
                         {
                            riskScoreTableData.map((item, index) =>(
                               <tr key={index} 
@@ -467,7 +465,7 @@ const Modal = ({open, }) => {
                                        <span><Popover >
                                           <PopoverTrigger className="pl-2">
          
-                                          <strong className="text-sm">i</strong>
+                                          <button className="px-2 py-1 rounded-full font-serif font-semibold bg-gradient-to-r from-[#7B0E72] from-70%   to-[#E6007E] text-white text-xs">i</button>
                                           
                                        </PopoverTrigger>
                                        <PopoverContent className="p-0 w-[30em] text-sm">
@@ -482,35 +480,35 @@ const Modal = ({open, }) => {
                                              <tbody>
                                                 
                                                 <tr className="border-b border-gray-200">
-                                                   <td className=" w-[22em] pl-2">Congestive Heart Failure (CHF)</td>
+                                                   <td className=" w-[22em] pl-4">Congestive Heart Failure (CHF)</td>
                                                    <td className =" py-1 pl-2 text-center">1</td>
                                                 </tr>
                                                 <tr className="border-b border-gray-200">
-                                                   <td className=" w-[22em] pl-2">Hypertension</td>
+                                                   <td className=" w-[22em] pl-4">Hypertension</td>
                                                    <td className ="py-1 pl-2 text-center">1</td>
                                                 </tr>
                                                 <tr className="border-b border-gray-200">
-                                                   <td className=" w-[22em] pl-2">Age ≥ 75</td>
+                                                   <td className=" w-[22em] pl-4">Age ≥ 75</td>
                                                    <td className ="py-1 pl-2 text-center">2</td>
                                                 </tr>
                                                 <tr className="border-b border-gray-200">
-                                                   <td className=" w-[22em] pl-2">Age 65 - 74</td>
+                                                   <td className=" w-[22em] pl-4">Age 65 - 74</td>
                                                    <td className =" py-1 pl-2 text-center">1</td>
                                                 </tr>
                                                 <tr className="border-b border-gray-200">
-                                                   <td className=" w-[22em] pl-2">Diabetes mellitus</td>
+                                                   <td className=" w-[22em] pl-4">Diabetes mellitus</td>
                                                    <td className =" py-1 pl-2 text-center">1</td>
                                                 </tr>
                                                 <tr className="border-b border-gray-200">
-                                                   <td className=" w-[22em] pl-2">Ischaemic Stroke/TIA/Thromboembolism</td>
+                                                   <td className=" w-[22em] pl-4">Ischaemic Stroke/TIA/Thromboembolism</td>
                                                    <td className =" py-1 pl-2 text-center">2</td>
                                                 </tr>
                                                 <tr className="border-b border-gray-200">
-                                                   <td className=" w-[22em] pl-2">Vascular disease</td>
+                                                   <td className=" w-[22em] pl-4">Vascular disease</td>
                                                    <td className =" py-1 pl-2 text-center">1</td>
                                                 </tr>
                                                 <tr className="border-b border-gray-200">
-                                                   <td className=" w-[22em] pl-2">Sex Female</td>
+                                                   <td className=" w-[22em] pl-4">Sex Female</td>
                                                    <td className =" py-1 pl-2 text-center">1</td>
                                                 </tr>
                                                 
@@ -528,7 +526,7 @@ const Modal = ({open, }) => {
                                        <span>
                                              <Popover>
                                                 <PopoverTrigger className="pl-2">
-                                                   <strong className="text-sm">i</strong>
+                                                <button className="px-2 py-1 rounded-full font-serif font-semibold bg-gradient-to-r from-[#7B0E72] from-70%   to-[#E6007E] text-white text-xs">i</button>
                                                 </PopoverTrigger>
                                                 <PopoverContent className="p-0 w-[40em] text-sm">
                                                    <div className="py-1 w-full border-b border-gray-200 bg-gray-100 font-bold text-center">
@@ -644,16 +642,16 @@ const Modal = ({open, }) => {
                   
 
                   {/* COMORBODITIES TABLE  */}
-                  <table className="w-full border mt-4">
-                     <thead className="bg-[#648DBC] text-left text-white font-semibold">
+                  <table className="w-full mt-4">
+                     <thead className="bg-[#21376A] text-left text-white font-semibold">
                         <tr>
-                           <th className=" pl-2 py-1 w-[40%]">Comorboditiies</th>
+                           <th className=" pl-2 py-1 w-[40%] rounded-tl-lg">Comorbiditiies</th>
                            <th className="w-[6%]" colSpan="1">&nbsp;</th>
                            <th className="py-1 pl-4">Description</th>
-                           <th className=" pl-2 w-[15%]">Date Recorded</th>
+                           <th className=" pl-2 w-[15%] rounded-tr-lg">Date recorded</th>
                         </tr>
                      </thead>
-                     <tbody>
+                     <tbody className="border-l border-b ">
                         {
                            comorbiditiesTableData.map((item, index) =>(
                               <tr key={index} 
@@ -664,62 +662,83 @@ const Modal = ({open, }) => {
                                     className="py-1 pl-4 font-semibold">{item.comorbidity}
                                  </td>
                                  <td 
-                                    className={`text-center text-white font-semibold
-                                       ${
-                                          item.comorbidity ==="HF, CKD 3-5, IHD, Stroke/TIA, PAD, HTN, Diab (T1/T2)" 
-                                          && 
-                                          (
-                                             (selectedPatientData[AFibColumns.HF_Concept]) ||
-                                             (selectedPatientData[AFibColumns.CKD3_5_Concept]) ||
-                                             (selectedPatientData[AFibColumns.IHD_Concept])||
-                                             (selectedPatientData[AFibColumns.StrokeTIA_Concept]) ||
-                                             (selectedPatientData[AFibColumns.NonHaemStrokeConcept]) ||
-                                             (selectedPatientData[AFibColumns.PAD_Concept]) ||
-                                             (selectedPatientData[AFibColumns.Hypertension]) ||
-                                             (selectedPatientData[AFibColumns.DiabetesConcept])
-                                          )
-                                          ? " bg-orange-400" 
-                                          : null
-                                       }
-                                       ${
-                                          item.comorbidity ==="Liver Failure" &&
-                                          selectedPatientData[AFibColumns.LiverFailureConcept] ? " bg-orange-400" : null
-                                          
-                                       }
-                                       ${
-                                          item.comorbidity ==="Heart Valve" &&
-                                          selectedPatientData[AFibColumns.HeartValveConcept] ? " bg-orange-400" : null
-                                          
-                                       }
-                                       ${
-                                          item.comorbidity ==="Bleeding history" &&
-                                          selectedPatientData[AFibColumns.BleedConcept] ? " bg-red-600" : null
-                                          
-                                       }
-                                       ${
-                                          item.comorbidity ==="Palliative Care" &&
-                                          selectedPatientData[AFibColumns.PalliativeCareConcept] ? " bg-red-600" : null
-                                          
-                                       }
-                                       ${
-                                          item.comorbidity ==="Dementia" &&
-                                          selectedPatientData[AFibColumns.DementiaConcept] ? " bg-orange-400" : null
-                                          
-                                       }
-                                       ${
-                                          item.comorbidity ==="SMI/Learning Disability/Housebound" &&
+                                    className="text-center text-white font-semibold"
+                                    style ={{
+                                       backgroundColor: 
+                                          item.comorbidity ==="HF, CKD 3-5, IHD, Stroke/TIA, PAD, HTN, Diab (T1/T2)" &&
+                                          ((selectedPatientData[AFibColumns.HF_Concept]) ||
+                                          (selectedPatientData[AFibColumns.CKD3_5_Concept]) ||
+                                          (selectedPatientData[AFibColumns.IHD_Concept])||
+                                          (selectedPatientData[AFibColumns.StrokeTIA_Concept]) ||
+                                          (selectedPatientData[AFibColumns.NonHaemStrokeConcept]) ||
+                                          (selectedPatientData[AFibColumns.PAD_Concept]) ||
+                                          (selectedPatientData[AFibColumns.Hypertension]) ||
+                                          (selectedPatientData[AFibColumns.DiabetesConcept]))
+                                          ? cegColors.orange
+                                          : item.comorbidity ==="Liver Failure" && selectedPatientData[AFibColumns.LiverFailureConcept] ? cegColors.orange
+                                          : item.comorbidity ==="Heart Valve" && selectedPatientData[AFibColumns.HeartValveConcept] ? cegColors.orange
+                                          : item.comorbidity ==="Bleeding history" && selectedPatientData[AFibColumns.BleedConcept] ? cegColors.red
+                                          : item.comorbidity ==="Palliative Care" && selectedPatientData[AFibColumns.PalliativeCareConcept] ? cegColors.red
+                                          : item.comorbidity ==="Dementia" && selectedPatientData[AFibColumns.DementiaConcept] ? cegColors.orange
+                                          : item.comorbidity ==="SMI/Learning Disability/Housebound" &&
                                           (selectedPatientData[AFibColumns.SMI_Concept] ||
                                           selectedPatientData[AFibColumns.LD_Concept] ||
-                                          selectedPatientData[AFibColumns.HouseboundConcept]) ?  "bg-orange-400" : null
+                                          selectedPatientData[AFibColumns.HouseboundConcept]) ?  cegColors.orange
+                                          :null 
+                                    }}
+                                          
+                                    // className={`text-center text-white font-semibold
+                                    //    ${
+                                    //       item.comorbidity ==="HF, CKD 3-5, IHD, Stroke/TIA, PAD, HTN, Diab (T1/T2)" 
+                                    //       && 
+                                    //       (
+                                    //          (selectedPatientData[AFibColumns.HF_Concept]) ||
+                                    //          (selectedPatientData[AFibColumns.CKD3_5_Concept]) ||
+                                    //          (selectedPatientData[AFibColumns.IHD_Concept])||
+                                    //          (selectedPatientData[AFibColumns.StrokeTIA_Concept]) ||
+                                    //          (selectedPatientData[AFibColumns.NonHaemStrokeConcept]) ||
+                                    //          (selectedPatientData[AFibColumns.PAD_Concept]) ||
+                                    //          (selectedPatientData[AFibColumns.Hypertension]) ||
+                                    //          (selectedPatientData[AFibColumns.DiabetesConcept])
+                                    //       )
+                                    //       ? " bg-orange-400" 
+                                    //       : null
+                                    //    }
+                                    //    ${
+                                    //       item.comorbidity ==="Liver Failure" &&
+                                    //       selectedPatientData[AFibColumns.LiverFailureConcept] ? " bg-orange-400" : null
+                                          
+                                    //    }
+                                    //    ${
+                                    //       item.comorbidity ==="Heart Valve" &&
+                                    //       selectedPatientData[AFibColumns.HeartValveConcept] ? " bg-orange-400" : null
+                                          
+                                    //    }
+                                    //    ${
+                                    //       item.comorbidity ==="Bleeding history" &&
+                                    //       selectedPatientData[AFibColumns.BleedConcept] ? " bg-red-600" : null
+                                          
+                                    //    }
+                                    //    ${
+                                    //       item.comorbidity ==="Palliative Care" &&
+                                    //       selectedPatientData[AFibColumns.PalliativeCareConcept] ? " bg-red-600" : null
+                                          
+                                    //    }
+                                    //    ${
+                                    //       item.comorbidity ==="Dementia" &&
+                                    //       selectedPatientData[AFibColumns.DementiaConcept] ? " bg-orange-400" : null
+                                          
+                                    //    }
+                                    //    ${
+                                    //       item.comorbidity ==="SMI/Learning Disability/Housebound" &&
+                                    //       (selectedPatientData[AFibColumns.SMI_Concept] ||
+                                    //       selectedPatientData[AFibColumns.LD_Concept] ||
+                                    //       selectedPatientData[AFibColumns.HouseboundConcept]) ?  "bg-orange-400" : null
                                           
                                           
-                                       }
-                                       
-                                       
-                                       
-                                       
-                                       `
-                                    }
+                                    //    }            
+                                    //               `
+                                    // }
                                  >
                                     {
                                        item.comorbidity ==="HF, CKD 3-5, IHD, Stroke/TIA, PAD, HTN, Diab (T1/T2)"
@@ -839,19 +858,19 @@ const Modal = ({open, }) => {
 
 
                   {/* PROCESS MEASURES */}
-                  <table className="w-full border mt-4">
-                     <thead className="bg-[#648DBC] text-left text-white font-semibold">
+                  <table className="w-full  mt-4">
+                     <thead className="bg-[#21376A] text-left text-white font-semibold">
                         <tr>
-                           <th className=" pl-2 py-1 w-[40%]">Process Measures</th>
+                           <th className=" pl-2 py-1 w-[40%] rounded-tl-lg">Process measures</th>
                            <th className="w-[6%]" colSpan="1">&nbsp;</th>
                            <th className="py-1 pl-4">Value</th>
-                           <th className=" pl-2 w-[15%]">Date Recorded</th>
+                           <th className=" pl-2 w-[15%] rounded-tr-lg">Date recorded</th>
 
                         </tr>
                      </thead>
-                     <tbody>
+                     <tbody className="border-l border-b ">
                         <tr>
-                           <td className="font-semibold text-red-500 pl-8 py-1" colSpan="3">*INR values may not be recorded in the GP system and may be under required in this tool.</td>
+                           <td className="font-semibold text-[#E6007E] pl-8 py-1" colSpan="3">*INR values may not be recorded in the GP system and may be under required in this tool.</td>
                         </tr>
                         {
                            processMeasuresTableData.map((item, index) =>(
@@ -868,7 +887,7 @@ const Modal = ({open, }) => {
                                           <Popover >
                                           <PopoverTrigger className="pl-2">
          
-                                          <strong className="text-sm">i</strong>
+                                          <button className="px-2 py-1 rounded-full font-serif font-semibold bg-gradient-to-r from-[#7B0E72] from-70%   to-[#E6007E] text-white text-xs">i</button>
                                           
                                        </PopoverTrigger>
                                        <PopoverContent className="p-0 w-[25em] text-sm">
@@ -896,26 +915,22 @@ const Modal = ({open, }) => {
 
 
                                  </td>
-                                 <td className= {
-                                    `
-                                       ${
-                                          item.process === "Systolic/Diastolic BP (mmHg)(latest ever)" 
-                                          && selectedPatientData[AFibColumns.SystolicBPValue] >= 160
-                                          ? "bg-red-500" : null
-                                       }
-                                        ${
-                                          (item.process === "Systolic/Diastolic BP (mmHg)(latest ever)" 
+                                 <td 
+                                    style ={{
+                                       backgroundColor: item.process === "Systolic/Diastolic BP (mmHg)(latest ever)" && selectedPatientData[AFibColumns.SystolicBPValue] >= 160 
+                                       ? cegColors.red
+                                       : (item.process === "Systolic/Diastolic BP (mmHg)(latest ever)" 
                                           && selectedPatientData[AFibColumns.SystolicBPValue] >= 140) ||
                                           (item.process === "Alcohol consumption"
                                           && selectedPatientData[AFibColumns.AlcoholValue] >= 14) ||
                                           (item.process === "eGFR (mL/min)(latest ever)"
-                                             && ((selectedPatientData[AFibColumns.eGFR_Value] < 60) &&
-                                                (selectedPatientData[AFibColumns.eGFR_Value] > 0)))
-                                          
-                                          ? "bg-orange-400" : null
-                                       }
-                                    `
-                                 }></td>
+                                          && ((selectedPatientData[AFibColumns.eGFR_Value] < 60) &&
+                                          (selectedPatientData[AFibColumns.eGFR_Value] > 0)))
+                                       ? cegColors.orange
+                                       : null
+                                    }}
+                                 >
+                                 </td>
                                  <td className="py-1 pl-4">
                                     {item.value}
                                  </td>
@@ -926,36 +941,33 @@ const Modal = ({open, }) => {
                      </tbody>
                   </table>
                   {/* MEDICATION REVIEW */}
-                  <table className="w-full border mt-4">
-                     <thead className="bg-[#648DBC] text-left text-white font-semibold">
+                  <table className="w-full  mt-4">
+                     <thead className="bg-[#21376A] text-left text-white font-semibold">
                         <tr>
-                           <th className=" pl-2 py-1 w-[40%]">Medication Review</th>
+                           <th className=" pl-2 py-1 w-[40%] rounded-tl-lg">Medication review</th>
                            <th className="w-[6%]" colSpan="1">&nbsp;</th>
                            <th className="py-1 pl-4"></th>
-                           <th className=" pl-2 w-[15%]">Date Recorded</th>
+                           <th className=" pl-2 w-[15%] rounded-tr-lg">Date recorded</th>
 
                         </tr>
                      </thead>
-                     <tbody>
+                     <tbody className="border-l border-b ">
                            <tr className="bg-gray-50 border-b">
                               <td className="py-1 pl-4 font-semibold ">Medication Reviews (latest ever)</td>
                               <td
-                                 className={`text-center text-white font-semibold
-                                 ${
-                                    selectedPatientData[AFibColumns.MedsReviewConcept]
-                                    ? "bg-green-600"
-                                    : "bg-red-500"
-                                 }
-                                 ${
-                                    recordedOverTwelveMonths(
-                                       convertDate(selectedPatientData[AFibColumns.MedsReviewDate]),
-                                       convertRelativeRunDate(relativeRunDate)
-                                    )
-                                    ? " bg-orange-400"
-                                    : ""
-                                    }
-                                 `}
-                                 >
+                                 className="text-center text-white font-semibold"
+                                 style = {{
+                                    backgroundColor: recordedOverTwelveMonths(
+                                             convertDate(selectedPatientData[AFibColumns.MedsReviewDate]),
+                                             convertRelativeRunDate(relativeRunDate)
+                                          ) ? cegColors.orange
+                                          : selectedPatientData[AFibColumns.MedsReviewConcept]
+                                          ? cegColors.green
+                                          : cegColors.red
+
+                                 }}
+                        
+                              >
                                  {selectedPatientData[AFibColumns.MedsReviewConcept] 
                                  ? "YES" 
                                  : "NO"
@@ -973,21 +985,25 @@ const Modal = ({open, }) => {
                   </table>
 
                    {/* EXCEPTION REPORTING */}
-                   <table className="w-full border mt-4 mb-6">
-                     <thead className="bg-[#648DBC] text-left text-white font-semibold">
+                   <table className="w-full  mt-4 mb-6">
+                     <thead className="bg-[#21376A] text-left text-white font-semibold">
                         <tr>
-                           <th className=" pl-2 py-1 w-[40%]">Exception Reporting</th>
+                           <th className=" pl-2 py-1 w-[40%] rounded-tl-lg">Exception reporting</th>
                            <th className="w-[6%]" colSpan="1">&nbsp;</th>
                            <th className="py-1 pl-4"></th>
-                           <th className=" pl-2 w-[15%]">Date Recorded</th>
+                           <th className=" pl-2 w-[15%] rounded-tr-lg">Date recorded</th>
                         </tr>
                      </thead>
-                     <tbody>
+                     <tbody className="border-l border-b ">
                         <tr className="bg-gray-50 border-b">
                            <td className="py-1 pl-4 font-semibold ">Anticoagulants contraindicated (latest ever)</td>
-                           <td  className={` text-center text-white font-semibold
-                              ${selectedPatientData[AFibColumns.AnticoagContraCodeTerm] ? "bg-orange-400" : null}
-                              `}>{selectedPatientData[AFibColumns.AnticoagContraCodeTerm] ? "YES" : null }
+                           <td className=" text-center text-white font-semibold"
+                               style ={{
+                                          backgroundColor: selectedPatientData[AFibColumns.AnticoagContraCodeTerm]
+                                          ? cegColors.orange
+                                          : null
+
+                               }}>{selectedPatientData[AFibColumns.AnticoagContraCodeTerm] ? "YES" : null }
                            </td>
                            <td></td>
                            <td className="py-1 pl-4">{selectedPatientData[AFibColumns.AnticoagContraDate]}</td>
@@ -996,10 +1012,13 @@ const Modal = ({open, }) => {
                         
                         <tr>
                            <td className="py-1 pl-4 font-semibold ">Anticoagulants declined (latest ever)</td>
-                           <td 
-                              className={` text-center text-white font-semibold
-                              ${selectedPatientData[AFibColumns.AnticoagDeclineCodeTerm] ? "bg-orange-400" : null}
-                              `}>{selectedPatientData[AFibColumns.AnticoagDeclineCodeTerm] ? "YES" : null }
+                           <td className=" text-center text-white font-semibold"
+                               style ={{
+                                          backgroundColor: selectedPatientData[AFibColumns.AnticoagDeclineCodeTerm]
+                                          ? cegColors.orange
+                                          : null
+
+                               }}>{selectedPatientData[AFibColumns.AnticoagDeclineCodeTerm] ? "YES" : null }
                            </td>
                            <td></td>
                            <td className="py-1 pl-4">{selectedPatientData[AFibColumns.AnticoagDeclineDate]}</td>
@@ -1008,15 +1027,6 @@ const Modal = ({open, }) => {
                      </tbody>
                   </table>
                   
-                  {/* PATIENT NOTES */}
-                  {/* <div className="flex flex-col mt-6 mb-10">
-                     <textarea placeholder='Enter patient notes here' className="border w-full h-20 text-sm p-2">
-
-                     </textarea>
-                     <button className = "bg-[#648DBC] font-semibold text-white w-20 px-2 py-2 rounded-md mt-2 ml-auto" >
-                        Save
-                     </button>
-                  </div> */}
             </div>
          </div>
           {/* ))}  */}

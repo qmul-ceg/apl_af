@@ -10,11 +10,11 @@ import { MainContext } from './MainContext'
 
 
 import {  } from 'react'
-import { useNavigate } from 'react-router-dom'
+// import { useNavigate } from 'react-router-dom'
 const Display = () => {
   
 
-   const { isModalOpen, dataCount } = useContext(MainContext)
+   const { isModalOpen, dataCount, relativeRunDate } = useContext(MainContext)
 
 return (
    <div className="">
@@ -37,8 +37,10 @@ return (
          
       </section>
       
-      <div className=" mt-2 w-[98vw] mx-auto text-left pl-2 ">
-         <strong>Patient count: <span className='text-red-600'>{dataCount}</span></strong> 
+      <div className=" mt-2 w-[98vw] mx-auto text-left pl-2 pr-2 flex justify-between">
+         <p>Patient count: <strong className='text-[#E6007E]'>{dataCount}</strong></p>
+         <p>Relative run date: <strong className='text-[#E6007E]'>{relativeRunDate}</strong></p>
+
       </div>
       {/* DISPLAY DATA */}
       <section className= "flex justify-center  mt-2" id="display_data">

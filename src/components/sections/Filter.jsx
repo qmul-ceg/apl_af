@@ -203,38 +203,44 @@ const Filter = () => {
    // console.log(selectedFilters)
    return (
       <>
-         <div className= "flex justify-between items-center  w-full h-20 px-4 rounded-t-lg bg-[#648DBC] text-white">
-            <div className="flex items-center ">
-               <strong className=" text-center text-2xl">Filters</strong>
+         <div className= "flex justify-between items-center  w-full  px-4 py-2 rounded-t-lg bg-[#21376A] text-white flex-shrink-0">
+            <div className="flex items-center min-h-10 ">
+               <p className="text-sm md:text-md 
+                  lg:text-lg xl:text-xl 2xl:text-xl 
+                  font-semibold">
+                  Filters
+               </p>
+
+
                {/* DISPLAY FILTERS */}
-               <div className=" ml-6 items-center flex gap-2 border border-dotted  flex-wrap max-h-20">
-                  {(data.length > 0 && selectedAnti) && (
-                     <button className="border text-xs bg-white text-[#648DBC] px-2 rounded-md">
+               <div className=" ml-6 items-center flex gap-2 flex-wrap mr-6 ">
+                  {(importedData.length > 0 && selectedAnti) && (
+                     <button className=" text-xs bg-white text-[#21376A] px-2 rounded-md ">
                         <strong className ="mr-2">AntiCoag/AntiP:</strong> {selectedAnti.label } 
                         {<button className=" ml-2 font-bold" onClick={()=>removeAntiFilter()}>x</button>}
                      </button>
                   )}
-                  {(data.length > 0 && displayMedReview[0].value !== "") && (
-                     <button className="border text-xs bg-white text-[#648DBC] px-2 rounded-md flex items-center text-center">
+                  {(importedData.length > 0 && displayMedReview[0].value !== "") && (
+                     <button className=" text-xs bg-white text-[#21376A] px-2 rounded-md flex items-center text-center">
                          <strong className ="mr-2">Med Review:</strong> {displayMedReview[0].value } 
                         {<button className=" ml-2 font-bold"onClick={() => handleMedReview("")}>x</button>}
                      </button>
                   )}
-                  {(data.length > 0 && displayNsaid[0].value !== "") && (
-                     <button className="border text-xs bg-white text-[#648DBC] px-2 rounded-md flex items-center text-center">
+                  {(importedData.length > 0 && displayNsaid[0].value !== "") && (
+                     <button className=" text-xs bg-white text-[#21376A] px-2 rounded-md flex items-center text-center">
                          <strong className ="mr-2">NSAID:</strong> {displayNsaid[0].value } 
                         {<button className="ml-2 font-bold"onClick={removeNsaidFilter}>x</button>}
                      </button>
                   )}
-                  {(data.length > 0 && cvd)  && (
-                     <button className="border text-xs bg-white text-[#648DBC] px-2 rounded-md flex items-center text-center">
+                  {(importedData.length > 0 && cvd)  && (
+                     <button className=" text-xs bg-white text-[#21376A] px-2 rounded-md flex items-center text-center">
                          <strong className ="mr-2">CVD:</strong> {cvd.value } 
                         {<button className="ml-2 font-bold"onClick={removeCvdDisplay}>x</button>}
                      </button>
                   )}
-                  {(data.length > 0 && selectedVulnerabilities.length > 0) && (
+                  {(importedData.length > 0 && selectedVulnerabilities.length > 0) && (
                      selectedVulnerabilities.map((item, id) => 
-                        <button key = {id} className="border text-xs bg-white text-[#648DBC] px-2 rounded-md flex items-center text-center">
+                        <button key = {id} className=" text-xs bg-white text-[#21376A] px-2 rounded-md flex items-center text-center">
                            <strong className ="mr-2">Vulnerabilities: </strong> {item.label} 
                            {<button className="ml-2 font-bold" onClick={()=>removeVulnerabilities(item.value)}>x</button>}
                         </button>
@@ -242,34 +248,34 @@ const Filter = () => {
                   )}
                   
                   {/* BP DISPLAY */}
-                  {(data.length > 0 && selectedBP.length > 0) && (
+                  {(importedData.length > 0 && selectedBP.length > 0) && (
                      selectedBP.map((item, id) => 
-                        <button key = {id} className="border text-xs bg-white text-[#648DBC] px-2 rounded-md flex items-center text-center">
+                        <button key = {id} className=" text-xs bg-white text-[#21376A] px-2 rounded-md flex items-center text-center">
                            <strong className ="mr-2">BP:</strong> {item.label} 
                            {<button className="ml-2 font-bold" onClick={()=>removeBP(item.value)}>x</button>}
                         </button>
                      )
                   )}
                   {/* CHA₂DS₂-VASc DISPLAY */}
-                  {(data.length > 0 && selectedChdValue.length > 0 && selectedChdDate === null) && (
+                  {(importedData.length > 0 && selectedChdValue.length > 0 && selectedChdDate === null) && (
                      selectedChdValue.map((item, id) => 
-                        <button key = {id} className="border text-xs bg-white text-[#648DBC] px-2 rounded-md flex items-center text-center">
+                        <button key = {id} className=" text-xs bg-white text-[#21376A] px-2 rounded-md flex items-center text-center">
                            <strong className ="mr-2">CHA₂DS₂-VASc: </strong> {item.label} 
                            {<button className="ml-2 font-bold" onClick={()=>removeChdValue(item.value)}>x</button>}
                         </button>
                      )
                   )}
-                  {(data.length > 0 && selectedChdValue.length === 0 && selectedChdDate) && (
+                  {(importedData.length > 0 && selectedChdValue.length === 0 && selectedChdDate) && (
                      // selectedChdDate.map((item, id) => 
-                        <button key = {selectedChdDate.value} className="border text-xs bg-white text-[#648DBC] px-2 rounded-md flex items-center text-center">
+                        <button key = {selectedChdDate.value} className=" text-xs bg-white text-[#21376A] px-2 rounded-md flex items-center text-center">
                            <strong className ="mr-2">CHA₂DS₂-VASc: </strong> {selectedChdDate.label} 
                            {<button className="ml-2 font-bold" onClick={()=>removeChdDate()}>x</button>}
                         </button>
                      
                   )}
-                  {(data.length > 0 && selectedChdValue.length > 0 && selectedChdDate) && (
+                  {(importedData.length > 0 && selectedChdValue.length > 0 && selectedChdDate) && (
                       selectedChdValue.map((item, id) => 
-                        <button key = {id} className="border text-xs bg-white text-[#648DBC] px-2 rounded-md flex items-center text-center">
+                        <button key = {id} className=" text-xs bg-white text-[#21376A] px-2 rounded-md flex items-center text-center">
                            <strong className ="mr-2">CHA₂DS₂-VASc: </strong>{item.label} 
                            {<button className="ml-2 font-bold" onClick={()=>removeChdValue(item.value)}>x</button>}
                            <span className="ml-2">{selectedChdDate.label} </span>
@@ -278,18 +284,18 @@ const Filter = () => {
                   ))}
 
                   {/* ORBIT DISPLAY */}
-                  {(data.length > 0 && selectedOrbit.length > 0) && (
+                  {(importedData.length > 0 && selectedOrbit.length > 0) && (
                      selectedOrbit.map((item, id) => 
-                        <button key = {id} className="border text-xs bg-white text-[#648DBC] px-2 rounded-md flex items-center text-center">
+                        <button key = {id} className=" text-xs bg-white text-[#21376A] px-2 rounded-md flex items-center text-center">
                            <strong className ="mr-2">ORBIT:</strong> {item.label} 
                            {<button className="ml-2 font-bold" onClick={()=>removeOrbitDisplay(item.value)}>x</button>}
                         </button>
                      )
                   )}
 
-                  {(data.length > 0 && selectedAges.length > 0) && (
+                  {(importedData.length > 0 && selectedAges.length > 0) && (
                      selectedAges.map((item, id) => 
-                        <button key = {id} className="border text-xs bg-white text-[#648DBC] px-2 rounded-md flex items-center text-center">
+                        <button key = {id} className=" text-xs bg-white text-[#21376A] px-2 rounded-md flex items-center text-center">
                            <strong className ="mr-2">Age:</strong> {item.label} 
                            {<button className="ml-2 font-bold" onClick={()=>removeAgeDisplay(item.value)}>x</button>}
                         </button>
@@ -297,8 +303,20 @@ const Filter = () => {
                   )}
                   
                </div>
+
+               
             </div>
             
+            {/* Reset Filters button */}
+            <div className="ml-auto mr-8  text-center min-w-[140px] ">
+               <button
+               className = "bg-white text-xs  lg:text-xs xl:text-sm 2xl:text-sm font-semibold text-[#21376A] hover:text-black px-2 py-1 rounded-lg "
+               onClick={resetFilters} >
+                  Remove all filters
+               </button>
+               
+            </div>
+           
             {/* TOGGLE COLLAPSE BUTTON */}
             <button onClick={toggleFilter}>
                {filterMenu ? <FiChevronDown /> : <FiChevronUp/>}
@@ -310,6 +328,30 @@ const Filter = () => {
          {
             filterMenu && (
                <div className= "flex justify-between border border-gray-400 px-2 py-2 h-80" id="collapsible_filter ">
+
+                  {/* QUICK FILTERS */}
+                  <div className =" flex-1 w-full flex flex-col justify-between max-w-[300px]">
+                     <div className =" flex flex-col">
+                        <header className="flex justify-between px-2 py-2 rounded-t-lg  bg-gradient-to-r from-[#7B0E72] from-70%   to-[#E6007E] text-white" >
+                           <p className ="font-semibold text-xs text-left xl:text-sm 2xl:text-sm pr-2">Quick filters</p>
+                           <button onClick={toggleQuickFilter}>
+                              { quickFilter  ? <FiChevronDown /> : <FiChevronUp/> }
+                           </button>
+                        </header>
+                     
+                        {
+                           quickFilter && (
+                              <div className="border  border-gray-400 h-28 border-t-0">
+                                 <ul>
+                                    <li>???</li>
+                                    <li>???</li>
+                                    
+                                 </ul>
+                              </div>
+                           )
+                        }
+                     </div>
+                  </div>
                   
                   {/* w-[70vh] flex justify-between */}
                   {/* FILTERS */}
@@ -320,8 +362,8 @@ const Filter = () => {
                         
                         {/* ANTICOAGULANT FILTER */}
                         <Select>
-                           <SelectTrigger className=" bg-[#648DBC] text-white">
-                              <h1 className="text-xs text-left xl:text-sm 2xl:text-sm pr-2">Anticoagulants / Antiplatelets</h1>
+                           <SelectTrigger className=" bg-[#21376A] text-white">
+                              <h1 className="text-xs font-semibold text-left xl:text-sm 2xl:text-sm pr-2">Anticoagulants / Antiplatelets</h1>
                               {/* <SelectValue placeholder="" /> */}
                            </SelectTrigger>
                            <SelectContent>
@@ -355,8 +397,8 @@ const Filter = () => {
 
                         {/* MED REVIEW FILTER*/}
                         <Select>
-                           <SelectTrigger className=" bg-[#648DBC]  text-white">
-                              <h1 className="text-xs text-left xl:text-sm 2xl:text-sm">Med review {">"} 12m</h1>
+                           <SelectTrigger className=" bg-[#21376A]  text-white">
+                              <h1 className="text-xs font-semibold text-left xl:text-sm 2xl:text-sm">Med review {">"} 12m</h1>
                               {/* <SelectValue placeholder="CHA₂DS₂-VASc" /> */}
                            </SelectTrigger>
                            <SelectContent>
@@ -386,8 +428,8 @@ const Filter = () => {
 
                         {/*VULNERABILITIES FILTER */}
                         <Select>
-                           <SelectTrigger className=" bg-[#648DBC]  text-white">
-                           <h1 className="text-xs text-left xl:text-sm 2xl:text-sm pr-2">Vulnerabilities</h1>
+                           <SelectTrigger className=" bg-[#21376A]  text-white">
+                           <h1 className="text-xs font-semibold text-left xl:text-sm 2xl:text-sm pr-2">Vulnerabilities</h1>
                            {/* <SelectValue placeholder="VULNERABILITIES" /> */}
                            </SelectTrigger>
                            <SelectContent>
@@ -426,8 +468,8 @@ const Filter = () => {
                         
                         {/* CHA₂DS₂-VASc FILTER */}
                         <Select>
-                              <SelectTrigger className=" bg-[#648DBC] text-white">
-                                 <h1 className="text-xs text-left xl:text-sm 2xl:text-sm pr-2">CHA₂DS₂-VASc</h1>
+                              <SelectTrigger className=" bg-[#21376A] text-white">
+                                 <h1 className="text-xs font-semibold text-left xl:text-sm 2xl:text-sm pr-2">CHA₂DS₂-VASc</h1>
                                  {/* <SelectValue placeholder="CHA₂DS₂-VASc" /> */}
                               </SelectTrigger>
                               <SelectContent>
@@ -442,6 +484,7 @@ const Filter = () => {
                                        value={item.value}
                                        checked={selectedChdValue.some(object => object.value === item.value)}
                                        onChange={() => handleChdValue(item.value, item.label)}
+                                       // className=''
                                     />
                                     <span>{item.label}</span>
                                  </label>
@@ -471,8 +514,8 @@ const Filter = () => {
 
                         {/* ORBIT FILTER*/}
                         <Select>
-                           <SelectTrigger className=" bg-[#648DBC]  text-white">
-                              <h1 className="text-xs text-left xl:text-sm 2xl:text-sm">ORBIT</h1>
+                           <SelectTrigger className=" bg-[#21376A]  text-white">
+                              <h1 className="text-xs font-semibold text-left xl:text-sm 2xl:text-sm">ORBIT</h1>
                               {/* <SelectValue placeholder="VULNERABILITIES" /> */}
                            </SelectTrigger>
                            <SelectContent>
@@ -499,8 +542,8 @@ const Filter = () => {
                         
                         {/* AGE FILTER*/}
                         <Select>
-                           <SelectTrigger className=" bg-[#648DBC]  text-white">
-                              <h1 className="text-xs text-left xl:text-sm 2xl:text-sm">Age</h1>
+                           <SelectTrigger className=" bg-[#21376A]  text-white">
+                              <h1 className="text-xs font-semibold text-left xl:text-sm 2xl:text-sm">Age</h1>
                            </SelectTrigger>
                            <SelectContent >
                            {[
@@ -530,8 +573,8 @@ const Filter = () => {
                      <div className= "flex flex-col gap-6 ">
                         {/*NSAID FILTER*/}
                         <Select>
-                              <SelectTrigger className=" bg-[#648DBC] text-white">
-                                 <h1 className="text-xs text-left xl:text-sm 2xl:text-sm pr-2">NSAID</h1>
+                              <SelectTrigger className=" bg-[#21376A] text-white">
+                                 <h1 className="text-xs font-semibold text-left xl:text-sm 2xl:text-sm pr-2">NSAID</h1>
                                  {/* <SelectValue placeholder="" /> */}
                               </SelectTrigger>
                               <SelectContent>
@@ -561,8 +604,8 @@ const Filter = () => {
 
                         {/*CVD FILTER*/}
                         <Select>
-                              <SelectTrigger className=" bg-[#648DBC]  text-white">
-                                 <h1 className="text-xs text-left xl:text-sm 2xl:text-sm">CVD</h1>
+                              <SelectTrigger className=" bg-[#21376A]  text-white">
+                                 <h1 className="text-xs font-semibold text-left xl:text-sm 2xl:text-sm">CVD</h1>
                                  {/* <SelectValue placeholder="CHA₂DS₂-VASc" /> */}
                               </SelectTrigger>
                               <SelectContent> {[
@@ -588,8 +631,8 @@ const Filter = () => {
 
                         {/* BP FILTER*/}
                         <Select>
-                              <SelectTrigger className=" bg-[#648DBC] text-white">
-                                 <h1 className="text-xs text-left xl:text-sm 2xl:text-sm">BP</h1>
+                              <SelectTrigger className=" bg-[#21376A] text-white">
+                                 <h1 className="text-xs font-semibold text-left xl:text-sm 2xl:text-sm">BP</h1>
                                  {/* <SelectValue placeholder="VULNERABILITIES" /> */}
                               </SelectTrigger>
                               <SelectContent>
@@ -625,47 +668,18 @@ const Filter = () => {
                   </div>
                   
                   
-                  {/* QUICK FILTERS */}
-                  <div className =" flex-1 w-full flex flex-col justify-between max-w-[300px]">
-                     <div className =" flex flex-col">
-                        <header className="flex justify-between px-2 py-2 rounded-t-lg  bg-black text-white" >
-                           <strong className ="text-xs text-left xl:text-sm 2xl:text-sm pr-2">Quick filters</strong>
-                           <button onClick={toggleQuickFilter}>
-                              { quickFilter  ? <FiChevronDown /> : <FiChevronUp/> }
-                           </button>
-                        </header>
-                     
-                        {
-                           quickFilter && (
-                              <div className="border  border-gray-200 h-28 border-t-0">
-                                 <ul>
-                                    <li>???</li>
-                                    <li>???</li>
-                                    
-                                 </ul>
-                              </div>
-                           )
-                        }
-                     </div>
-                     
-                     <div>
-                        <Button 
-                           className = "bg-[#648DBC] font-bold text-white"
-                           variant="outline"
-                           onClick={resetFilters}>Reset filters</Button>
-                     </div>
-                  </div>
+                  
 
 
                   {/* SUMMARY */}
                   <div className=" w-full max-w-[560px] flex flex-col justify-between">
                      <div>
-                        <header className=" flex  rounded-t-lg px-2 py-2 bg-[#648DBC] text-white">
-                           <strong className ="text-xs text-left xl:text-sm 2xl:text-sm pr-2">Summary</strong>
+                        <header className=" flex  rounded-t-lg px-2 py-2 bg-[#21376A] text-white">
+                           <p className ="text-xs font-semibold text-left xl:text-sm 2xl:text-sm pr-2">Summary</p>
                         </header>
 
-                        <div className="border border-t-0 border-gray-200 flex flex-col pt-2 px-2" >
-                           <table className=" text-xs ">
+                        <div className="border border-t-0 border-gray-400 flex flex-col pt-2 px-2" >
+                           <table className=" text-sm ">
                               <tbody className=" ">
                                  <tr className="border-b border-gray-200">
                                     <td className=" font-bold">Atrial Fibrillation Register</td>
@@ -705,8 +719,8 @@ const Filter = () => {
                               </tbody>
                            </table>
 
-                           <div className="text-xs mt-10 border-b border-gray mb-2">
-                               *Modified QoF no exclusions for contraindication or declined
+                           <div className="text-sm mt-10 border-b border-gray mb-2">
+                               *Modified QOF no exclusions for contraindication or declined
                             </div>
                         </div>
 
@@ -714,27 +728,26 @@ const Filter = () => {
                         
                         {/* EXTERNAL LINKS */}
                         
-                     </div>
-                     
-                        <div>
-                           <Popover >
-                              <PopoverTrigger className="flex justify-center pr-4 ml-auto">
+                  </div>                  
+                     <div>
+                        <Popover >
+                           <PopoverTrigger className="flex justify-center pr-4 ml-auto mt-2">
 
-                                 <strong>i</strong>
-                                 
-                              </PopoverTrigger>
-                              <PopoverContent>
-                                 <div>
-                                    <strong className="text-sm">EXTERNAL LINKS</strong>
-                                    <ul className=" ml-4 text-sm">
-                                       <li><a href="https://www.qmul.ac.uk/ceg/" target="_blank" rel="noopener noreferrer">https://www.qmul.ac.uk/ceg/</a></li>
+                              <button className=" px-2 rounded-full font-serif font-semibold bg-gradient-to-r from-[#7B0E72] from-70%   to-[#E6007E] text-white">i</button>
+                              
+                           </PopoverTrigger>
+                           <PopoverContent>
+                              <div>
+                                 <strong className="text-sm">EXTERNAL LINKS</strong>
+                                 <ul className=" ml-4 text-sm">
+                                    <li><a href="https://www.qmul.ac.uk/ceg/" target="_blank" rel="noopener noreferrer">https://www.qmul.ac.uk/ceg/</a></li>
 
-                                    </ul>
-                                 </div>
-                              </PopoverContent>
-                           </Popover>
-                        </div>
+                                 </ul>
+                              </div>
+                           </PopoverContent>
+                        </Popover>
                      </div>
+                  </div>
                </div>
             )
          }
@@ -792,3 +805,9 @@ export default Filter
       //       <span>{item.label}</span>
       //    </label>
       // ))}
+      {/* <Button 
+               //    className = "bg-white text-xs font-semibold text-[#21376A] hover:bg-gray-400 hover:text-white"
+               //    // variant="outline"
+               //    onClick={resetFilters}>
+               //       Remove all filters
+               // </Button> */}

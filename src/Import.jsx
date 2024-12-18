@@ -166,24 +166,43 @@ const Import = () => {
 
   return (
    <>
-      <div className = "flex justify-center  items-start h-screen ">
+      <div className = "flex justify-center  items-start h-screen bg-[#21376A]">
       {/* <div>
             <img />
             <h1>Atrial Fibrillation Tool </h1>
             <div>
                <h2>Select clinical system and import CSV file </h2>
             </div>
-         </div> */}
-         <div  className = "w-[50vw] mt-[25vh] ">
+         </div> w-[40%]*/}
+         <div  className = " w-[40%] max-w-[500px] mt-[20vh] border text-center py-12 rounded-t-lg bg-white">
 
-            <header className="mb-4">
+            <div className="text-center w-full sm:w-auto  flex-row flex-1">
+               <h1 className="text-sm md:text-md 
+                  lg:text-lg xl:text-xl 2xl:text-2xl 
+                   font-sourceSans font-bold
+                  text-[#21376A]" 
+               >Clinical Effectiveness Group</h1>
+               <h1 className="text-xl md:text-2xl 
+                  lg:text-3xl xl:text-4xl 
+                  2xl:text-4xl  font-sourceSans 
+                  font-bold
+                  text-[#21376A]"
+               >Atrial Fibrillation tool </h1>
+ 
+            </div>
+
+            <div className=" max-w-[370px]  m-auto mt-4 mb-4 font-semibold">
+               <p>This tool has been created to present clinical information coded in the patient health record. It is not a diagnostic tool or intended to replace clinical judgement.</p>
+            </div>
+
+            {/* <header className="mb-4">
                <img 
                   src={CegLogo} 
                   alt="Ceg Logo" 
                   className="w-[20%] mx-auto "
                />
                <h1 className="text-2xl text-center mt-4 font-bold">Atrial Fibrillation Tool </h1>
-            </header>
+            </header> */}
                {/* <CardTitle>Card Title</CardTitle> */}
                
                
@@ -194,31 +213,33 @@ const Import = () => {
                <div>
 
                </div>
-               <div className="flex flex-col justify-center items-center">
-                  <h2 className="text-2xl mb-2">Select clinical system and import CSV file </h2>
+               <div className="flex flex-col justify-center items-center mb-6">
+                  <h2 className="text-xl font-medium text-[#21376A]">Select clinical system and import CSV file </h2>
                   {/* <RadioGroup className ="flex justify-center items-center"> */}
-                     <div className="flex items-center space-x-2">
-                        <div className="flex items-center">
+                     <div className="flex items-center mt-4 gap-10 font-bold text-[#21376A]">
+                        <div className="flex flex-col items-center">
+                           <label className="text-xl" htmlFor="option-one">EMIS Web</label>
                            <input
                               type="radio"
                               id="option-one"
                               name="gp-system"
                               value={GpSystems.EMIS_Web}
                               onClick={handleGpSystemSelect}
-                              className="w-4 h-4 border-2 rounded-full  checked:bg-[#648DBC] mr-2"
+                              className="w-4 h-4 border-2 rounded-full  checked:bg-[#21376A] mr-2"
                            />
-                           <label className="text-lg" htmlFor="option-one">EMIS Web</label>
+                           
                         </div>
-                        <div className="flex items-center">
+                        <div className="flex flex-col items-center">
+                           <label className="text-xl" htmlFor="option-two ">SystmOne</label>
                            <input
                               type="radio"
                               id="option-two"
                               name="gp-system"
                               value={GpSystems.SystmOne}
                               onClick={handleGpSystemSelect}
-                              className="w-4 h-4 border-2 rounded-full  checked:bg-[#648DBC] mr-2"
+                              className="w-4 h-4 border-2 rounded-full  checked:bg-[#21376A] mr-2"
                            />
-                           <label className="text-lg" htmlFor="option-two ">SystmOne</label>
+                           
                         </div>
                         
 
@@ -227,9 +248,11 @@ const Import = () => {
             </div>
          
 
-            <div className="flex justify-center mt-2">
+            <div className="flex justify-center ">
                {/* <Link to="/display"> */}
-                  <Button className="text-center bg-[#648DBC] w-[6em] text-lg" onClick={handleButtonClick}>Import</Button>
+                  <Button className="text-center bg-gradient-to-r from-[#7B0E72] from-70%   to-[#E6007E] text-white w-[6em] text-lg" onClick={handleButtonClick}> 
+                     Import
+                  </Button>
                {/* </Link> */}
                
                <input
