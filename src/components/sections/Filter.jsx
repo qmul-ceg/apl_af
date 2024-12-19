@@ -310,8 +310,9 @@ const Filter = () => {
             {/* Reset Filters button */}
             <div className="ml-auto mr-8  text-center min-w-[140px] ">
                <button
-               className = "bg-white text-xs  lg:text-xs xl:text-sm 2xl:text-sm font-semibold text-[#21376A] hover:text-black px-2 py-1 rounded-lg "
-               onClick={resetFilters} >
+                  className = "bg-white text-xs  lg:text-xs xl:text-sm 2xl:text-sm font-semibold text-[#21376A] hover:text-black px-2 py-1 rounded-lg "
+                  onClick={resetFilters} 
+               >
                   Remove all filters
                </button>
                
@@ -327,7 +328,7 @@ const Filter = () => {
 
          {
             filterMenu && (
-               <div className= "flex justify-between border border-gray-400 px-2 py-2 h-80" id="collapsible_filter ">
+               <div className= "flex justify-between border-[0.1em] border-[#21376A] px-2 py-2 h-80" id="collapsible_filter ">
 
                   {/* QUICK FILTERS */}
                   <div className =" flex-1 w-full flex flex-col justify-between max-w-[300px]">
@@ -341,7 +342,7 @@ const Filter = () => {
                      
                         {
                            quickFilter && (
-                              <div className="border  border-gray-400 h-28 border-t-0">
+                              <div className="border-[0.1em] border-[#21376A] h-28 border-t-0">
                                  <ul>
                                     <li>???</li>
                                     <li>???</li>
@@ -678,8 +679,8 @@ const Filter = () => {
                            <p className ="text-xs font-semibold text-left xl:text-sm 2xl:text-sm pr-2">Summary</p>
                         </header>
 
-                        <div className="border border-t-0 border-gray-400 flex flex-col pt-2 px-2" >
-                           <table className=" text-sm ">
+                        <div className=" border-t-0 border-[0.1em] border-[#21376A] flex flex-col pt-2 px-2" >
+                           <table className=" lg:text-xs xl:text-sm 2xl:text-sm ">
                               <tbody className=" ">
                                  <tr className="border-b border-gray-200">
                                     <td className=" font-bold">Atrial Fibrillation Register</td>

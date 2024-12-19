@@ -71,9 +71,85 @@ const Data = () => {
    // handleSelectedRow()
 
   return (
-   <>      
-       <Table className=" border border-gray-400 mb-10">
-         
+   <div className="border-[0.1em] rounded-t-lg  border-[#21376A] "> 
+      <table className=" dataTable w-full  border-collapse top-0 sticky z-10">
+         <thead className="border-b-4 border-[#21376A] top-[calc(3rem+1px)]">
+            <tr className="text-[#21376A]">
+               <th rowSpan={2} className="w-[2%] border-r-[0.1em] border-[#21376A]">
+                  <input
+                     type="checkbox"
+                     onChange={handleSelectAll}
+                     checked={selectAll}
+                  />
+               </th>
+               <th rowSpan={2} className="w-[13%] border-r-[0.1em] border-[#21376A]">Full Name</th>
+               <th rowSpan={2} className="w-[4%] border-r-[0.1em] border-[#21376A]">Age</th>
+               <th rowSpan={2} className="w-[4%] border-r-[0.1em] border-[#21376A]">Gender</th>
+               <th rowSpan={2} className="w-[8%] border-r-[0.1em] border-[#21376A]">Patience Reference No.</th>
+               <th colSpan="2 " className="border-r-[0.1em] border-[#21376A]">CHA₂DS₂-VASc</th>
+               <th colSpan="2" className="border-r-[0.1em] border-[#21376A]">ORBIT</th>
+               <th rowSpan={2} className="w-[7%] border-r-[0.1em] border-[#21376A]">Anticoagulant issued (6m)</th>
+               <th rowSpan={2} className="w-[10%] border-r-[0.1em] border-[#21376A]">Aspirin / Antiplatelet <br />issued (6m)</th>
+               <th rowSpan={2} className="border-r-[0.1em] border-[#21376A]">NSAID</th>
+               <th rowSpan={2} className="w-[7%] border-r-[0.1em] border-[#21376A]">Statin issued (6m)</th>
+               <th rowSpan={2} className="w-[4%] border-r-[0.1em] border-[#21376A]">CVD</th>
+               <th rowSpan={2} className="w-[4%] border-r-[0.1em] border-[#21376A]">HTN</th>
+               <th rowSpan={2} className="w-[4%] border-r-[0.1em] border-[#21376A]">BP</th>
+               <th rowSpan={2} >Medical review date</th>
+            </tr>
+
+            <tr className="text-[#21376A]" >
+            {/* CHA₂DS₂-VASc */}
+               <th className="border-r-[0.1em]  border-t-[0.1em] border-[#21376A] hover:cursor-pointer" 
+                  onClick={handleSortClick}   
+               > 
+                  <span>Value {sortChdValue === "asc" ? ' ↑' : ' ↓'}</span>
+               </th>
+               <th className="border-r-[0.1em]   border-t-[0.1em] border-[#21376A]">Latest date</th>
+            {/* ORBIT */}
+               <th className="border-r-[0.1em] border-t-[0.1em] border-[#21376A]">Value</th>
+               <th className="border-r-[0.1em] border-t-[0.1em] border-[#21376A]">Latest date</th>
+
+            </tr>
+         </thead>
+         <tbody className="text-center lg:text-xs xl:text-sm 2xl:text-sm ">
+            {data.map((patient, id) => 
+                (
+                  <tr key={id} className="border-b hover:bg-gray-100 " >
+                     <td >
+                        <input
+                           type="checkbox"
+                           checked={selectAll}
+                        >
+                        </input>
+                     </td>
+                     <td className="font-medium text-left px-4 cursor-pointer text-blue-600 hover:underline"
+                        onClick={()=>handlePatientClick(id)}
+                     >
+                        {patient[AFibColumns.FullName]}
+                     </td>
+                     <td>{patient[AFibColumns.Age]}</td>
+                     <td>{patient[AFibColumns.Gender]}</td>
+                     <td>{patient[AFibColumns.PatientReference]}</td>
+                     <td>{patient[AFibColumns.CHADSVAScValue]}</td>
+                     <td>{patient[AFibColumns.CHADSVAScDate]}</td>
+                     <td>{patient[AFibColumns.ORBIT_Value]}</td>
+                     <td>{patient[AFibColumns.ORBIT_Date]}</td>
+                     <td>{patient[AFibColumns.OnAnticoagulant]}</td>
+                     <td>{patient[AFibColumns.OnAspirinAntiplatelet]}</td>
+                     <td>{patient[AFibColumns.OnNSAID]}</td>
+                     <td>{patient[AFibColumns.OnStatin]}</td>
+                     <td>{patient[AFibColumns.CVD]}</td>
+                     <td>{patient[AFibColumns.Hypertension]}</td>
+                     <td>{patient[AFibColumns.BP]}</td>
+                     <td>{patient[AFibColumns.MedsReviewDate]}</td>
+                  </tr>
+               )
+            )}
+         </tbody>
+      
+      </table>     
+       {/* <Table className=" border border-gray-400 mb-10">
           <TableHeader >
              <TableRow className="font-bold text-xs bg-[#648DBC] hover:bg-bg-[#648DBC]">
                <TableHead className="border-b border-r border-gray-400 text-center">
@@ -137,13 +213,12 @@ const Data = () => {
          <TableBody className="text-center text-xs">
              {data.map((patient, id)=> (
             <TableRow key={id} className={id % 2 === 0 ? 'bg-gray-50' : ''} >
-               {/* <Dialog>
-                  <DialogTrigger asChild> */}
+               
                   <TableCell>
                      <input
                         type="checkbox"
                         checked={selectAll}
-                        // onChange={()=>handleSelectedRow(patient.id)}
+               
                      >
                      </input>
                   </TableCell>
@@ -183,9 +258,9 @@ const Data = () => {
             </TableRow>
               )) }
          </TableBody>
-      </Table>
-     {/* </div> */}
-    </>
+      </Table> */}
+     
+    </div>
 
    
   )

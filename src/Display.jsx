@@ -17,7 +17,7 @@ const Display = () => {
    const { isModalOpen, dataCount, relativeRunDate } = useContext(MainContext)
 
 return (
-   <div className="">
+   <div className="flex flex-col min-h-[100vh] items-center">
       {/* HEADER */}
       <section id="header" className =" flex justify-center mt-2">
             <div className="w-[98vw]">
@@ -42,14 +42,20 @@ return (
          <p>Relative run date: <strong className='text-[#E6007E]'>{relativeRunDate}</strong></p>
 
       </div>
+      
       {/* DISPLAY DATA */}
-      <section className= "flex justify-center  mt-2" id="display_data">
+      <section className= "flex justify-center  mt-2 mb-2" id="display_data">
          <div className=" w-[98vw] ">
             <Data />
          </div>
          
       </section>
-
+      <footer className="text-center lg:text-xs xl:text-sm 2xl:text-sm  bottom-0 mt-auto flex gap-2 mb-2">
+         <p className="font-semibold"> © Clinical Effectiveness Group (CEG), Queen Mary University of London. All rights reserved.</p> 
+         <p className="font-semibold"> Attribution-NonCommercial-ShareAlike CC BY-NC-SA</p>
+      </footer>
+      
+     
      
 
    </div>

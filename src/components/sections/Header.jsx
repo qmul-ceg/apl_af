@@ -10,7 +10,7 @@ const Header = () => {
       <header className="flex flex-col items-center justify-between ">
          
          <div className="flex justify-between w-full ">
-            <div className="text-left  w-[20%] md:w-[20%] lg:w-[20%] xl:w-[12%] 2xl:w-[12%] ">
+            <div className="text-left  w-[20%] md:w-[20%] lg:w-[16%] xl:w-[10%] 2xl:w-[13%] ">
                <a href="https://www.qmul.ac.uk" target="_blank" rel="noopener noreferrer">
                   <img src={qmulLogo} alt="Clinical effectiveness group logo" className=""/>
                </a>
@@ -32,7 +32,7 @@ const Header = () => {
             </div>
          
             <div className="text-right ">
-                <div className=" mt-0 ">
+                <div className=" mt-2 ">
                   <Menu />
                </div>
             </div>
