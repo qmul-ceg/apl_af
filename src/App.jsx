@@ -52,8 +52,8 @@ function App() {
          <div>
             <Router>
                <Routes>
-                  <Route path = "/" element = {<Import />}/>
-                  <Route path = "/display" element = {<Display />}/>
+                  <Route path = "/apl_af" element = {<Import />}/>
+                  <Route path = "/apl_af/display" element = {<Display />}/>
                   {/* <Route path = "/modal" element = {<Modal />}/>  */}
                   {/* DELETE ABOVE PATH AFTER BUILDING MODAL */}
 
