@@ -167,15 +167,8 @@ const Import = () => {
   return (
    <>
       <div className = "flex justify-center  items-start h-screen bg-[#21376A]">
-      {/* <div>
-            <img />
-            <h1>Atrial Fibrillation Tool </h1>
-            <div>
-               <h2>Select clinical system and import CSV file </h2>
-            </div>
-         </div> w-[40%]*/}
+      
          <div  className = " w-[40%] max-w-[500px] mt-[20vh] border text-center py-12 rounded-t-lg bg-white">
-
             <div className="text-center w-full sm:w-auto  flex-row flex-1">
                <h1 className="text-sm md:text-md 
                   lg:text-lg xl:text-xl 2xl:text-2xl 
@@ -195,23 +188,8 @@ const Import = () => {
                <p>This tool has been created to present clinical information coded in the patient health record. It is not a diagnostic tool or intended to replace clinical judgement.</p>
             </div>
 
-            {/* <header className="mb-4">
-               <img 
-                  src={CegLogo} 
-                  alt="Ceg Logo" 
-                  className="w-[20%] mx-auto "
-               />
-               <h1 className="text-2xl text-center mt-4 font-bold">Atrial Fibrillation Tool </h1>
-            </header> */}
-               {/* <CardTitle>Card Title</CardTitle> */}
-               
-               
-            
-            
-            {/* <CardContent className ="text-center"> */}
-               
+           
                <div>
-
                </div>
                <div className="flex flex-col justify-center items-center mb-6">
                   <h2 className="text-xl font-medium text-[#21376A]">Select clinical system and import CSV file </h2>
@@ -237,13 +215,10 @@ const Import = () => {
                               name="gp-system"
                               value={GpSystems.SystmOne}
                               onClick={handleGpSystemSelect}
-                              className="w-4 h-4 border-2 rounded-full  checked:bg-[#21376A] mr-2"
+                              className="w-4 h-4 border-2 rounded-full  checked:bg-[#648DBC] mr-2"
                            />
-                           
-                        </div>
-                        
 
-                   
+                        </div>
                </div>
             </div>
          
@@ -274,4 +249,24 @@ const Import = () => {
 
 export default Import
     
-      
+       {/* <header className="mb-4">
+               <img 
+                  src={CegLogo} 
+                  alt="Ceg Logo" 
+                  className="w-[20%] mx-auto "
+               />
+               <h1 className="text-2xl text-center mt-4 font-bold">Atrial Fibrillation Tool </h1>
+            </header> */}
+               {/* <CardTitle>Card Title</CardTitle> */}
+               
+               
+            
+            
+            {/* <CardContent className ="text-center"> */}
+               {/* <div>
+            <img />
+            <h1>Atrial Fibrillation Tool </h1>
+            <div>
+               <h2>Select clinical system and import CSV file </h2>
+            </div>
+         </div> w-[40%]*/}

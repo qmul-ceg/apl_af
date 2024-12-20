@@ -52,7 +52,7 @@ return (
       </section>
       <footer className="text-center lg:text-xs xl:text-sm 2xl:text-sm  bottom-0 mt-auto flex gap-2 mb-2">
          <p className="font-semibold"> © Clinical Effectiveness Group (CEG), Queen Mary University of London. All rights reserved.</p> 
-         <p className="font-semibold"> Attribution-NonCommercial-ShareAlike CC BY-NC-SA</p>
+         <p className="font-semibold"> Attribution-NonCommercial-ShareAlike CC BY-NC-SA.</p>
       </footer>
       
      

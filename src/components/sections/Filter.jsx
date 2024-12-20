@@ -310,7 +310,7 @@ const Filter = () => {
             {/* Reset Filters button */}
             <div className="ml-auto mr-8  text-center min-w-[140px] ">
                <button
-                  className = "bg-white text-xs  lg:text-xs xl:text-sm 2xl:text-sm font-semibold text-[#21376A] hover:text-black px-2 py-1 rounded-lg "
+                  className = " cursor-pointer bg-white text-xs  lg:text-xs xl:text-sm 2xl:text-sm font-semibold text-[#21376A] hover:text-black px-2 py-1 rounded-lg "
                   onClick={resetFilters} 
                >
                   Remove all filters
@@ -331,7 +331,7 @@ const Filter = () => {
                <div className= "flex justify-between border-[0.1em] border-[#21376A] px-2 py-2 h-80" id="collapsible_filter ">
 
                   {/* QUICK FILTERS */}
-                  <div className =" flex-1 w-full flex flex-col justify-between max-w-[300px]">
+                  <div className =" flex-1 w-full flex flex-col justify-between max-w-[400px]">
                      <div className =" flex flex-col">
                         <header className="flex justify-between px-2 py-2 rounded-t-lg  bg-gradient-to-r from-[#7B0E72] from-70%   to-[#E6007E] text-white" >
                            <p className ="font-semibold text-xs text-left xl:text-sm 2xl:text-sm pr-2">Quick filters</p>
@@ -342,12 +342,31 @@ const Filter = () => {
                      
                         {
                            quickFilter && (
-                              <div className="border-[0.1em] border-[#21376A] h-28 border-t-0">
-                                 <ul>
-                                    <li>???</li>
-                                    <li>???</li>
-                                    
-                                 </ul>
+                              <div className="border-[0.1em] border-[#21376A] h-36 border-t-0 text-sm pt-2 font-semibold">
+                                 {[
+                                    { value: "", label: "CHADSVASC > 2 (12m) - no anticoagulation  "},
+                                    { value: "", label: "CHADSVASC > 2 (>12m/never) - no anticoagulation"},
+                                    { value: "", label: "ORBIT > 4 (12m) - on anticoagulation"},
+                                    { value: "", label: "Med review > 12m - on anticoagulation"},
+                                    { value: "", label: "On NSAIDs - on anticoagulant"},
+                                    { value: "", label: "On dual therapy - no med review (12m)"}
+
+                                 ].map((item) => {
+                                    return (
+                                       <label
+                                          value={item.value}
+                                          className="flex items-center space-x-2 ml-4" 
+                                       >
+                                       <input
+                                          type="checkbox"
+                                          
+                                          
+                                       />
+                                          <span>{item.label}</span>       
+                                       </label>
+
+                                    )
+                                 })}
                               </div>
                            )
                         }

@@ -62,7 +62,7 @@ const Menu = () => {
 
             <div className="ml-1 w-[70%]">
                <Link to="/">
-                  <button className=" flex flex-col  items-center px-4  py-1 hover:text-black group"  onClick={resetFilters} >
+                  <button className="  flex flex-col  items-center px-4  py-1 hover:text-black group"  onClick={resetFilters} >
                      <p className="text-xs text-[#21376A]  group-hover:text-black font-bold">Load new</p>
                      <p className="text-xs text-[#21376A]  group-hover:text-black font-bold">patient data</p>
 

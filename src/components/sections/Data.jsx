@@ -23,56 +23,11 @@ const Data = () => {
    const handleSelectAll = () => {
       setSelectAll(!selectAll)
    }
-   // console.log(data)
-   
 
-   // useEffect(() => {
-   //    if(data && data.length > 0){
-   //       setSelectedRows(data.map((row) => row.id))
-   //    }
-   // }, [data])
-
-   // console.log(selectedRows)
-//    useEffect(() => {
-//       // Initialize selectedRows with all IDs when data changes
-//       setSelectedRows(data.map((row) => row.id));
-//   }, [data]);
-
-//    const handleSelectAll = () => {
-//       setSelectAll(!selectAll);
-//       if(!selectAll){
-//          setSelectedRows([])
-//       }
-      // if (!selectAll) {
-      //     // Add all row IDs to selectedRows
-      //     setSelectedRows(data.map((row) => row.id));
-      // } else {
-      //     // Clear selectedRows
-      //     setSelectedRows([]);
-      // }
-//   };
-   
-
-   // const handleSelectedRow= (id)=>{
-   //    if(selectAll){
-   //       //add all my data.id to my selected rows
-   //       setSelectedRows((prev) =>{
-   //          return data.map((row) => row.id)
-   //       })
-   //       console.log("All selected")
-   //    }
-   //    else console.log("All not selected")
-   // }
-
-   // useEffect(()=>{
-   //    console.log(selectedRows)
-   // }, [selectedRows])
-   
-   // handleSelectedRow()
 
   return (
    <div className="border-[0.1em] rounded-t-lg  border-[#21376A] "> 
-      <table className=" dataTable w-full  border-collapse top-0 sticky z-10">
+      <table className=" dataTable w-full  border-collapse top-0 sticky ">
          <thead className="border-b-4 border-[#21376A] top-[calc(3rem+1px)]">
             <tr className="text-[#21376A]">
                <th rowSpan={2} className="w-[2%] border-r-[0.1em] border-[#21376A]">
@@ -84,14 +39,14 @@ const Data = () => {
                </th>
                <th rowSpan={2} className="w-[13%] border-r-[0.1em] border-[#21376A]">Full Name</th>
                <th rowSpan={2} className="w-[4%] border-r-[0.1em] border-[#21376A]">Age</th>
-               <th rowSpan={2} className="w-[4%] border-r-[0.1em] border-[#21376A]">Gender</th>
-               <th rowSpan={2} className="w-[8%] border-r-[0.1em] border-[#21376A]">Patience Reference No.</th>
+               <th rowSpan={2} className="w-[5%] border-r-[0.1em] border-[#21376A]">Gender</th>
+               <th rowSpan={2} className="w-[7%] border-r-[0.1em] border-[#21376A]">Patience Reference No.</th>
                <th colSpan="2 " className="border-r-[0.1em] border-[#21376A]">CHA₂DS₂-VASc</th>
                <th colSpan="2" className="border-r-[0.1em] border-[#21376A]">ORBIT</th>
                <th rowSpan={2} className="w-[7%] border-r-[0.1em] border-[#21376A]">Anticoagulant issued (6m)</th>
-               <th rowSpan={2} className="w-[10%] border-r-[0.1em] border-[#21376A]">Aspirin / Antiplatelet <br />issued (6m)</th>
+               <th rowSpan={2} className="w-[9%] border-r-[0.1em] border-[#21376A]">Aspirin / Antiplatelet <br />issued (6m)</th>
                <th rowSpan={2} className="border-r-[0.1em] border-[#21376A]">NSAID</th>
-               <th rowSpan={2} className="w-[7%] border-r-[0.1em] border-[#21376A]">Statin issued (6m)</th>
+               <th rowSpan={2} className="w-[6%] border-r-[0.1em] border-[#21376A]">Statin issued (6m)</th>
                <th rowSpan={2} className="w-[4%] border-r-[0.1em] border-[#21376A]">CVD</th>
                <th rowSpan={2} className="w-[4%] border-r-[0.1em] border-[#21376A]">HTN</th>
                <th rowSpan={2} className="w-[4%] border-r-[0.1em] border-[#21376A]">BP</th>
@@ -149,7 +104,75 @@ const Data = () => {
          </tbody>
       
       </table>     
-       {/* <Table className=" border border-gray-400 mb-10">
+       
+     
+    </div>
+
+   
+  )
+}
+
+export default Data
+
+
+
+
+// useEffect(() => {
+//    return () => {
+//      // Clear data when the component unmounts
+//      setImportedData([]);
+//    };
+//  }, []);
+
+//    const sortedPatients = () => {
+//       if (sortChdValue === 'asc') {
+//           return [...filteredPatients].sort((a, b) => {
+//               const valueA = parseFloat(a[AFibColumns.CHADSVAScValue]) || 0;
+//               const valueB = parseFloat(b[AFibColumns.CHADSVAScValue]) || 0;
+//               return valueA - valueB; // Ascending
+//           });
+//       } else {
+//           return [...filteredPatients].sort((a, b) => {
+//               const valueA = parseFloat(a[AFibColumns.CHADSVAScValue]) || 0;
+//               const valueB = parseFloat(b[AFibColumns.CHADSVAScValue]) || 0;
+//               return valueB - valueA; // Descending
+//           });
+//       }
+//   };
+
+//    const tableData = sortedPatients()
+ // if (selectAll){
+      //    setSelectedRows((prev) => {
+      //       return prev.filter
+      //    })
+      // }
+      // const isChecked = event.target.checked;
+      // setSelectAll(isChecked)
+      // setSelectedRows(
+      //    isChecked?
+      //    data.map((item) => item.id)
+      //    : [])
+      // const handleSelectedRow = (id) =>{
+   //    setSelectedRows((prev) =>
+   //       prev.includes(id) ?
+   //       prev.filter((rowId) => rowId !== id)
+   //       : [...prev, id]
+   //    )
+   // }
+
+   // console.log(selectedRows)
+
+   // const filteredPatients = getFilteredPatients()
+//    const [sortChdValue, setSortChdValue] = useState("asc")
+  
+
+//    // console.log(filteredPatients)
+//    const handleSortClick = () => {
+//       setSortChdValue (prevDirection => {
+//          return (prevDirection === "asc" ? "desc" : "asc")
+//       })
+//    }
+{/* <Table className=" border border-gray-400 mb-10">
           <TableHeader >
              <TableRow className="font-bold text-xs bg-[#648DBC] hover:bg-bg-[#648DBC]">
                <TableHead className="border-b border-r border-gray-400 text-center">
@@ -258,71 +281,50 @@ const Data = () => {
             </TableRow>
               )) }
          </TableBody>
-      </Table> */}
-     
-    </div>
-
+      </Table> */} 
+// console.log(data)
    
-  )
-}
 
-export default Data
-
-
-
-
-// useEffect(() => {
-//    return () => {
-//      // Clear data when the component unmounts
-//      setImportedData([]);
-//    };
-//  }, []);
-
-//    const sortedPatients = () => {
-//       if (sortChdValue === 'asc') {
-//           return [...filteredPatients].sort((a, b) => {
-//               const valueA = parseFloat(a[AFibColumns.CHADSVAScValue]) || 0;
-//               const valueB = parseFloat(b[AFibColumns.CHADSVAScValue]) || 0;
-//               return valueA - valueB; // Ascending
-//           });
-//       } else {
-//           return [...filteredPatients].sort((a, b) => {
-//               const valueA = parseFloat(a[AFibColumns.CHADSVAScValue]) || 0;
-//               const valueB = parseFloat(b[AFibColumns.CHADSVAScValue]) || 0;
-//               return valueB - valueA; // Descending
-//           });
-//       }
-//   };
-
-//    const tableData = sortedPatients()
- // if (selectAll){
-      //    setSelectedRows((prev) => {
-      //       return prev.filter
-      //    })
-      // }
-      // const isChecked = event.target.checked;
-      // setSelectAll(isChecked)
-      // setSelectedRows(
-      //    isChecked?
-      //    data.map((item) => item.id)
-      //    : [])
-      // const handleSelectedRow = (id) =>{
-   //    setSelectedRows((prev) =>
-   //       prev.includes(id) ?
-   //       prev.filter((rowId) => rowId !== id)
-   //       : [...prev, id]
-   //    )
-   // }
+   // useEffect(() => {
+   //    if(data && data.length > 0){
+   //       setSelectedRows(data.map((row) => row.id))
+   //    }
+   // }, [data])
 
    // console.log(selectedRows)
+//    useEffect(() => {
+//       // Initialize selectedRows with all IDs when data changes
+//       setSelectedRows(data.map((row) => row.id));
+//   }, [data]);
 
-   // const filteredPatients = getFilteredPatients()
-//    const [sortChdValue, setSortChdValue] = useState("asc")
-  
+//    const handleSelectAll = () => {
+//       setSelectAll(!selectAll);
+//       if(!selectAll){
+//          setSelectedRows([])
+//       }
+      // if (!selectAll) {
+      //     // Add all row IDs to selectedRows
+      //     setSelectedRows(data.map((row) => row.id));
+      // } else {
+      //     // Clear selectedRows
+      //     setSelectedRows([]);
+      // }
+//   };
+   
 
-//    // console.log(filteredPatients)
-//    const handleSortClick = () => {
-//       setSortChdValue (prevDirection => {
-//          return (prevDirection === "asc" ? "desc" : "asc")
-//       })
-//    }
+   // const handleSelectedRow= (id)=>{
+   //    if(selectAll){
+   //       //add all my data.id to my selected rows
+   //       setSelectedRows((prev) =>{
+   //          return data.map((row) => row.id)
+   //       })
+   //       console.log("All selected")
+   //    }
+   //    else console.log("All not selected")
+   // }
+
+   // useEffect(()=>{
+   //    console.log(selectedRows)
+   // }, [selectedRows])
+   
+   // handleSelectedRow()
