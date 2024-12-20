@@ -534,7 +534,6 @@ const MainProvider = ({ children }) => {
       resetFilters,
       handleSortClick, data,
       sortChdValue, dataCount,
-      relativeRunDate,
       handleChdValue,  selectedChdValue, removeChdValue,
       handleChdDate,selectedChdDate, removeChdDate
    }
