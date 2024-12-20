@@ -50,7 +50,11 @@ export default {
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
   			}
-  		}
+  		},
+        fontFamily: {
+         sourceSans: ['Source Sans Pro', 'Arial'], // Add the font here
+       },
+
   	}
   },
   plugins: [require("tailwindcss-animate")],

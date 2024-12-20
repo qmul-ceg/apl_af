@@ -2,14 +2,108 @@ import React, { useState } from 'react'
 import { FiChevronDown, FiChevronUp, FiInfo } from 'react-icons/fi'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
-import * as Dialog from "@radix-ui/react-dialog";
 import { Popover, PopoverContent, PopoverTrigger, } from "@/components/ui/popover"
+import { MainContext } from '@/MainContext'
+import { useContext } from 'react'
+import { AFibColumns } from '@/enums/AFibColumns'
 
 const Filter = () => {
 
+   const{  
+         selectedAges, handleAgeSelection, removeAgeDisplay,
+         nsaid, handleNSAID, 
+         cvd, handleCVD, removeCvdDisplay,
+         selectedBP, handleBP, removeBP,
+         selectedChdValue,handleChdValue,  removeChdValue,
+         selectedChdDate,handleChdDate, removeChdDate,
+         // selectedChd, handleChd,
+         selectedOrbit, handleOrbit, removeOrbitDisplay,
+         medReview, handleMedReview, setMedReview,
+         handleVulnerabilitesFilter,
+         selectedAnti, handleAntiFilter, setSelectedAnti, removeAntiFilter,
+         selectedVulnerabilities, 
+         setSelectedVulnerabilities, 
+         importedData, relativeRunDate,
+         resetFilters, data} = useContext(MainContext);
+
+
+
+   //FILTER AND QUICK FILTERS FUNCTIONALITY
    const[filterMenu, setFilterMenu] = useState(true)
    const[quickFilter, setQuickFilter] = useState(true)
 
+   //FILTER DISPLAY FEATURE
+   // const [displayAntiFilter] = useState(selectedAnti)
+
+   const [selectedAntiLabel, setSelectedAntiLabel] = useState()
+
+   // console.log(selectedVulnerabilities)
+
+
+
+   const displayAntiFilter =[
+      {
+         name: "Anti",
+         value : selectedAnti,
+         label: selectedAntiLabel
+      }
+   ]
+
+   const displayMedReview =[
+      {
+         name: "Med Review",
+         value: medReview,
+      }
+   ]
+
+   const displayNsaid=[
+      {
+         name :"NSAID",
+         value: nsaid
+      }
+   ]
+   const displayCvd=[
+      {
+         name : "CVD",
+         value: cvd
+      }
+   ]
+
+
+
+
+   const removeNsaidFilter =()=>{
+      handleNSAID("")
+   }
+
+   const removeCvdFilter =()=>{
+      handleCVD("")
+   }
+
+
+
+   // const handleAntiChange = (event, label)=>{
+   //    handleAntiFilter(event.target.value)
+   // }
+
+   
+
+
+   const removeVulnerabilities = (value) =>{
+      setSelectedVulnerabilities((prev) => 
+         prev.filter((item) => item.value !== value)
+     );
+
+   };
+
+
+
+   
+   
+
+
+
+   //FILTER MENU 
    const toggleFilter =() =>{
       setFilterMenu(!filterMenu)
    }
@@ -19,152 +113,228 @@ const Filter = () => {
    }
 
 
+   //SUMMARY TABLE FUNCTIONALITY
+   const chadsvasce2 = (chadsvasc2Cnt, patient) => {
+      if (parseInt(patient[AFibColumns.CHADSVAScValue]) >= 2)           
+         chadsvasc2Cnt += 1;
+      return chadsvasc2Cnt;
+   }
+
+   const chadsvasce2Anticoag = (anticoagCnt, patient) => {
+      if (parseInt(patient[AFibColumns.CHADSVAScValue]) >= 2 && patient[AFibColumns.OnAnticoagulant].includes('YES'))           
+         anticoagCnt += 1;
+      return anticoagCnt;
+   }
+
+   const chadsvasce2NotOnAnticoag = (notOnAnticoagCnt, patient) => {
+      if (parseInt(patient[AFibColumns.CHADSVAScValue]) >= 2 && !patient[AFibColumns.OnAnticoagulant].includes('YES'))           
+         notOnAnticoagCnt += 1;
+      return notOnAnticoagCnt;
+   }
+
+   const chadsvasce2OnAspAntipOnly = (onAspAntipOnlyCnt, patient) => {
+      if (parseInt(patient[AFibColumns.CHADSVAScValue]) >= 2 &&           
+          !patient[AFibColumns.OnAnticoagulant].includes('YES') &&
+          patient[AFibColumns.OnAspirinAntiplatelet].includes('YES') )           
+            onAspAntipOnlyCnt += 1;
+      return onAspAntipOnlyCnt;
+   }
+
+   const chadsvasce2OnAnticoagAspAntip = (onAnticoagAspAntipCnt, patient) => {
+      if (parseInt(patient[AFibColumns.CHADSVAScValue]) >= 2 && 
+          patient[AFibColumns.OnAnticoagulant].includes('YES') &&
+          patient[AFibColumns.OnAspirinAntiplatelet].includes('YES'))                     
+            onAnticoagAspAntipCnt += 1;
+      return onAnticoagAspAntipCnt;
+   }
+
+   const chadsvasce2DOAC = (DOAC_Cnt, patient) => {
+      if (parseInt(patient[AFibColumns.CHADSVAScValue]) >= 2 && patient[AFibColumns.OnAnticoagulant].includes('DOAC'))           
+         DOAC_Cnt += 1;
+      return DOAC_Cnt;
+   }
+
+   const newChadsvasce2 = (newChadsvasc2Cnt, patient) => {
+
+      if (patient[AFibColumns.CHADSVAScDate]) {
+
+         const dtRelRunDate = new Date(relativeRunDate);
+         dtRelRunDate.setMonth(dtRelRunDate.getMonth() - 12);
+         //const dtRelRunDate = new Date("02/22/2024");
+         //console.log(dtRelRunDate.toLocaleDateString());
+
+         if ( Date.parse(patient[AFibColumns.CHADSVAScDate]) >= dtRelRunDate.getTime() )           
+            newChadsvasc2Cnt += 1;
+      }
+      return newChadsvasc2Cnt;
+   }
+
+   const chadsvasc2RecordedPrior12m = (chadsvasc2Prior12mCnt, patient) => {
+
+      if (patient[AFibColumns.CHADSVAScDate]) {
+
+         const dtRelRunDate = new Date(relativeRunDate);
+         dtRelRunDate.setMonth(dtRelRunDate.getMonth() - 12);
+         //const dtRelRunDate = new Date("02/22/2024");   
+         //console.log(dtRelRunDate.toLocaleDateString());
+         
+         if ( Date.parse(patient[AFibColumns.CHADSVAScDate]) <= dtRelRunDate.getTime() && parseInt(patient[AFibColumns.CHADSVAScValue]) >= 2)           
+            chadsvasc2Prior12mCnt += 1;
+      }
+      return chadsvasc2Prior12mCnt;
+   }
+
+   function percentageFormatter(numerator, denominator) {
+      
+      if (denominator < numerator || denominator <= 0) {
+         return '0%';
+      }
+      else {
+
+         return new Intl.NumberFormat('default', {
+         style: 'percent',
+         minimumFractionDigits: 0,
+         maximumFractionDigits: 0,
+         }).format(numerator / denominator);
+      }
+   }
+
+
+   // console.log(selectedFilters)
    return (
       <>
-         <div className= "flex justify-between items-center  w-full h-14 px-4 rounded-t-lg bg-[#648DBC] text-white">
-            <strong>FILTERS</strong>
+         <div className= "flex justify-between items-center  w-full  px-4 py-2 rounded-t-lg bg-[#21376A] text-white flex-shrink-0">
+            <div className="flex items-center min-h-10 ">
+               <p className="text-sm md:text-md 
+                  lg:text-lg xl:text-xl 2xl:text-xl 
+                  font-semibold">
+                  Filters
+               </p>
 
+
+               {/* DISPLAY FILTERS */}
+               <div className=" ml-6 items-center flex gap-2 flex-wrap mr-6 ">
+                  {(importedData.length > 0 && selectedAnti) && (
+                     <button className=" text-xs bg-white text-[#21376A] px-2 rounded-md ">
+                        <strong className ="mr-2">AntiCoag/AntiP:</strong> {selectedAnti.label } 
+                        {<button className=" ml-2 font-bold" onClick={()=>removeAntiFilter()}>x</button>}
+                     </button>
+                  )}
+                  {(importedData.length > 0 && displayMedReview[0].value !== "") && (
+                     <button className=" text-xs bg-white text-[#21376A] px-2 rounded-md flex items-center text-center">
+                         <strong className ="mr-2">Med Review:</strong> {displayMedReview[0].value } 
+                        {<button className=" ml-2 font-bold"onClick={() => handleMedReview("")}>x</button>}
+                     </button>
+                  )}
+                  {(importedData.length > 0 && displayNsaid[0].value !== "") && (
+                     <button className=" text-xs bg-white text-[#21376A] px-2 rounded-md flex items-center text-center">
+                         <strong className ="mr-2">NSAID:</strong> {displayNsaid[0].value } 
+                        {<button className="ml-2 font-bold"onClick={removeNsaidFilter}>x</button>}
+                     </button>
+                  )}
+                  {(importedData.length > 0 && cvd)  && (
+                     <button className=" text-xs bg-white text-[#21376A] px-2 rounded-md flex items-center text-center">
+                         <strong className ="mr-2">CVD:</strong> {cvd.value } 
+                        {<button className="ml-2 font-bold"onClick={removeCvdDisplay}>x</button>}
+                     </button>
+                  )}
+                  {(importedData.length > 0 && selectedVulnerabilities.length > 0) && (
+                     selectedVulnerabilities.map((item, id) => 
+                        <button key = {id} className=" text-xs bg-white text-[#21376A] px-2 rounded-md flex items-center text-center">
+                           <strong className ="mr-2">Vulnerabilities: </strong> {item.label} 
+                           {<button className="ml-2 font-bold" onClick={()=>removeVulnerabilities(item.value)}>x</button>}
+                        </button>
+                     )
+                  )}
+                  
+                  {/* BP DISPLAY */}
+                  {(importedData.length > 0 && selectedBP.length > 0) && (
+                     selectedBP.map((item, id) => 
+                        <button key = {id} className=" text-xs bg-white text-[#21376A] px-2 rounded-md flex items-center text-center">
+                           <strong className ="mr-2">BP:</strong> {item.label} 
+                           {<button className="ml-2 font-bold" onClick={()=>removeBP(item.value)}>x</button>}
+                        </button>
+                     )
+                  )}
+                  {/* CHA₂DS₂-VASc DISPLAY */}
+                  {(importedData.length > 0 && selectedChdValue.length > 0 && selectedChdDate === null) && (
+                     selectedChdValue.map((item, id) => 
+                        <button key = {id} className=" text-xs bg-white text-[#21376A] px-2 rounded-md flex items-center text-center">
+                           <strong className ="mr-2">CHA₂DS₂-VASc: </strong> {item.label} 
+                           {<button className="ml-2 font-bold" onClick={()=>removeChdValue(item.value)}>x</button>}
+                        </button>
+                     )
+                  )}
+                  {(importedData.length > 0 && selectedChdValue.length === 0 && selectedChdDate) && (
+                     // selectedChdDate.map((item, id) => 
+                        <button key = {selectedChdDate.value} className=" text-xs bg-white text-[#21376A] px-2 rounded-md flex items-center text-center">
+                           <strong className ="mr-2">CHA₂DS₂-VASc: </strong> {selectedChdDate.label} 
+                           {<button className="ml-2 font-bold" onClick={()=>removeChdDate()}>x</button>}
+                        </button>
+                     
+                  )}
+                  {(importedData.length > 0 && selectedChdValue.length > 0 && selectedChdDate) && (
+                      selectedChdValue.map((item, id) => 
+                        <button key = {id} className=" text-xs bg-white text-[#21376A] px-2 rounded-md flex items-center text-center">
+                           <strong className ="mr-2">CHA₂DS₂-VASc: </strong>{item.label} 
+                           {<button className="ml-2 font-bold" onClick={()=>removeChdValue(item.value)}>x</button>}
+                           <span className="ml-2">{selectedChdDate.label} </span>
+                           {<button className="ml-2 font-bold" onClick={()=>removeChdDate()}>x</button>}
+                        </button>
+                  ))}
+
+                  {/* ORBIT DISPLAY */}
+                  {(importedData.length > 0 && selectedOrbit.length > 0) && (
+                     selectedOrbit.map((item, id) => 
+                        <button key = {id} className=" text-xs bg-white text-[#21376A] px-2 rounded-md flex items-center text-center">
+                           <strong className ="mr-2">ORBIT:</strong> {item.label} 
+                           {<button className="ml-2 font-bold" onClick={()=>removeOrbitDisplay(item.value)}>x</button>}
+                        </button>
+                     )
+                  )}
+
+                  {(importedData.length > 0 && selectedAges.length > 0) && (
+                     selectedAges.map((item, id) => 
+                        <button key = {id} className=" text-xs bg-white text-[#21376A] px-2 rounded-md flex items-center text-center">
+                           <strong className ="mr-2">Age:</strong> {item.label} 
+                           {<button className="ml-2 font-bold" onClick={()=>removeAgeDisplay(item.value)}>x</button>}
+                        </button>
+                     )
+                  )}
+                  
+               </div>
+
+               
+            </div>
+            
+            {/* Reset Filters button */}
+            <div className="ml-auto mr-8  text-center min-w-[140px] ">
+               <button
+                  className = " cursor-pointer bg-white text-xs  lg:text-xs xl:text-sm 2xl:text-sm font-semibold text-[#21376A] hover:text-black px-2 py-1 rounded-lg "
+                  onClick={resetFilters} 
+               >
+                  Remove all filters
+               </button>
+               
+            </div>
+           
+            {/* TOGGLE COLLAPSE BUTTON */}
             <button onClick={toggleFilter}>
                {filterMenu ? <FiChevronDown /> : <FiChevronUp/>}
             </button>
          </div>
          
-         
-         
+
+
          {
-            filterMenu &&(
-               <div className= "flex justify-between border border-gray-400 w-full px-4 py-2 h-80" id="collapsible_filter ">
-                  
-                  <div className="w-[70vh] flex justify-between ">
-                     <div className= "w-64 flex flex-col gap-6 ">
-                        <Select>
-                              <SelectTrigger className=" bg-[#648DBC] text-white">
-                                 <h1 >Anticoagulants / Antiplatelets</h1>
-                                 {/* <SelectValue placeholder="" /> */}
-                              </SelectTrigger>
-                              <SelectContent>
-                                 <SelectItem value="none">NONE</SelectItem>
-                                 <SelectItem value="doac_warfarin">DOAC or WARFARIN</SelectItem>
-                                 <SelectItem value="doac">DOAC</SelectItem>
-                                 <SelectItem value="warfarin">WARFARIN</SelectItem>
-                                 <SelectItem value="antiplatelets">ANTIPLATELETS ONLY</SelectItem>
-                                 <SelectItem value="dual_therapy">DUAL THERAPY</SelectItem>
-                              </SelectContent>
-                        </Select>
+            filterMenu && (
+               <div className= "flex justify-between border-[0.1em] border-[#21376A] px-2 py-2 h-80" id="collapsible_filter ">
 
-                        <Select>
-                              <SelectTrigger className=" bg-[#648DBC] text-white">
-                                 <h1>CHA₂DS₂-VASc</h1>
-                                 {/* <SelectValue placeholder="CHA₂DS₂-VASc" /> */}
-                              </SelectTrigger>
-                              <SelectContent>
-                                 <SelectItem value="light">≥ 2</SelectItem>
-                                 <SelectItem value="dark">1</SelectItem>
-                                 <SelectItem value="system">0</SelectItem>
-                                 <SelectItem value="system">Recorded {'>'} 12m</SelectItem>
-                                 <SelectItem value="system">Not Recorded</SelectItem>
-
-                              </SelectContent>
-                        </Select>
-
-                        <Select>
-                              <SelectTrigger className=" bg-[#648DBC]  text-white">
-                                 <h1>VULNERABILITIES</h1>
-                                 {/* <SelectValue placeholder="VULNERABILITIES" /> */}
-                              </SelectTrigger>
-                              <SelectContent>
-                                 <SelectItem value="light">SMI</SelectItem>
-                                 <SelectItem value="dark">Learning Disability</SelectItem>
-                                 <SelectItem value="system">Dementia</SelectItem>
-                                 <SelectItem value="system">Housebound</SelectItem> 
-                              </SelectContent>
-                        </Select>
-
-                     </div>
-
-                     <div className= "w-40 flex flex-col gap-6">
-                        <Select>
-                              <SelectTrigger className=" bg-[#648DBC]  text-white">
-                                 <h1>AGE</h1>
-                                 {/* <SelectValue placeholder="" /> */}
-                              </SelectTrigger>
-                              <SelectContent>
-                                 <SelectItem value="none">{'<'} 65</SelectItem>
-                                 <SelectItem value="doac_warfarin">65 - 79</SelectItem>
-                                 <SelectItem value="doac">80+</SelectItem>
-                              </SelectContent>
-                        </Select>
-
-                        <Select>
-                              <SelectTrigger className=" bg-[#648DBC]  text-white">
-                                 <h1>MED REVIEW</h1>
-                                 {/* <SelectValue placeholder="CHA₂DS₂-VASc" /> */}
-                              </SelectTrigger>
-                              <SelectContent>
-                                 <SelectItem value="light">Yes</SelectItem>
-                                 <SelectItem value="dark">No</SelectItem>
-                              </SelectContent>
-                        </Select>
-
-                        <Select>
-                              <SelectTrigger className=" bg-[#648DBC]  text-white">
-                                 <h1>ORBIT</h1>
-                                 {/* <SelectValue placeholder="VULNERABILITIES" /> */}
-                              </SelectTrigger>
-                              <SelectContent>
-                                 <SelectItem value="light">≥ 4</SelectItem>
-                                 <SelectItem value="dark">Recorded {'>'} 12m</SelectItem>
-                                 <SelectItem value="system">Not Recorded</SelectItem>
-                              </SelectContent>
-                        </Select>
-
-                     </div>
-                     
-                     <div className= "w-40 flex flex-col gap-6 ">
-                        <Select>
-                              <SelectTrigger className=" bg-[#648DBC] text-white">
-                                 <h1>NSAID</h1>
-                                 {/* <SelectValue placeholder="" /> */}
-                              </SelectTrigger>
-                              <SelectContent>
-                                 <SelectItem value="light">Yes</SelectItem>
-                                 <SelectItem value="dark">No</SelectItem>
-                              </SelectContent>
-                        </Select>
-
-                        <Select>
-                              <SelectTrigger className=" bg-[#648DBC]  text-white">
-                                 <h1>CVD</h1>
-                                 {/* <SelectValue placeholder="CHA₂DS₂-VASc" /> */}
-                              </SelectTrigger>
-                              <SelectContent>
-                                 <SelectItem value="light">Yes</SelectItem>
-                                 <SelectItem value="dark">No</SelectItem>
-                              </SelectContent>
-                        </Select>
-
-                        <Select>
-                              <SelectTrigger className=" bg-[#648DBC] text-white">
-                                 <h1>BP</h1>
-                                 {/* <SelectValue placeholder="VULNERABILITIES" /> */}
-                              </SelectTrigger>
-                              <SelectContent>
-                                 <SelectItem value="light"> {'<'} 130/80</SelectItem>
-                                 <SelectItem value="dark"> {'<'} 140/90</SelectItem>
-                                 <SelectItem value="system">140/90 - 159/90</SelectItem>
-                                 <SelectItem value="system"> ≥ 160/100</SelectItem>
-
-                              </SelectContent>
-                        </Select>
-
-                     </div>
-                  </div>
-                  
                   {/* QUICK FILTERS */}
-                  <div className =" flex flex-col justify-between w-[20vw]">
+                  <div className =" flex-1 w-full flex flex-col justify-between max-w-[400px]">
                      <div className =" flex flex-col">
-                        <header className="flex justify-between px-2 py-2 rounded-t-lg  bg-black text-white" >
-                           <strong>QUICK FILTERS</strong>
+                        <header className="flex justify-between px-2 py-2 rounded-t-lg  bg-gradient-to-r from-[#7B0E72] from-70%   to-[#E6007E] text-white" >
+                           <p className ="font-semibold text-xs text-left xl:text-sm 2xl:text-sm pr-2">Quick filters</p>
                            <button onClick={toggleQuickFilter}>
                               { quickFilter  ? <FiChevronDown /> : <FiChevronUp/> }
                            </button>
@@ -172,96 +342,419 @@ const Filter = () => {
                      
                         {
                            quickFilter && (
-                              <div className="border  border-gray-400 border-t-0">
-                                 <ul>
-                                    <li>???</li>
-                                    <li>???</li>
-                                    <li>??</li>
-                                 </ul>
+                              <div className="border-[0.1em] border-[#21376A] h-36 border-t-0 text-sm pt-2 font-semibold">
+                                 {[
+                                    { value: "", label: "CHADSVASC > 2 (12m) - no anticoagulation  "},
+                                    { value: "", label: "CHADSVASC > 2 (>12m/never) - no anticoagulation"},
+                                    { value: "", label: "ORBIT > 4 (12m) - on anticoagulation"},
+                                    { value: "", label: "Med review > 12m - on anticoagulation"},
+                                    { value: "", label: "On NSAIDs - on anticoagulant"},
+                                    { value: "", label: "On dual therapy - no med review (12m)"}
+
+                                 ].map((item) => {
+                                    return (
+                                       <label
+                                          value={item.value}
+                                          className="flex items-center space-x-2 ml-4" 
+                                       >
+                                       <input
+                                          type="checkbox"
+                                          
+                                          
+                                       />
+                                          <span>{item.label}</span>       
+                                       </label>
+
+                                    )
+                                 })}
                               </div>
                            )
                         }
                      </div>
+                  </div>
+                  
+                  {/* w-[70vh] flex justify-between */}
+                  {/* FILTERS */}
+                  <div className="flex   gap-2 max-w-[560px]">
+
+                     {/* FILTER COLUMN 1 */}
+                     <div className= "flex flex-col gap-6">
+                        
+                        {/* ANTICOAGULANT FILTER */}
+                        <Select>
+                           <SelectTrigger className=" bg-[#21376A] text-white">
+                              <h1 className="text-xs font-semibold text-left xl:text-sm 2xl:text-sm pr-2">Anticoagulants / Antiplatelets</h1>
+                              {/* <SelectValue placeholder="" /> */}
+                           </SelectTrigger>
+                           <SelectContent>
+                              {[
+                                 // {value: "none", label:"NONE", name: 'Anti'},
+                                 {value: "doac_warf", label: "DOAC or Warfarin", name: 'Anti'},
+                                 {value: "doac", label: "DOAC", name: 'Anti'},
+                                 {value: "warf", label: "Warfarin", name: 'Anti'},
+                                 {value: "antiplatelets", label: "Antiplatelets only" , name: 'Anti'},
+                                 {value: "no_anticoagulant", label: "None" , name: 'Anti'},
+                                 {value: "dual", label: "Dual therapy" , name: 'Anti'},
+                              ].map((item) => (
+                                 <label 
+                                    key ={item.value}
+                                    className="flex items-center space-x-2 ml-4"
+                                 >
+                                    <input
+                                    type="checkbox"
+                                    value={item.value}
+                                    name="antiFilter"
+                                    // selectedChdDate && selectedChdDate.value === item.value
+                                    checked={selectedAnti && selectedAnti.value === item.value || false}
+                                    onChange={() => handleAntiFilter(item.value, item.label)}
+                                    
+                                    />
+                                    <span>{item.label}</span>
+                                 </label>
+                              ))}
+                           </SelectContent>
+                        </Select>
+
+                        {/* MED REVIEW FILTER*/}
+                        <Select>
+                           <SelectTrigger className=" bg-[#21376A]  text-white">
+                              <h1 className="text-xs font-semibold text-left xl:text-sm 2xl:text-sm">Med review {">"} 12m</h1>
+                              {/* <SelectValue placeholder="CHA₂DS₂-VASc" /> */}
+                           </SelectTrigger>
+                           <SelectContent>
+                           <label className="flex items-center space-x-2 ml-4">
+                                 <input
+                                    type="checkbox"
+                                    name="medReview"
+                                    value="Yes"
+                                    checked = {medReview=== "Yes"}
+                                    onChange= {()=>handleMedReview("Yes")}
+                                 />
+                                 <span>Yes</span>
+                              </label>
+
+                              <label className="flex items-center space-x-2 ml-4">
+                                 <input
+                                       type="checkbox"
+                                       name="medReview"
+                                       value="No"
+                                       checked={medReview === "No"}
+                                       onChange={()=>handleMedReview("No")}
+                                    />
+                                    <span>No</span>
+                              </label>
+                           </SelectContent>
+                        </Select>
+
+                        {/*VULNERABILITIES FILTER */}
+                        <Select>
+                           <SelectTrigger className=" bg-[#21376A]  text-white">
+                           <h1 className="text-xs font-semibold text-left xl:text-sm 2xl:text-sm pr-2">Vulnerabilities</h1>
+                           {/* <SelectValue placeholder="VULNERABILITIES" /> */}
+                           </SelectTrigger>
+                           <SelectContent>
+
+                              {[
+                                    {value: 'smi', label: 'SMI' },
+                                    {value: 'learning_disability', label: 'Learning disability' },
+                                    {value: 'dementia', label: 'Dementia' },
+                                    {value: 'housebound', label: 'Housebound' },
+                                 ].map((item, index) =>
+                                    (
+                                       <label
+                                          value={item.value}
+                                          className="flex items-center space-x-2 ml-4" 
+                                       >
+                                       <input
+                                          type="checkbox"
+                                          value={item.value}
+                                          checked={selectedVulnerabilities.some(object =>object.value === item.value)}
+                                          onChange = {() => handleVulnerabilitesFilter(item.value, item.label)}
+                                          
+                                       />
+                                          <span>{item.label}</span>       
+                                       </label>
+                                    ))}
+                           
+                           </SelectContent>
+                        </Select>
+
+                        
                      
-                     <div>
-                        <Button className = "bg-[#648DBC] font-bold text-white"variant="outline">RESET FILTERS</Button>
+                     </div>
+
+                     {/* FILTER COLUMN 2 */}
+                     <div className= "flex flex-col gap-6">
+                        
+                        {/* CHA₂DS₂-VASc FILTER */}
+                        <Select>
+                              <SelectTrigger className=" bg-[#21376A] text-white">
+                                 <h1 className="text-xs font-semibold text-left xl:text-sm 2xl:text-sm pr-2">CHA₂DS₂-VASc</h1>
+                                 {/* <SelectValue placeholder="CHA₂DS₂-VASc" /> */}
+                              </SelectTrigger>
+                              <SelectContent>
+                              {[
+                                 { value: 'gte2', label: '≥ 2' },
+                                 { value: '1', label: '1' },
+                                 { value: '0', label: '0' }
+                              ].map((item, index) => (
+                                 <label key={index} className="flex items-center space-x-2 ml-4">
+                                    <input
+                                       type="checkbox"
+                                       value={item.value}
+                                       checked={selectedChdValue.some(object => object.value === item.value)}
+                                       onChange={() => handleChdValue(item.value, item.label)}
+                                       // className=''
+                                    />
+                                    <span>{item.label}</span>
+                                 </label>
+                              ))}
+                              
+                              <div className="w-full border"></div>
+                              
+                              {[
+                                 { value: '>12m', label: 'Recorded > 12m' },
+                                 { value: 'not_recorded', label: 'Not Recorded' },
+                                 { value: '<12m', label: 'Recorded < 12m' }
+                              ].map((item, index) => (
+                                 <label key={index + 3} className="flex items-center space-x-2 ml-4">
+                                    <input
+                                    type="checkbox"
+                                    // name="chdGroup" // Ensures only one radio button can be selected at a time
+                                    value={item.value}
+                                    checked= {selectedChdDate && selectedChdDate.value === item.value || false}
+                                    onChange={() => handleChdDate(item.value, item.label)}
+                                    />
+                                    <span>{item.label}</span>
+                                 </label>
+                              ))}
+                                
+                              </SelectContent>
+                        </Select>
+
+                        {/* ORBIT FILTER*/}
+                        <Select>
+                           <SelectTrigger className=" bg-[#21376A]  text-white">
+                              <h1 className="text-xs font-semibold text-left xl:text-sm 2xl:text-sm">ORBIT</h1>
+                              {/* <SelectValue placeholder="VULNERABILITIES" /> */}
+                           </SelectTrigger>
+                           <SelectContent>
+                              {[
+                                 {value: "gte4", label : "≥ 4"},
+                                 {value: ">12m", label : "Recorded > 12m"},
+                                 {value: "not_recorded", label : "Not recorded"}
+                              ].map((item, index) =>{
+                                 return (
+                                    <label key={index + 3} className="flex items-center space-x-2 ml-4">
+                                    <input
+                                    type="checkbox"
+                                    value={item.value}
+                                    checked={selectedOrbit.some(object =>object.value === item.value)}
+                                    onChange={() => handleOrbit(item.value, item.label)}
+                                    />
+                                    <span>{item.label}</span>
+                                 </label>
+                                 )
+                              })}
+                              
+                           </SelectContent>
+                        </Select>      
+                        
+                        {/* AGE FILTER*/}
+                        <Select>
+                           <SelectTrigger className=" bg-[#21376A]  text-white">
+                              <h1 className="text-xs font-semibold text-left xl:text-sm 2xl:text-sm">Age</h1>
+                           </SelectTrigger>
+                           <SelectContent >
+                           {[
+                                 {value: "<65", label : "< 65"},
+                                 {value: "65-79", label : "65 - 79"},
+                                 {value: "80+", label : "80+"}
+                              ].map((item, index) =>{
+                                 return (
+                                    <label key={index + 3} className="flex items-center space-x-2 ml-4">
+                                    <input
+                                    type="checkbox"
+                                    value={item.value}
+                                    checked={selectedAges.some(object =>object.value === item.value)}
+                                    onChange={() => handleAgeSelection(item.value, item.label)}
+                                    />
+                                    <span>{item.label}</span>
+                                 </label>
+                                 )
+                              })}
+
+                           </SelectContent>
+                        </Select>
+
                      </div>
                      
+                     {/* FILTER COLUMN 3 */}
+                     <div className= "flex flex-col gap-6 ">
+                        {/*NSAID FILTER*/}
+                        <Select>
+                              <SelectTrigger className=" bg-[#21376A] text-white">
+                                 <h1 className="text-xs font-semibold text-left xl:text-sm 2xl:text-sm pr-2">NSAID</h1>
+                                 {/* <SelectValue placeholder="" /> */}
+                              </SelectTrigger>
+                              <SelectContent>
+                                 <label className="flex items-center space-x-2 ml-4">
+                                    <input
+                                       type="checkbox"
+                                       name="nsaid"
+                                       value="Yes"
+                                       checked= {nsaid=== "Yes"}
+                                       onChange= {()=>handleNSAID("Yes")}
+                                    />
+                                    <span>{"Yes"}</span>
+                                 </label>
 
+                                 <label className="flex items-center space-x-2 ml-4">
+                                    <input
+                                          type="checkbox"
+                                          name="nsaid"
+                                          value="No"
+                                          checked={nsaid === "No"}
+                                          onChange={()=>handleNSAID("No")}
+                                       />
+                                       <span>{"No"}</span>
+                                 </label>
+                              </SelectContent>
+                        </Select>
+
+                        {/*CVD FILTER*/}
+                        <Select>
+                              <SelectTrigger className=" bg-[#21376A]  text-white">
+                                 <h1 className="text-xs font-semibold text-left xl:text-sm 2xl:text-sm">CVD</h1>
+                                 {/* <SelectValue placeholder="CHA₂DS₂-VASc" /> */}
+                              </SelectTrigger>
+                              <SelectContent> {[
+                                 {value: "Yes", label : "Yes"},
+                                 {value: "No", label : "No"},
+                        
+                                 ].map((item, index) =>{
+                                 return (
+                                    <label key={index + 3} className="flex items-center space-x-2 ml-4">
+                                    <input
+                                    type="checkbox"
+                                    value={item.value}
+                                    checked={cvd && cvd.value === item.value}
+                                    onChange={() => handleCVD(item.value, item.label)}
+                                    />
+                                    <span>{item.label}</span>
+                                 </label>
+                                 )
+                              })}
+                           
+                              </SelectContent>
+                        </Select>
+
+                        {/* BP FILTER*/}
+                        <Select>
+                              <SelectTrigger className=" bg-[#21376A] text-white">
+                                 <h1 className="text-xs font-semibold text-left xl:text-sm 2xl:text-sm">BP</h1>
+                                 {/* <SelectValue placeholder="VULNERABILITIES" /> */}
+                              </SelectTrigger>
+                              <SelectContent>
+                                 {[
+                                    { value: "lt130-80", label: "< 130/80"},
+                                    { value: "lt140-90", label: "< 140/90"},
+                                    { value: "140/90-159/90", label: "140/90 - 159/90"},
+                                    { value: "gte160-100", label: "≥ 160/100"}
+                                 ].map((item) => {
+                                    return (
+                                       <label
+                                          value={item.value}
+                                          className="flex items-center space-x-2 ml-4" 
+                                       >
+                                       <input
+                                          type="checkbox"
+                                          value={item.value}
+                                          checked={selectedBP.some(object =>object.value === item.value)}
+                                          onChange = {() => handleBP(item.value, item.label)}
+                                          
+                                       />
+                                          <span>{item.label}</span>       
+                                       </label>
+
+                                    )
+                                 })}
+                              
+
+                              </SelectContent>
+                        </Select>
+
+                     </div>
                   </div>
+                  
+                  
+                  
 
 
                   {/* SUMMARY */}
-                  <div className="flex flex-col  w-[30vw] ">
+                  <div className=" w-full max-w-[560px] flex flex-col justify-between">
+                     <div>
+                        <header className=" flex  rounded-t-lg px-2 py-2 bg-[#21376A] text-white">
+                           <p className ="text-xs font-semibold text-left xl:text-sm 2xl:text-sm pr-2">Summary</p>
+                        </header>
+
+                        <div className=" border-t-0 border-[0.1em] border-[#21376A] flex flex-col pt-2 px-2" >
+                           <table className=" lg:text-xs xl:text-sm 2xl:text-sm ">
+                              <tbody className=" ">
+                                 <tr className="border-b border-gray-200">
+                                    <td className=" font-bold">Atrial Fibrillation Register</td>
+                                    <td className=" font-semibold text-right">{importedData.length}</td>
+                                    <td className="  font-semibold text-right">{ percentageFormatter(importedData.length, importedData.length) }</td>
+                                 </tr>
+                                 <tr className="border-b border-gray-200 bg-gray-100">
+                                    <td className="">*Modified AF008: CHA₂DS₂-VASc ≥ 2 issued Anticoagulants (6m)</td>
+                                    <td className=" text-right">{ importedData.reduce(chadsvasce2Anticoag,0) }</td>
+                                    <td className=" text-right">{ percentageFormatter(importedData.reduce(chadsvasce2Anticoag,0), importedData.reduce(chadsvasce2,0)) }</td>
+                                 </tr>
+                                 <tr className="border-b border-gray-200">
+                                    <td className="">CHA₂DS₂-VASc ≥ 2 and NOT issued Anticoagulants (6m)</td>
+                                    <td className=" text-right">{ importedData.reduce(chadsvasce2NotOnAnticoag,0) }</td>
+                                    <td className=" text-right">{ percentageFormatter(importedData.reduce(chadsvasce2NotOnAnticoag,0), importedData.reduce(chadsvasce2,0)) }</td>
+                                 </tr>
+                                 <tr className="border-b border-gray-200 bg-gray-100">
+                                    <td className="">CHA₂DS₂-VASc ≥ 2 issued Aspirin/Antiplatelets ONLY (6m)</td>
+                                    <td className=" text-right">{ importedData.reduce(chadsvasce2OnAspAntipOnly,0) }</td>
+                                    <td className=" text-right">{ percentageFormatter(importedData.reduce(chadsvasce2OnAspAntipOnly,0), importedData.reduce(chadsvasce2,0)) }</td>
+                                 </tr>
+                                    <tr className="border-b border-gray-200">
+                                    <td className="">CHA₂DS₂-VASc ≥ 2 issued BOTH Anticoagulants + Antiplatelets (6m)</td>
+                                    <td className=" text-right">{ importedData.reduce(chadsvasce2OnAnticoagAspAntip,0) }</td>
+                                    <td className=" text-right">{ percentageFormatter(importedData.reduce(chadsvasce2OnAnticoagAspAntip,0), importedData.reduce(chadsvasce2,0)) }</td>
+                                 </tr>
+                                 <tr className="border-b border-gray-200 bg-gray-100">
+                                    <td className="">CHA₂DS₂-VASc ≥ 2 issued DOAC(6m)</td>
+                                    <td className=" text-right">{ importedData.reduce(chadsvasce2DOAC,0) }</td>
+                                    <td className=" text-right">{ percentageFormatter(importedData.reduce(chadsvasce2DOAC,0), importedData.reduce(chadsvasce2,0)) }</td>
+                                 </tr>
+                                 <tr className="border-b border-gray-200">
+                                    <td className="">*Modified AF006: new CHA₂DS₂-VASc ≥ 2 in last 12m</td>
+                                    <td className=" text-right">{ importedData.reduce(newChadsvasce2,0) }</td>
+                                    <td className=" text-right">{ percentageFormatter(importedData.reduce(newChadsvasce2,0), (importedData.length - importedData.reduce(chadsvasc2RecordedPrior12m,0)) ) }</td>
+                                 </tr>
+                              </tbody>
+                           </table>
+
+                           <div className="text-sm mt-10 border-b border-gray mb-2">
+                               *Modified QOF no exclusions for contraindication or declined
+                            </div>
+                        </div>
+
                      
-                     <header className=" flex px-2 py-2 rounded-t-lg bg-[#648DBC] text-white">
-                        <strong>SUMMARY</strong>
-                     </header>
-
-                     <div className="border border-t-0 border-gray-400 flex flex-col">
-                        <div className=" p-2 text-xs w-full h-full flex flex-col gap-1" >
-                           <div className="border-b border-gray flex justify-between">
-                              <strong>Atrial Fibrullation Register</strong>
-                              <div className="w-20 flex justify-between">
-                                 <strong>0</strong>
-                                 <strong>0%</strong>
-                              </div>
-                           </div>
-                           <div className="border-b border-gray flex justify-between">
-                              <span>*Modified AF008: CHA₂DS₂-VASc ≥ 2 issued Anticoagulants (6m)</span>
-                              <div className=" w-20 flex justify-between">
-                                 <span>0</span>
-                                 <span>0%</span>
-                              </div>
-                           </div>
-                           <div className="border-b border-gray flex justify-between">
-                              <span>CHA₂DS₂-VASc ≥ 2 and NOT issued Anticoagulants (6m)</span>
-                              <div className=" w-20 flex justify-between">
-                                 <span>0</span>
-                                 <span>0%</span>
-                              </div>
-                           </div>
-                           <div className="border-b border-gray flex justify-between">
-                              <span>  CHA₂DS₂-VASc ≥ 2 issued Aspirin/Antiplatelets ONLY (6m)</span>
-                              <div className=" w-20 flex justify-between">
-                                 <span>0</span>
-                                 <span>0%</span>
-                              </div>
-                           </div>
-                           <div className="border-b border-gray flex justify-between">
-                              <span>CHA₂DS₂-VASc ≥ 2 issued BOTH Anticoagulants + Antiplatelets (6m)</span>
-                              <div className=" w-20 flex justify-between">
-                                 <span>0</span>
-                                 <span>0%</span>
-                              </div>
-                           </div>
-                           <div className="border-b border-gray flex justify-between">
-                              <span>CHA₂DS₂-VASc ≥ 2 issued DOAC(6m)</span>
-                              <div className=" w-20 flex justify-between">
-                                 <span>0</span>
-                                 <span>0%</span>
-                              </div>
-                           </div>
-                           <div className="border-b border-gray flex justify-between">
-                              <span>*Modified AF006: new CHA₂DS₂-VASc ≥ 2 in last 12m</span>
-                              <div className=" w-20 flex justify-between">
-                                 <span>0</span>
-                                 <span>0%</span>
-                              </div>
-                           </div>
-
-                        </div>
-                        <div className="text-xs mt-4">
-                           *Modified QoF no exclusions for contraindication or declined
-                        </div>
+                        
                         {/* EXTERNAL LINKS */}
                         
-                     </div>
-                     
-                     <div className=" mt-6">
+                  </div>                  
+                     <div>
                         <Popover >
-                           <PopoverTrigger className="flex justify-center py-2 px-6  ml-auto">
-                              <FiInfo className="text-xl" /> {/* Icon component */}
+                           <PopoverTrigger className="flex justify-center pr-4 ml-auto mt-2">
+
+                              <button className=" px-2 rounded-full font-serif font-semibold bg-gradient-to-r from-[#7B0E72] from-70%   to-[#E6007E] text-white">i</button>
+                              
                            </PopoverTrigger>
                            <PopoverContent>
                               <div>
@@ -274,9 +767,6 @@ const Filter = () => {
                            </PopoverContent>
                         </Popover>
                      </div>
-                     
-                     
-         
                   </div>
                </div>
             )
@@ -286,3 +776,58 @@ const Filter = () => {
 }
 
 export default Filter
+
+
+
+ // setDisplayVulnerabilities((prev) => prev.filter((item) => item.value !== value));
+      // selectedVulnerabilities.map((item) => {
+      //    if(item === value){
+      //       return selectedVulnerabilities.filter((currentItems) => currentItems !== value )
+      //    }
+      // })
+      
+      
+      // setDisplayVulnerabilities((prev) => {
+
+      //    const exists = prev.some((item)=> item.value === value)
+
+      //    if(exists){
+      //       return prev.filter((item) => item.value !== value)
+      //    }else{
+      //       return [...prev, {value, label}];
+      //    }
+      // });
+      
+      
+      // handleVulnerabilities,
+
+      // {[
+      //    {value: "none", label:"NONE", name: 'Anti'},
+      //    {value: "doac_warf", label: "DOAC or WARFARIN", name: 'Anti'},
+      //    {value: "doac", label: "DOAC", name: 'Anti'},
+      //    {value: "warf", label: "WARFARIN", name: 'Anti'},
+      //    {value: "antiplatelets", label: "ANTIPLATELETS ONLY" , name: 'Anti'},
+      //    {value: "no_anticoagulant", label: "NO ANTICOAGULANT" , name: 'Anti'},
+      //    {value: "dual", label: "DUAL THERAPY" , name: 'Anti'},
+      // ].map((item) => (
+      //    <label 
+      //       key ={item.value}
+      //       className="flex items-center space-x-2 ml-4"
+      //    >
+      //       <input
+      //       type="radio"
+      //       value={item.value}
+      //       name="antiFilter"
+      //       checked={selectedAnti === item.value}
+      //       onChange={(event) => handleAntiChange(event, item.label, item.name)}
+            
+      //       />
+      //       <span>{item.label}</span>
+      //    </label>
+      // ))}
+      {/* <Button 
+               //    className = "bg-white text-xs font-semibold text-[#21376A] hover:bg-gray-400 hover:text-white"
+               //    // variant="outline"
+               //    onClick={resetFilters}>
+               //       Remove all filters
+               // </Button> */}

@@ -4,7 +4,44 @@
 @tailwind components;
 @tailwind utilities;
 
+.no-scroll{
+   overflow: hidden;
+}
 
+/* .import_radio{
+   display: none;
+}
+
+.radio_display{
+   width: 1.5em;
+   height: 1.5em;
+   border: 2px solid #21376A;
+   border-radius: 50%;
+   box-sizing: border-box;
+   padding: 2px;
+}
+
+.radio_display::after{
+   content: "";
+   width: 100%;
+   height: 100%;
+   display: block;
+   background: #21376A;
+   border-radius: 50%;
+
+   transform: scale(0);
+   transition: transform 0.15s;
+}
+
+.import_radio:checked + .radio_display::after {
+   transform: scale(1)
+} */
+
+/* .dataTable {
+   border: 0.1em solid #21376A;
+   border-collapse: separate;
+   border-radius: 0.1em;
+} */
 /* body{
    margin: 0;
    padding: 0;
