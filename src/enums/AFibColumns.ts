@@ -99,7 +99,8 @@ export enum AFibColumns {
     OnStatin,    
     CVD,
     Hypertension,
-    BP
+    BP,
+    Selected
 
 }
 

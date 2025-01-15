@@ -8,11 +8,14 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
 
 function App() {
+   console.log("App component loaded");
+
    //State checks desktop to see if it can be displayed 
    const [isDesktop, setIsDesktop] = useState(true)
 
    //Checking user screen size
    const checkScreenSize =() => {
+   
       if(window.innerWidth < 1024){
          setIsDesktop(false)
       }
@@ -26,11 +29,11 @@ function App() {
 
       window.addEventListener('resize', checkScreenSize);
       return ()=>{
-         window.addEventListener('resize', checkScreenSize)
+         window.removeEventListener('resize', checkScreenSize)
       };
    }, [])
 
-   // console.log(isDesktop)
+   console.log("Current path:", window.location.pathname);
    
 
    if(!isDesktop){
@@ -48,10 +51,15 @@ function App() {
       )
    }
    return (
+      // <div>
+      //    <h1>App Component</h1>
+      //    <Import />
+      // </div>
       <MainProvider>
          <div>
-            <Router>
+            <Router basename="/AF_tool_test/">
                <Routes>
+                  <Route path="*" element={<Import />} />
                   <Route path = "/" element = {<Import />}/>
                   <Route path = "/display" element = {<Display />}/>
                   {/* <Route path = "/modal" element = {<Modal />}/>  */}
@@ -60,7 +68,6 @@ function App() {
                </Routes>
             </Router>
          </div>
-         
       </MainProvider>
    )
 }

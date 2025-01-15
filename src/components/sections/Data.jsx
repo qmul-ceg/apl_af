@@ -19,46 +19,106 @@ const Data = () => {
    
    const [selectAll, setSelectAll] = useState(true)
    const [selectedRows, setSelectedRows] = useState([])
+   
 
+   // const handleSelectAll = () => {
+   //    setSelectAll(!selectAll)
+   // }
+
+   const [selectedForExport, setSelectedForExport] = useState({})
+   //Initiate a useState variable that holds an object containing the ids of patients we want to export
+   
+   // useEffect(() => {
+   //    const patientsSelectedForExport = {}
+   //    data.map((patient) =>{
+   //       patientsSelectedForExport[patient.id] = true
+   //    })
+
+   //    setSelectedForExport(patientsSelectedForExport)
+   // }, [data])
+   
+   
+   
    const handleSelectAll = () => {
-      setSelectAll(!selectAll)
+      // This function toggles the select all button table header it allows the user to 
+      // select and deselect patients they want to add to the export list
+      // selected patients are added based on their ids to the selectedForExport variable 
+
+      const selectedPatientsForExport = {}
+   
+      if (Object.keys(selectedForExport).length === 0){
+         data.map((patient) => (
+            selectedPatientsForExport[patient.id] = true
+         ));
+         setSelectedForExport(selectedPatientsForExport)
+      }
+      else {
+         setSelectedForExport({})
+      }
+   }
+   //when we click the header we should be able to toggle the select all 
+   // if we click an individaual patient we remove individual ids from select all
+   const toggleSelectedPatient = (id) => {
+      
+      
+      setSelectedForExport((prev) => {
+         console.log('Previous State:', prev); // Log previous state
+         console.log('Toggling ID:', id); 
+         return {
+            ...prev, 
+            [id] : !prev[id],
+         }
+   })
+      
    }
 
 
   return (
-   <div className="border-[0.1em] rounded-t-lg  border-[#21376A] "> 
-      <table className=" dataTable w-full  border-collapse top-0 sticky ">
-         <thead className="border-b-4 border-[#21376A] top-[calc(3rem+1px)]">
-            <tr className="text-[#21376A]">
-               <th rowSpan={2} className="w-[2%] border-r-[0.1em] border-[#21376A]">
-                  <input
-                     type="checkbox"
-                     onChange={handleSelectAll}
-                     checked={selectAll}
-                  />
+
+   // max-h-[400px]
+   // <div className="border-[0.1em] rounded-t-lg  border-[#21376A] max-h-[400px] overflow-y-auto "> 
+   <div className=" rounded-t-lg  ">   
+      <table className="w-full border-separate border-spacing-0 ">
+        
+         <thead className=" text-[10em] lg:text-xs xl:text-sm 2xl:text-[1em] table_header ">
+            <tr className="text-[#21376A] ">
+               <th 
+                  rowSpan={2} 
+                  // className="w-[2%] border-l-[0.1em] border-[#21376A]"
+                  className="w-[2%] "
+               >
+                     <input
+                        type="checkbox"
+                        onChange={handleSelectAll}
+                        // checked={selectAll}
+                        className="header_checkbox"
+                     />
+                     {/* below div is for customised check box, styling can be found in index.css */}
+                     <div className="custom_header_checkbox"></div> 
                </th>
-               <th rowSpan={2} className="w-[13%] border-r-[0.1em] border-[#21376A]">Full Name</th>
-               <th rowSpan={2} className="w-[4%] border-r-[0.1em] border-[#21376A]">Age</th>
-               <th rowSpan={2} className="w-[5%] border-r-[0.1em] border-[#21376A]">Gender</th>
-               <th rowSpan={2} className="w-[7%] border-r-[0.1em] border-[#21376A]">Patience Reference No.</th>
-               <th colSpan="2 " className="border-r-[0.1em] border-[#21376A]">CHA₂DS₂-VASc</th>
-               <th colSpan="2" className="border-r-[0.1em] border-[#21376A]">ORBIT</th>
-               <th rowSpan={2} className="w-[7%] border-r-[0.1em] border-[#21376A]">Anticoagulant issued (6m)</th>
-               <th rowSpan={2} className="w-[9%] border-r-[0.1em] border-[#21376A]">Aspirin / Antiplatelet <br />issued (6m)</th>
-               <th rowSpan={2} className="border-r-[0.1em] border-[#21376A]">NSAID</th>
-               <th rowSpan={2} className="w-[6%] border-r-[0.1em] border-[#21376A]">Statin issued (6m)</th>
-               <th rowSpan={2} className="w-[4%] border-r-[0.1em] border-[#21376A]">CVD</th>
-               <th rowSpan={2} className="w-[4%] border-r-[0.1em] border-[#21376A]">HTN</th>
-               <th rowSpan={2} className="w-[4%] border-r-[0.1em] border-[#21376A]">BP</th>
-               <th rowSpan={2} >Medical review date</th>
+               <th rowSpan={2} className="w-[12%] ">Full name</th>
+               <th rowSpan={2} className="w-[4%]  ">Age</th>
+               <th rowSpan={2} className="w-[5%]">Gender</th>
+               <th rowSpan={2} className="w-[7%] ">Patient reference no.</th>
+               <th colSpan="2 " className="sub_header">CHA₂DS₂-VASc</th>
+               <th colSpan="2" className="sub_header">ORBIT</th>
+               <th rowSpan={2} className="w-[7%]">Anticoagulant issued (6m)</th>
+               <th rowSpan={2} className="w-[9%] ">Aspirin / antiplatelet <br />issued (6m)</th>
+               <th rowSpan={2} className="">NSAID</th>
+               <th rowSpan={2} className="w-[6%] ">Statin issued (6m)</th>
+               <th rowSpan={2} className="w-[4%] ">CVD</th>
+               <th rowSpan={2} className="w-[4%]">HTN</th>
+               <th rowSpan={2} className="w-[4%] ">BP</th>
+               <th rowSpan={2} className="med_review">Med review date</th>
             </tr>
 
-            <tr className="text-[#21376A]" >
+            <tr className="text-[#21376A]">
             {/* CHA₂DS₂-VASc */}
-               <th className="border-r-[0.1em]  border-t-[0.1em] border-[#21376A] hover:cursor-pointer" 
+               <th className="border-r-[0.1em]  border-t-[0.1em] border-[#21376A] hover:cursor-pointer " 
                   onClick={handleSortClick}   
-               > 
-                  <span>Value {sortChdValue === "asc" ? ' ↑' : ' ↓'}</span>
+               >
+                  {/* {sortChdValue === "asc" ? ' ↑' : ' ↓'} */}
+                  <span>Value </span>
                </th>
                <th className="border-r-[0.1em]   border-t-[0.1em] border-[#21376A]">Latest date</th>
             {/* ORBIT */}
@@ -67,16 +127,24 @@ const Data = () => {
 
             </tr>
          </thead>
+         
+         {/* top-12 */}
+
+
          <tbody className="text-center lg:text-xs xl:text-sm 2xl:text-sm ">
             {data.map((patient, id) => 
                 (
-                  <tr key={id} className="border-b hover:bg-gray-100 " >
-                     <td >
+                  <tr key={patient.id} className="border-b hover:bg-gray-100" >
+                     <td className=" ">
                         <input
                            type="checkbox"
-                           checked={selectAll}
-                        >
-                        </input>
+                           checked={selectedForExport[patient.id] || false}
+                           className="patient_checkbox"
+                           onChange={()=>toggleSelectedPatient(patient.id)}
+                        />
+                           {/* below div is for customised check box, styling can be found in index.css */}
+                           <div className="custom_patient_checkbox"></div> 
+                        
                      </td>
                      <td className="font-medium text-left px-4 cursor-pointer text-blue-600 hover:underline"
                         onClick={()=>handlePatientClick(id)}

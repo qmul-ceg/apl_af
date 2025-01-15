@@ -19,7 +19,11 @@ const Modal = ({open, }) => {
 
 
    if (!open) return null
-
+   
+   const freezeBackgroundStyles = {
+      position: "fixed",
+      marginLeft: "2em"
+   }
    // STOPS BACKGROUND FROM SCROLLING
 //    useEffect(() => {
 //       if (open) {
@@ -29,9 +33,9 @@ const Modal = ({open, }) => {
 //       }
   
 //       // Clean up effect
-//       // return () => {
-//       //     document.body.classList.remove('no-scroll');
-//       // };
+//       return () => {
+//           document.body.classList.remove('no-scroll');
+//       };
 //   }, [open]);
    const cegColors = {
       navy: "#21376A",
@@ -47,7 +51,7 @@ const Modal = ({open, }) => {
       left: 0,
       right: 0,
       bottom: 0,
-      backgroundColor: 'rgba(0,0,0, 0.7)',
+      backgroundColor: 'rgba(0,0,0, 0.9)',
       zIndex:50
    }
 
@@ -88,13 +92,13 @@ const Modal = ({open, }) => {
          dateOfIssue: selectedPatientData[AFibColumns.AntiplateletDate] 
       },
       {
-         medication: "PPI medication (6m)", 
+         medication: "PPI (6m)", 
          colorCode: "", 
          medicationName: selectedPatientData[AFibColumns.PPI_Med], 
          dateOfIssue: selectedPatientData[AFibColumns.PPI_Date] 
       },
       {
-         medication: "NSAID (excluding Aspirin)(6m)", 
+         medication: "NSAID (excluding aspirin) (6m)", 
          colorCode: "", 
          medicationName: selectedPatientData[AFibColumns.NSAID_Med], 
          dateOfIssue: selectedPatientData[AFibColumns.NSAID_Date] 
@@ -211,13 +215,13 @@ const Modal = ({open, }) => {
          dateRecorded: selectedPatientData[AFibColumns.CreatClearanceDate]
       },
       {
-         process: "Serum Creatinine Level (latest ever)", 
+         process: "Serum creatinine level (latest ever)", 
          colorCode: "", 
          value: selectedPatientData[AFibColumns.SerumCreatValue], 
          dateRecorded: selectedPatientData[AFibColumns.SerumCreatDate]
       },
       {
-         process: "Serum ALT or ASP (latest ever", 
+         process: "Serum ALT or ASP (latest ever)", 
          colorCode: "", 
          value: selectedPatientData[AFibColumns.ALT_LFT_Value], 
          dateRecorded: selectedPatientData[AFibColumns.ALT_LFT_Date]
@@ -280,11 +284,11 @@ const Modal = ({open, }) => {
             {/* HEADER */}
             <div className="flex justify-between items-center  w-full h-12 px-4 rounded-t-lg bg-[#21376A] text-white">
                <strong>Patient Information</strong>
-               <button className="  p-1 text-xs  hover:text-sm font-extrabold" onClick={()=>{
+               <button className=" p-1 text-sm  hover:text-lg " onClick={()=>{
                   // console.log('Closing Modal...')
                   setIsModalOpen((prevState) => !prevState)
                   }}> 
-                     X 
+                     &#10005;
                </button>
             </div>
 
@@ -334,19 +338,19 @@ const Modal = ({open, }) => {
                   {/* TABLE 2 */}
                   <div className="flex flex-col gap-2 w-[50%] text-left">
                      <div className="flex">
-                        <h2 className="w-[30%] text-white pl-2 bg-[#21376A] font-semibold py-1 rounded-l-lg">Patient record #</h2>
+                        <h2 className="w-[36%] text-white pl-2 bg-[#21376A] font-semibold py-1 rounded-l-lg whitespace-nowrap">Patient record #</h2>
                         <div className="border border-gray-400 w-[65%] rounded-r-lg pl-2 py-1">{selectedPatientData[AFibColumns.PatientReference]}</div>
                      </div>
                      <div className="flex">
-                        <h2 className="w-[30%] text-white pl-2 bg-[#21376A] font-semibold py-1 rounded-l-lg">Gender</h2>
+                        <h2 className="w-[36%] text-white pl-2 bg-[#21376A] font-semibold py-1 rounded-l-lg">Gender</h2>
                         <div className="border border-gray-400 w-[65%] rounded-r-lg pl-2 py-1">{selectedPatientData[AFibColumns.Gender]}</div>
                      </div>
                      <div className="flex">
-                        <h2 className="w-[30%] text-white pl-2 bg-[#21376A] font-semibold py-1 rounded-l-lg">Age</h2>
+                        <h2 className="w-[36%] text-white pl-2 bg-[#21376A] font-semibold py-1 rounded-l-lg">Age</h2>
                         <div className="border border-gray-400 w-[65%] rounded-r-lg pl-2 py-1">{selectedPatientData[AFibColumns.Age]}</div>
                      </div>
                      <div className="flex">
-                        <h2 className="w-[30%] text-white pl-2 bg-[#21376A] font-semibold py-1 rounded-l-lg">Mobile telephone</h2>
+                        <h2 className="w-[36%] text-white pl-2 bg-[#21376A] font-semibold py-1 rounded-l-lg">Mobile telephone</h2>
                         <div className="border border-gray-400 w-[65%] rounded-r-lg pl-2 py-1">{selectedPatientData[AFibColumns.MobileTelephone]}</div>
                      </div>
                   </div>
@@ -358,43 +362,48 @@ const Modal = ({open, }) => {
                   
                   <div className=" flex " >
                      <span>
-                           <Popover>
-                              <PopoverTrigger >
-                                 <button className="px-2 py-1 rounded-full font-serif font-semibold bg-gradient-to-r from-[#7B0E72] from-70%   to-[#E6007E] text-white text-xs">i</button>            
-                              </PopoverTrigger>
-                                 <PopoverContent className="p-0 w-[16em] text-sm">
-                                    <div className="px-4 py-2 flex flex-col gap-2">
-                                       <div className="flex gap-2">
-                                          <div className=" w-14 h-5 "
-                                             style={{backgroundColor: cegColors.red}}
-                                          ></div>
-                                          <span>High Risk</span>
-                                       </div>
-                                       <div className="flex  gap-2">
-                                          <div className=" w-14 h-5"
-                                          style={{backgroundColor: cegColors.orange}}></div>
-                                          <span>Moderate Risk</span>
-                                       </div>
-                                       <div className="flex  gap-2">
-                                          <div className=" w-14 h-5"
-                                          style={{backgroundColor: cegColors.yellow}}></div>
-                                          <span>Mild Risk</span>
-                                       </div>
-                                       <div className="flex  gap-2">
-                                          <div className=" w-14 h-5 "
-                                          style={{backgroundColor: cegColors.green}}></div>
-                                          <span>Optimal Treatment</span>
-                                       </div>
-                                       
+                        <Popover>
+                           <PopoverTrigger 
+                              className="flex justify-center items-center
+                              font-serif text-xs px-[0.51em]  rounded-full font-semibold
+                              bg-gradient-to-r from-[#7B0E72] from-70% to-[#E6007E] text-white "
+                           >
+                              i              
+                           </PopoverTrigger>
+                              <PopoverContent className="p-0 w-[16em] text-sm">
+                                 <div className="px-4 py-2 flex flex-col gap-2">
+                                    <div className="flex gap-2">
+                                       <div className=" w-14 h-5 "
+                                          style={{backgroundColor: cegColors.red}}
+                                       ></div>
+                                       <span>High Risk</span>
                                     </div>
-                                 </PopoverContent>
-                              </Popover></span>
-                     </div>  
+                                    <div className="flex  gap-2">
+                                       <div className=" w-14 h-5"
+                                       style={{backgroundColor: cegColors.orange}}></div>
+                                       <span>Moderate Risk</span>
+                                    </div>
+                                    <div className="flex  gap-2">
+                                       <div className=" w-14 h-5"
+                                       style={{backgroundColor: cegColors.yellow}}></div>
+                                       <span>Mild Risk</span>
+                                    </div>
+                                    <div className="flex  gap-2">
+                                       <div className=" w-14 h-5 "
+                                       style={{backgroundColor: cegColors.green}}></div>
+                                       <span>Optimal Treatment</span>
+                                    </div>
+                                    
+                                 </div>
+                              </PopoverContent>
+                           </Popover>
+                     </span>
+                  </div>  
                </div>
 
                
                {/* TABLES */}
-               <div className=" flex-1 overflow-y-auto max-h-full mt-2 ">
+               <div className=" flex-1 overflow-y-auto max-h-full mt-2 modal_scrollbar">
                   {/* MEDICATIONS TABLE */}
                   <table className="w-full">
                      <thead className="bg-[#21376A] text-left text-white font-semibold ">
@@ -463,11 +472,12 @@ const Modal = ({open, }) => {
                                     {item.risk === "CHA₂DS₂-VASc (latest ever)" && (
                                        
                                        <span><Popover >
-                                          <PopoverTrigger className="pl-2">
-         
-                                          <button className="px-2 py-1 rounded-full font-serif font-semibold bg-gradient-to-r from-[#7B0E72] from-70%   to-[#E6007E] text-white text-xs">i</button>
-                                          
-                                       </PopoverTrigger>
+                                           <PopoverTrigger 
+                                                   className=" ml-2 justify-center items-center
+                                                   font-serif text-xs px-[0.51em]  rounded-full font-semibold
+                                                   bg-gradient-to-r from-[#7B0E72] from-70% to-[#E6007E] text-white "
+                                                >i
+                                             </PopoverTrigger>
                                        <PopoverContent className="p-0 w-[30em] text-sm">
                                           <div className="py-1 w-full border-b border-gray-200 bg-gray-100 font-bold text-center">CHA₂DS₂-VASc Risk Factors</div>
                                           <table className=" w-full">
@@ -525,8 +535,11 @@ const Modal = ({open, }) => {
                                     {item.risk === "ORBIT (latest ever)" && (
                                        <span>
                                              <Popover>
-                                                <PopoverTrigger className="pl-2">
-                                                <button className="px-2 py-1 rounded-full font-serif font-semibold bg-gradient-to-r from-[#7B0E72] from-70%   to-[#E6007E] text-white text-xs">i</button>
+                                                <PopoverTrigger 
+                                                   className=" ml-2 justify-center items-center
+                                                   font-serif text-xs px-[0.51em]  rounded-full font-semibold
+                                                   bg-gradient-to-r from-[#7B0E72] from-70% to-[#E6007E] text-white "
+                                                >i
                                                 </PopoverTrigger>
                                                 <PopoverContent className="p-0 w-[40em] text-sm">
                                                    <div className="py-1 w-full border-b border-gray-200 bg-gray-100 font-bold text-center">
@@ -870,7 +883,7 @@ const Modal = ({open, }) => {
                      </thead>
                      <tbody className="border-l border-b ">
                         <tr>
-                           <td className="font-semibold text-[#E6007E] pl-8 py-1" colSpan="3">*INR values may not be recorded in the GP system and may be under required in this tool.</td>
+                           <td className="font-semibold text-[#E6007E] pl-8 py-1" colSpan="3">*INR values may not be recorded in the GP system and may be under reported in this tool.</td>
                         </tr>
                         {
                            processMeasuresTableData.map((item, index) =>(
@@ -885,32 +898,34 @@ const Modal = ({open, }) => {
                                        <span>
                                           
                                           <Popover >
-                                          <PopoverTrigger className="pl-2">
-         
-                                          <button className="px-2 py-1 rounded-full font-serif font-semibold bg-gradient-to-r from-[#7B0E72] from-70%   to-[#E6007E] text-white text-xs">i</button>
-                                          
-                                       </PopoverTrigger>
-                                       <PopoverContent className="p-0 w-[25em] text-sm">
-                                          <table className="border w-full ">
-                                             <thead className="border bg-gray-100">
-                                                <tr className="py-2">
-                                                   <th className="py-1">AUDIT SCORES *</th>
-                                                </tr>
-                                             </thead>
-                                             <tbody >
-                                                <tr>
-                                                   <td className ="border-b border-gray-100 py-1 pl-2">AUDIT {">"} 15: High or severe drinking risk</td>
-                                                
-                                                </tr>
-                                                <tr>
-                                                   <td className ="border-b border-gray-100 py-1 pl-2">AUDIT-C {">"} 5: High or severe drinking risk</td>
-                                                
-                                                </tr>
-                                             </tbody>
-
-                                          </table>
-                                       </PopoverContent>
-                                    </Popover></span>
+                                             <PopoverTrigger 
+                                                   className=" ml-2 justify-center items-center
+                                                   font-serif text-xs px-[0.51em]  rounded-full font-semibold
+                                                   bg-gradient-to-r from-[#7B0E72] from-70% to-[#E6007E] text-white "
+                                                   >
+                                                      i
+                                             </PopoverTrigger>
+                                             <PopoverContent className="p-0 w-[25em] text-sm">
+                                                <table className="border w-full ">
+                                                   <thead className="border bg-gray-100">
+                                                      <tr className="py-2">
+                                                         <th className="py-1">AUDIT SCORES *</th>
+                                                      </tr>
+                                                   </thead>
+                                                   <tbody >
+                                                      <tr>
+                                                         <td className ="border-b border-gray-100 py-1 pl-2">AUDIT {">"} 15: High or severe drinking risk</td>
+                                                      
+                                                      </tr>
+                                                      <tr>
+                                                         <td className ="border-b border-gray-100 py-1 pl-2">AUDIT-C {">"} 5: High or severe drinking risk</td>
+                                                      
+                                                      </tr>
+                                                   </tbody>
+                                                </table>
+                                             </PopoverContent>
+                                          </Popover>
+                                       </span>
                                     )}
 
 
@@ -953,7 +968,7 @@ const Modal = ({open, }) => {
                      </thead>
                      <tbody className="border-l border-b ">
                            <tr className="bg-gray-50 border-b">
-                              <td className="py-1 pl-4 font-semibold ">Medication Reviews (latest ever)</td>
+                              <td className="py-1 pl-4 font-semibold ">Medication reviews (latest ever)</td>
                               <td
                                  className="text-center text-white font-semibold"
                                  style = {{
@@ -975,7 +990,7 @@ const Modal = ({open, }) => {
                               </td>
                               <td className="py-1 pl-4">
                                     {  selectedPatientData[AFibColumns.MedsReviewConcept] 
-                                       ? "Medication Review": null
+                                       ? "Medication review": null
                                     }
                               </td>
                               <td className="py-1 pl-4">{selectedPatientData[AFibColumns.MedsReviewDate]}</td>

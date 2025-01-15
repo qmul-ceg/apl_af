@@ -10,4 +10,7 @@ export default defineConfig({
      "@": path.resolve(__dirname, "./src"),
    },
  },
+ base: '/AF_tool_test/',
+//  base: '/AF_tool_test/apl_af/',
+ 
 })
